@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" font-family="'Noto Serif SC', serif">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1520"/>
+      <stop offset="100%" style="stop-color:#231e2a"/>
+    </linearGradient>
+    <linearGradient id="warm" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#e8a87c"/>
+      <stop offset="100%" style="stop-color:#d4758c"/>
+    </linearGradient>
+    <linearGradient id="lavender" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#9b8ec4"/>
+      <stop offset="100%" style="stop-color:#d4758c"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#d4b896"/>
+      <stop offset="100%" style="stop-color:#e8a87c"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="900" height="520" fill="url(#bg)" rx="16"/>
+
+  <text x="450" y="45" text-anchor="middle" fill="url(#warm)" font-size="22" font-weight="700" letter-spacing="6">心语日记 · 多智能体架构</text>
+
+  <!-- User Input -->
+  <rect x="350" y="70" width="200" height="44" rx="22" fill="rgba(232,168,124,0.15)" stroke="#e8a87c" stroke-width="1.5"/>
+  <text x="450" y="97" text-anchor="middle" fill="#e8a87c" font-size="14" letter-spacing="2">👤 用户输入</text>
+
+  <!-- Arrow down -->
+  <line x1="450" y1="114" x2="450" y2="140" stroke="#9b8ec4" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <polygon points="445,138 455,138 450,146" fill="#9b8ec4"/>
+
+  <!-- Agent 1: Emotion Sensor -->
+  <rect x="60" y="150" width="180" height="80" rx="14" fill="rgba(232,168,124,0.1)" stroke="#e8a87c" stroke-width="1.5"/>
+  <text x="150" y="178" text-anchor="middle" fill="#e8a87c" font-size="13" font-weight="600">🎭 情绪感知器</text>
+  <text x="150" y="198" text-anchor="middle" fill="#a89fb5" font-size="10">analyze_emotion</text>
+  <text x="150" y="216" text-anchor="middle" fill="#6e6479" font-size="9">识别情绪 · 分析强度</text>
+
+  <!-- Agent 2: Memory Manager -->
+  <rect x="280" y="150" width="180" height="80" rx="14" fill="rgba(212,117,140,0.1)" stroke="#d4758c" stroke-width="1.5"/>
+  <text x="370" y="178" text-anchor="middle" fill="#d4758c" font-size="13" font-weight="600">🧠 记忆管家</text>
+  <text x="370" y="198" text-anchor="middle" fill="#a89fb5" font-size="10">save / search / forget</text>
+  <text x="370" y="216" text-anchor="middle" fill="#6e6479" font-size="9">检索记忆 · 保存信息</text>
+
+  <!-- Agent 3: Diary Generator -->
+  <rect x="500" y="150" width="180" height="80" rx="14" fill="rgba(212,184,150,0.1)" stroke="#d4b896" stroke-width="1.5"/>
+  <text x="590" y="178" text-anchor="middle" fill="#d4b896" font-size="13" font-weight="600">📝 日记生成器</text>
+  <text x="590" y="198" text-anchor="middle" fill="#a89fb5" font-size="10">generate_diary</text>
+  <text x="590" y="216" text-anchor="middle" fill="#6e6479" font-size="9">融合情绪与记忆</text>
+
+  <!-- Agent 4: Dialog Elf -->
+  <rect x="720" y="150" width="150" height="80" rx="14" fill="rgba(155,142,196,0.1)" stroke="#9b8ec4" stroke-width="1.5"/>
+  <text x="795" y="178" text-anchor="middle" fill="#9b8ec4" font-size="13" font-weight="600">✨ 对话精灵</text>
+  <text x="795" y="198" text-anchor="middle" fill="#a89fb5" font-size="10">整合回复</text>
+  <text x="795" y="216" text-anchor="middle" fill="#6e6479" font-size="9">共情 · 温暖回应</text>
+
+  <!-- Flow arrows between agents -->
+  <line x1="240" y1="190" x2="280" y2="190" stroke="#9b8ec4" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <polygon points="278,186 278,194 286,190" fill="#9b8ec4"/>
+  <line x1="460" y1="190" x2="500" y2="190" stroke="#9b8ec4" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <polygon points="498,186 498,194 506,190" fill="#9b8ec4"/>
+  <line x1="680" y1="190" x2="720" y2="190" stroke="#9b8ec4" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <polygon points="718,186 718,194 726,190" fill="#9b8ec4"/>
+
+  <!-- Arrow down to middle layer -->
+  <line x1="450" y1="230" x2="450" y2="270" stroke="#9b8ec4" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <polygon points="445,268 455,268 450,276" fill="#9b8ec4"/>
+
+  <!-- Middle layer: Memory & Storage -->
+  <rect x="100" y="280" width="260" height="70" rx="12" fill="rgba(155,142,196,0.08)" stroke="rgba(155,142,196,0.3)" stroke-width="1"/>
+  <text x="230" y="308" text-anchor="middle" fill="#9b8ec4" font-size="12" font-weight="600">💾 长期记忆 · ChromaDB</text>
+  <text x="230" y="328" text-anchor="middle" fill="#6e6479" font-size="10">BGE 嵌入模型 · 向量检索 · 持久化存储</text>
+
+  <rect x="400" y="280" width="260" height="70" rx="12" fill="rgba(212,184,150,0.08)" stroke="rgba(212,184,150,0.3)" stroke-width="1"/>
+  <text x="530" y="308" text-anchor="middle" fill="#d4b896" font-size="12" font-weight="600">📔 日记存储 · JSON</text>
+  <text x="530" y="328" text-anchor="middle" fill="#6e6479" font-size="10">日记保存 · Markdown导出 · 历史浏览</text>
+
+  <rect x="690" y="280" width="170" height="70" rx="12" fill="rgba(232,168,124,0.08)" stroke="rgba(232,168,124,0.3)" stroke-width="1"/>
+  <text x="775" y="308" text-anchor="middle" fill="#e8a87c" font-size="12" font-weight="600">🔄 短期记忆</text>
+  <text x="775" y="328" text-anchor="middle" fill="#6e6479" font-size="10">上下文窗口 · 最近10轮</text>
+
+  <!-- Arrow down to LLM -->
+  <line x1="450" y1="350" x2="450" y2="385" stroke="#9b8ec4" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <polygon points="445,383 455,383 450,391" fill="#9b8ec4"/>
+
+  <!-- LLM Layer -->
+  <rect x="200" y="395" width="500" height="55" rx="14" fill="rgba(155,142,196,0.12)" stroke="#9b8ec4" stroke-width="1.5" filter="url(#glow)"/>
+  <text x="450" y="422" text-anchor="middle" fill="#9b8ec4" font-size="14" font-weight="600">🤖 DeepSeek API · 大语言模型</text>
+  <text x="450" y="440" text-anchor="middle" fill="#6e6479" font-size="10">情绪分析 · 信息提取 · 日记生成 · 对话回复</text>
+
+  <!-- Bottom: Frontend -->
+  <line x1="450" y1="450" x2="450" y2="472" stroke="#9b8ec4" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <polygon points="445,470 455,470 450,478" fill="#9b8ec4"/>
+
+  <rect x="250" y="480" width="400" height="30" rx="10" fill="rgba(232,168,124,0.1)" stroke="#e8a87c" stroke-width="1"/>
+  <text x="450" y="500" text-anchor="middle" fill="#e8a87c" font-size="12" letter-spacing="2">🌐 FastAPI + HTML/JS · SSE 流式响应</text>
+
+  <!-- Data flow labels -->
+  <text x="30" y="300" fill="#6e6479" font-size="9" transform="rotate(-90,30,300)" letter-spacing="2">数据流</text>
+</svg>

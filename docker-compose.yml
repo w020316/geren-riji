@@ -1,0 +1,16 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+      - DEEPSEEK_BASE_URL=https://api.deepseek.com
+      - DEEPSEEK_MODEL=deepseek-chat
+    volumes:
+      - chroma_data:/app/chroma_db
+      - diary_data:/app/diaries
+
+volumes:
+  chroma_data:
+  diary_data:

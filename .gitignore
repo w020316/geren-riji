@@ -9,6 +9,7 @@ venv/
 dist/
 build/
 chroma_db/
+diaries/
 models/
 .DS_Store
 Thumbs.db

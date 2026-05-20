@@ -12,10 +12,12 @@
             --bg-deep: #1a1520;
             --bg-card: #231e2a;
             --bg-input: #2d2635;
+            --bg-hover: #2a2433;
             --accent-warm: #e8a87c;
             --accent-rose: #d4758c;
             --accent-lavender: #9b8ec4;
             --accent-gold: #d4b896;
+            --accent-mint: #7ec4a5;
             --text-primary: #ede8e3;
             --text-secondary: #a89fb5;
             --text-muted: #6e6479;
@@ -23,13 +25,7 @@
             --glow-warm: rgba(232, 168, 124, 0.15);
             --glow-rose: rgba(212, 117, 140, 0.12);
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Noto Serif SC', serif;
             background: var(--bg-deep);
@@ -37,600 +33,363 @@
             min-height: 100vh;
             overflow-x: hidden;
         }
-
         body::before {
             content: '';
             position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: 
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background:
                 radial-gradient(ellipse at 20% 20%, var(--glow-warm) 0%, transparent 50%),
                 radial-gradient(ellipse at 80% 80%, var(--glow-rose) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, rgba(155, 142, 196, 0.06) 0%, transparent 60%);
+                radial-gradient(ellipse at 50% 50%, rgba(155,142,196,0.06) 0%, transparent 60%);
             animation: bgDrift 30s ease-in-out infinite alternate;
-            z-index: 0;
-            pointer-events: none;
+            z-index: 0; pointer-events: none;
         }
-
         @keyframes bgDrift {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            100% { transform: translate(-5%, -3%) rotate(3deg); }
+            0% { transform: translate(0,0) rotate(0deg); }
+            100% { transform: translate(-5%,-3%) rotate(3deg); }
         }
-
         .app-container {
-            position: relative;
-            z-index: 1;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 24px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            position: relative; z-index: 1;
+            max-width: 1200px; margin: 0 auto; padding: 20px;
+            min-height: 100vh; display: flex; flex-direction: column;
         }
-
         header {
-            text-align: center;
-            padding: 32px 0 24px;
-            position: relative;
+            text-align: center; padding: 20px 0 16px; position: relative;
         }
-
         header::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 120px;
-            height: 1px;
+            content: ''; position: absolute; bottom: 0; left: 50%;
+            transform: translateX(-50%); width: 120px; height: 1px;
             background: linear-gradient(90deg, transparent, var(--accent-lavender), transparent);
         }
-
         .logo-title {
             font-family: 'ZCOOL XiaoWei', serif;
-            font-size: 2.8rem;
+            font-size: 2.6rem;
             background: linear-gradient(135deg, var(--accent-warm), var(--accent-rose), var(--accent-lavender));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: 8px;
-            margin-bottom: 8px;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text; letter-spacing: 8px; margin-bottom: 6px;
         }
-
         .logo-subtitle {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            letter-spacing: 4px;
-            font-weight: 400;
+            font-size: 0.8rem; color: var(--text-muted); letter-spacing: 4px;
         }
-
-        .main-layout {
-            display: grid;
-            grid-template-columns: 1fr 340px;
-            gap: 24px;
-            flex: 1;
-            margin-top: 24px;
+        .nav-tabs {
+            display: flex; justify-content: center; gap: 4px; margin-top: 16px;
         }
+        .nav-tab {
+            font-family: 'Noto Serif SC', serif;
+            padding: 8px 24px; border-radius: 12px 12px 0 0;
+            border: 1px solid var(--border-subtle); border-bottom: none;
+            background: transparent; color: var(--text-muted);
+            cursor: pointer; font-size: 0.82rem; letter-spacing: 2px;
+            transition: all 0.3s ease;
+        }
+        .nav-tab:hover { color: var(--text-secondary); background: rgba(155,142,196,0.05); }
+        .nav-tab.active {
+            color: var(--accent-gold); background: var(--bg-card);
+            border-color: rgba(155,142,196,0.25);
+        }
+        .tab-content { display: none; flex: 1; margin-top: -1px; }
+        .tab-content.active { display: flex; flex-direction: column; }
 
         .chat-panel {
-            display: flex;
-            flex-direction: column;
-            background: var(--bg-card);
-            border-radius: 20px;
-            border: 1px solid var(--border-subtle);
-            overflow: hidden;
-            position: relative;
+            display: flex; flex-direction: column;
+            background: var(--bg-card); border-radius: 0 20px 20px 20px;
+            border: 1px solid var(--border-subtle); overflow: hidden; position: relative;
         }
-
         .chat-panel::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
             background: linear-gradient(90deg, transparent, var(--accent-warm), var(--accent-rose), transparent);
             opacity: 0.5;
         }
-
         .chat-header {
-            padding: 18px 24px;
-            border-bottom: 1px solid var(--border-subtle);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            padding: 14px 20px; border-bottom: 1px solid var(--border-subtle);
+            display: flex; align-items: center; justify-content: space-between;
         }
-
         .chat-header-title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--accent-gold);
-            letter-spacing: 2px;
+            font-size: 0.95rem; font-weight: 600; color: var(--accent-gold); letter-spacing: 2px;
         }
-
-        .agent-badges {
-            display: flex;
-            gap: 6px;
-        }
-
+        .agent-badges { display: flex; gap: 5px; flex-wrap: wrap; }
         .agent-badge {
-            font-size: 0.65rem;
-            padding: 3px 10px;
-            border-radius: 20px;
-            border: 1px solid var(--border-subtle);
-            color: var(--text-secondary);
-            background: rgba(155, 142, 196, 0.08);
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
+            font-size: 0.6rem; padding: 3px 8px; border-radius: 20px;
+            border: 1px solid var(--border-subtle); color: var(--text-muted);
+            background: rgba(155,142,196,0.06); letter-spacing: 1px;
+            transition: all 0.3s ease; white-space: nowrap;
         }
-
-        .agent-badge.active {
-            border-color: var(--accent-warm);
-            color: var(--accent-warm);
+        .agent-badge.working {
+            border-color: var(--accent-warm); color: var(--accent-warm);
             background: var(--glow-warm);
             animation: badgePulse 1.5s ease-in-out infinite;
         }
-
-        @keyframes badgePulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(232, 168, 124, 0.2); }
-            50% { box-shadow: 0 0 12px 2px rgba(232, 168, 124, 0.15); }
+        .agent-badge.done {
+            border-color: var(--accent-mint); color: var(--accent-mint);
+            background: rgba(126,196,165,0.1);
         }
-
-        .clear-btn {
-            font-size: 0.7rem;
-            padding: 4px 12px;
-            border-radius: 12px;
-            border: 1px solid var(--border-subtle);
-            color: var(--text-muted);
-            background: transparent;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        @keyframes badgePulse {
+            0%,100% { box-shadow: 0 0 0 0 rgba(232,168,124,0.2); }
+            50% { box-shadow: 0 0 12px 2px rgba(232,168,124,0.15); }
+        }
+        .header-actions { display: flex; align-items: center; gap: 10px; }
+        .action-btn {
+            font-size: 0.68rem; padding: 4px 12px; border-radius: 12px;
+            border: 1px solid var(--border-subtle); color: var(--text-muted);
+            background: transparent; cursor: pointer; transition: all 0.3s ease;
             font-family: 'Noto Serif SC', serif;
         }
-
-        .clear-btn:hover {
-            border-color: var(--accent-rose);
-            color: var(--accent-rose);
-        }
+        .action-btn:hover { border-color: var(--accent-lavender); color: var(--accent-lavender); }
+        .action-btn.danger:hover { border-color: var(--accent-rose); color: var(--accent-rose); }
 
         .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            max-height: 520px;
-            scroll-behavior: smooth;
+            flex: 1; overflow-y: auto; padding: 20px;
+            display: flex; flex-direction: column; gap: 16px;
+            max-height: 500px; scroll-behavior: smooth;
         }
-
-        .chat-messages::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .chat-messages::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .chat-messages::-webkit-scrollbar-thumb {
-            background: var(--text-muted);
-            border-radius: 4px;
-        }
-
-        .message {
-            display: flex;
-            gap: 12px;
-            animation: msgFadeIn 0.5s ease-out;
-        }
-
-        @keyframes msgFadeIn {
-            from { opacity: 0; transform: translateY(12px); }
+        .chat-messages::-webkit-scrollbar { width: 4px; }
+        .chat-messages::-webkit-scrollbar-track { background: transparent; }
+        .chat-messages::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 4px; }
+        .message { display: flex; gap: 10px; animation: msgIn 0.4s ease-out; }
+        @keyframes msgIn {
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
-        .message.user {
-            flex-direction: row-reverse;
-        }
-
+        .message.user { flex-direction: row-reverse; }
         .message-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9rem;
-            flex-shrink: 0;
+            width: 34px; height: 34px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem; flex-shrink: 0;
         }
-
-        .message.user .message-avatar {
-            background: linear-gradient(135deg, var(--accent-warm), var(--accent-rose));
+        .message.user .message-avatar { background: linear-gradient(135deg, var(--accent-warm), var(--accent-rose)); }
+        .message.assistant .message-avatar { background: linear-gradient(135deg, var(--accent-lavender), var(--accent-rose)); }
+        .message-body { max-width: 75%; }
+        .message-time {
+            font-size: 0.6rem; color: var(--text-muted); margin-bottom: 3px;
+            padding: 0 4px;
         }
-
-        .message.assistant .message-avatar {
-            background: linear-gradient(135deg, var(--accent-lavender), var(--accent-rose));
-        }
-
+        .message.user .message-time { text-align: right; }
         .message-content {
-            max-width: 75%;
-            padding: 14px 18px;
-            border-radius: 16px;
-            font-size: 0.9rem;
-            line-height: 1.8;
-            position: relative;
+            padding: 12px 16px; border-radius: 16px;
+            font-size: 0.88rem; line-height: 1.8; position: relative;
         }
-
         .message.user .message-content {
-            background: linear-gradient(135deg, rgba(232, 168, 124, 0.15), rgba(212, 117, 140, 0.12));
-            border: 1px solid rgba(232, 168, 124, 0.2);
-            border-bottom-right-radius: 4px;
+            background: linear-gradient(135deg, rgba(232,168,124,0.15), rgba(212,117,140,0.12));
+            border: 1px solid rgba(232,168,124,0.2); border-bottom-right-radius: 4px;
         }
-
         .message.assistant .message-content {
-            background: rgba(155, 142, 196, 0.08);
-            border: 1px solid var(--border-subtle);
+            background: rgba(155,142,196,0.08); border: 1px solid var(--border-subtle);
             border-bottom-left-radius: 4px;
         }
-
         .emotion-tag {
-            display: inline-block;
-            font-size: 0.7rem;
-            padding: 2px 10px;
-            border-radius: 12px;
-            margin-bottom: 8px;
-            letter-spacing: 1px;
+            display: inline-block; font-size: 0.68rem; padding: 2px 10px;
+            border-radius: 12px; margin-bottom: 6px; letter-spacing: 1px;
         }
-
-        .emotion-tag.happy { background: rgba(255, 200, 87, 0.15); color: #ffc857; border: 1px solid rgba(255, 200, 87, 0.3); }
-        .emotion-tag.sad { background: rgba(100, 149, 237, 0.15); color: #6495ed; border: 1px solid rgba(100, 149, 237, 0.3); }
-        .emotion-tag.anxious { background: rgba(255, 127, 80, 0.15); color: #ff7f50; border: 1px solid rgba(255, 127, 80, 0.3); }
-        .emotion-tag.angry { background: rgba(220, 80, 80, 0.15); color: #dc5050; border: 1px solid rgba(220, 80, 80, 0.3); }
-        .emotion-tag.calm { background: rgba(130, 200, 160, 0.15); color: #82c8a0; border: 1px solid rgba(130, 200, 160, 0.3); }
-        .emotion-tag.surprised { background: rgba(200, 130, 255, 0.15); color: #c882ff; border: 1px solid rgba(200, 130, 255, 0.3); }
-        .emotion-tag.tired { background: rgba(160, 160, 180, 0.15); color: #a0a0b4; border: 1px solid rgba(160, 160, 180, 0.3); }
-        .emotion-tag.moved { background: rgba(255, 160, 180, 0.15); color: #ffa0b4; border: 1px solid rgba(255, 160, 180, 0.3); }
-
+        .emotion-tag.happy { background: rgba(255,200,87,0.15); color: #ffc857; border: 1px solid rgba(255,200,87,0.3); }
+        .emotion-tag.sad { background: rgba(100,149,237,0.15); color: #6495ed; border: 1px solid rgba(100,149,237,0.3); }
+        .emotion-tag.anxious { background: rgba(255,127,80,0.15); color: #ff7f50; border: 1px solid rgba(255,127,80,0.3); }
+        .emotion-tag.angry { background: rgba(220,80,80,0.15); color: #dc5050; border: 1px solid rgba(220,80,80,0.3); }
+        .emotion-tag.calm { background: rgba(130,200,160,0.15); color: #82c8a0; border: 1px solid rgba(130,200,160,0.3); }
+        .emotion-tag.surprised { background: rgba(200,130,255,0.15); color: #c882ff; border: 1px solid rgba(200,130,255,0.3); }
+        .emotion-tag.tired { background: rgba(160,160,180,0.15); color: #a0a0b4; border: 1px solid rgba(160,160,180,0.3); }
+        .emotion-tag.moved { background: rgba(255,160,180,0.15); color: #ffa0b4; border: 1px solid rgba(255,160,180,0.3); }
         .diary-section {
-            margin-top: 12px;
-            padding: 14px 16px;
-            background: rgba(212, 184, 150, 0.06);
-            border: 1px solid rgba(212, 184, 150, 0.15);
-            border-radius: 12px;
-            position: relative;
+            margin-top: 10px; padding: 12px 14px;
+            background: rgba(212,184,150,0.06); border: 1px solid rgba(212,184,150,0.15);
+            border-radius: 12px; position: relative;
         }
-
         .diary-section::before {
-            content: '📝 今日日记';
-            position: absolute;
-            top: -10px;
-            left: 14px;
-            font-size: 0.65rem;
-            color: var(--accent-gold);
-            background: var(--bg-card);
-            padding: 0 8px;
-            letter-spacing: 2px;
+            content: '📝 今日日记'; position: absolute; top: -9px; left: 12px;
+            font-size: 0.62rem; color: var(--accent-gold); background: var(--bg-card);
+            padding: 0 6px; letter-spacing: 2px;
         }
-
-        .diary-text {
-            font-size: 0.85rem;
-            line-height: 2;
-            color: var(--text-primary);
-            white-space: pre-wrap;
+        .diary-text { font-size: 0.83rem; line-height: 2; white-space: pre-wrap; }
+        .diary-actions {
+            display: flex; gap: 8px; margin-top: 10px; justify-content: flex-end;
         }
-
-        .chat-input-area {
-            padding: 18px 24px;
-            border-top: 1px solid var(--border-subtle);
-            display: flex;
-            gap: 12px;
-        }
-
-        .chat-input {
-            flex: 1;
-            background: var(--bg-input);
-            border: 1px solid var(--border-subtle);
-            border-radius: 14px;
-            padding: 12px 18px;
-            color: var(--text-primary);
-            font-size: 0.9rem;
+        .diary-action-btn {
+            font-size: 0.65rem; padding: 3px 10px; border-radius: 8px;
+            border: 1px solid var(--border-subtle); color: var(--text-muted);
+            background: transparent; cursor: pointer; transition: all 0.3s ease;
             font-family: 'Noto Serif SC', serif;
-            outline: none;
-            transition: border-color 0.3s ease;
-            resize: none;
-            min-height: 46px;
-            max-height: 120px;
         }
-
-        .chat-input:focus {
-            border-color: var(--accent-lavender);
+        .diary-action-btn:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
+        .chat-input-area {
+            padding: 14px 20px; border-top: 1px solid var(--border-subtle);
+            display: flex; gap: 10px;
         }
-
-        .chat-input::placeholder {
-            color: var(--text-muted);
+        .chat-input {
+            flex: 1; background: var(--bg-input); border: 1px solid var(--border-subtle);
+            border-radius: 14px; padding: 10px 16px; color: var(--text-primary);
+            font-size: 0.88rem; font-family: 'Noto Serif SC', serif;
+            outline: none; transition: border-color 0.3s ease;
+            resize: none; min-height: 44px; max-height: 120px;
         }
-
+        .chat-input:focus { border-color: var(--accent-lavender); }
+        .chat-input::placeholder { color: var(--text-muted); }
         .send-btn {
-            width: 46px;
-            height: 46px;
-            border-radius: 14px;
-            border: none;
+            width: 44px; height: 44px; border-radius: 14px; border: none;
             background: linear-gradient(135deg, var(--accent-warm), var(--accent-rose));
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
+            color: white; font-size: 1.1rem; cursor: pointer; transition: all 0.3s ease;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
         }
+        .send-btn:hover { transform: scale(1.05); box-shadow: 0 4px 20px rgba(232,168,124,0.3); }
+        .send-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-        .send-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 20px rgba(232, 168, 124, 0.3);
-        }
-
-        .send-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .side-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
+        .side-panel { display: flex; flex-direction: column; gap: 16px; }
         .side-card {
-            background: var(--bg-card);
-            border-radius: 20px;
-            border: 1px solid var(--border-subtle);
-            padding: 20px;
-            position: relative;
-            overflow: hidden;
+            background: var(--bg-card); border-radius: 20px;
+            border: 1px solid var(--border-subtle); padding: 16px;
+            position: relative; overflow: hidden;
         }
-
         .side-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent-lavender), transparent);
-            opacity: 0.4;
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-lavender), transparent); opacity: 0.4;
         }
-
         .side-card-title {
-            font-size: 0.85rem;
-            color: var(--accent-gold);
-            letter-spacing: 3px;
-            margin-bottom: 16px;
-            font-weight: 600;
+            font-size: 0.82rem; color: var(--accent-gold); letter-spacing: 3px;
+            margin-bottom: 12px; font-weight: 600;
         }
-
-        .emotion-display {
-            text-align: center;
-            padding: 16px 0;
-        }
-
-        .emotion-emoji {
-            font-size: 3rem;
-            margin-bottom: 8px;
-            display: block;
-        }
-
-        .emotion-name {
-            font-size: 1.1rem;
-            color: var(--accent-warm);
-            letter-spacing: 3px;
-        }
-
-        .emotion-bar-container {
-            margin-top: 12px;
-        }
-
+        .emotion-display { text-align: center; padding: 12px 0; }
+        .emotion-emoji { font-size: 2.8rem; margin-bottom: 6px; display: block; }
+        .emotion-name { font-size: 1rem; color: var(--accent-warm); letter-spacing: 3px; }
+        .emotion-bar-container { margin-top: 10px; }
         .emotion-bar-label {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            margin-bottom: 4px;
-            display: flex;
-            justify-content: space-between;
+            font-size: 0.68rem; color: var(--text-muted); margin-bottom: 3px;
+            display: flex; justify-content: space-between;
         }
-
-        .emotion-bar {
-            height: 4px;
-            background: rgba(155, 142, 196, 0.15);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-
+        .emotion-bar { height: 4px; background: rgba(155,142,196,0.15); border-radius: 2px; overflow: hidden; }
         .emotion-bar-fill {
-            height: 100%;
-            border-radius: 2px;
+            height: 100%; border-radius: 2px;
             background: linear-gradient(90deg, var(--accent-warm), var(--accent-rose));
             transition: width 0.8s ease;
         }
-
-        .memory-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .memory-list::-webkit-scrollbar {
-            width: 3px;
-        }
-
-        .memory-list::-webkit-scrollbar-thumb {
-            background: var(--text-muted);
-            border-radius: 3px;
-        }
-
+        .memory-list { display: flex; flex-direction: column; gap: 6px; max-height: 220px; overflow-y: auto; }
+        .memory-list::-webkit-scrollbar { width: 3px; }
+        .memory-list::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 3px; }
         .memory-item {
-            padding: 10px 12px;
-            background: rgba(155, 142, 196, 0.06);
-            border: 1px solid var(--border-subtle);
-            border-radius: 10px;
-            font-size: 0.78rem;
-            line-height: 1.6;
-            color: var(--text-secondary);
-            position: relative;
-            transition: all 0.3s ease;
+            padding: 8px 10px; background: rgba(155,142,196,0.06);
+            border: 1px solid var(--border-subtle); border-radius: 10px;
+            font-size: 0.75rem; line-height: 1.6; color: var(--text-secondary);
+            position: relative; transition: all 0.3s ease;
         }
-
-        .memory-item:hover {
-            border-color: var(--accent-lavender);
-            background: rgba(155, 142, 196, 0.1);
-        }
-
-        .memory-date {
-            font-size: 0.65rem;
-            color: var(--text-muted);
-            margin-top: 4px;
-        }
-
+        .memory-item:hover { border-color: var(--accent-lavender); background: rgba(155,142,196,0.1); }
+        .memory-date { font-size: 0.62rem; color: var(--text-muted); margin-top: 3px; }
         .memory-delete {
-            position: absolute;
-            top: 6px;
-            right: 8px;
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-size: 0.7rem;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            position: absolute; top: 5px; right: 7px; background: none; border: none;
+            color: var(--text-muted); cursor: pointer; font-size: 0.65rem;
+            opacity: 0; transition: opacity 0.3s ease;
         }
+        .memory-item:hover .memory-delete { opacity: 1; }
+        .memory-delete:hover { color: var(--accent-rose); }
+        .empty-state { text-align: center; padding: 20px 0; color: var(--text-muted); font-size: 0.78rem; }
+        .empty-state-icon { font-size: 1.8rem; margin-bottom: 6px; display: block; opacity: 0.5; }
 
-        .memory-item:hover .memory-delete {
-            opacity: 1;
-        }
-
-        .memory-delete:hover {
-            color: var(--accent-rose);
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 24px 0;
-            color: var(--text-muted);
-            font-size: 0.8rem;
-        }
-
-        .empty-state-icon {
-            font-size: 2rem;
-            margin-bottom: 8px;
-            display: block;
-            opacity: 0.5;
-        }
-
-        .loading-dots {
-            display: inline-flex;
-            gap: 4px;
-            padding: 8px 0;
-        }
-
+        .loading-dots { display: inline-flex; gap: 4px; padding: 6px 0; }
         .loading-dots span {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: var(--accent-lavender);
+            width: 6px; height: 6px; border-radius: 50%; background: var(--accent-lavender);
             animation: dotBounce 1.4s ease-in-out infinite;
         }
-
         .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
         .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
-
         @keyframes dotBounce {
-            0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+            0%,80%,100% { transform: scale(0.6); opacity: 0.4; }
             40% { transform: scale(1); opacity: 1; }
         }
 
-        .typing-indicator {
-            display: none;
+        .diary-list-panel {
+            background: var(--bg-card); border-radius: 0 20px 20px 20px;
+            border: 1px solid var(--border-subtle); padding: 20px; flex: 1;
         }
-
-        .typing-indicator.show {
-            display: flex;
+        .diary-list-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border-subtle);
         }
-
-        @media (max-width: 900px) {
-            .main-layout {
-                grid-template-columns: 1fr;
-            }
-            .side-panel {
-                flex-direction: row;
-                overflow-x: auto;
-            }
-            .side-card {
-                min-width: 280px;
-            }
+        .diary-list-title { font-size: 0.95rem; color: var(--accent-gold); letter-spacing: 2px; }
+        .export-all-btn {
+            font-size: 0.7rem; padding: 5px 14px; border-radius: 10px;
+            border: 1px solid var(--accent-gold); color: var(--accent-gold);
+            background: transparent; cursor: pointer; transition: all 0.3s ease;
+            font-family: 'Noto Serif SC', serif; text-decoration: none;
         }
-
-        @media (max-width: 600px) {
-            .app-container {
-                padding: 12px;
-            }
-            .logo-title {
-                font-size: 2rem;
-                letter-spacing: 4px;
-            }
-            .chat-messages {
-                max-height: 400px;
-            }
+        .export-all-btn:hover { background: rgba(212,184,150,0.1); }
+        .diary-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 14px; max-height: 600px; overflow-y: auto; padding-right: 4px;
         }
-
-        .welcome-message {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text-muted);
+        .diary-grid::-webkit-scrollbar { width: 4px; }
+        .diary-grid::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 4px; }
+        .diary-card {
+            background: rgba(155,142,196,0.06); border: 1px solid var(--border-subtle);
+            border-radius: 14px; padding: 14px; cursor: pointer; transition: all 0.3s ease;
         }
+        .diary-card:hover { border-color: var(--accent-lavender); background: rgba(155,142,196,0.1); transform: translateY(-2px); }
+        .diary-card-date { font-size: 0.72rem; color: var(--accent-gold); margin-bottom: 6px; }
+        .diary-card-emotion {
+            font-size: 0.62rem; padding: 2px 8px; border-radius: 10px;
+            display: inline-block; margin-bottom: 8px;
+        }
+        .diary-card-preview { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.7; }
+        .diary-card-actions { display: flex; gap: 6px; margin-top: 10px; justify-content: flex-end; }
+        .diary-card-btn {
+            font-size: 0.62rem; padding: 2px 8px; border-radius: 6px;
+            border: 1px solid var(--border-subtle); color: var(--text-muted);
+            background: transparent; cursor: pointer; transition: all 0.3s ease;
+            font-family: 'Noto Serif SC', serif;
+        }
+        .diary-card-btn:hover { border-color: var(--accent-lavender); color: var(--accent-lavender); }
+        .diary-card-btn.del:hover { border-color: var(--accent-rose); color: var(--accent-rose); }
 
+        .diary-modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6); z-index: 100;
+            justify-content: center; align-items: center;
+        }
+        .diary-modal-overlay.show { display: flex; }
+        .diary-modal {
+            background: var(--bg-card); border: 1px solid var(--border-subtle);
+            border-radius: 20px; padding: 24px; max-width: 600px; width: 90%;
+            max-height: 80vh; overflow-y: auto; position: relative;
+            animation: modalIn 0.3s ease-out;
+        }
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .diary-modal-close {
+            position: absolute; top: 12px; right: 16px;
+            background: none; border: none; color: var(--text-muted);
+            cursor: pointer; font-size: 1.2rem; transition: color 0.3s ease;
+        }
+        .diary-modal-close:hover { color: var(--accent-rose); }
+        .diary-modal-date { font-size: 0.85rem; color: var(--accent-gold); margin-bottom: 8px; }
+        .diary-modal-emotion { font-size: 0.72rem; padding: 3px 10px; border-radius: 10px; display: inline-block; margin-bottom: 14px; }
+        .diary-modal-input { font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 14px; line-height: 1.8; padding: 10px; background: rgba(155,142,196,0.06); border-radius: 10px; }
+        .diary-modal-text { font-size: 0.88rem; line-height: 2; white-space: pre-wrap; }
+        .diary-modal-actions { display: flex; gap: 8px; margin-top: 16px; justify-content: flex-end; }
+
+        .main-layout { display: grid; grid-template-columns: 1fr 320px; gap: 20px; flex: 1; }
+
+        .welcome-message { text-align: center; padding: 30px 16px; color: var(--text-muted); }
         .welcome-message h3 {
-            font-family: 'ZCOOL XiaoWei', serif;
-            font-size: 1.3rem;
-            color: var(--accent-gold);
-            margin-bottom: 12px;
-            letter-spacing: 3px;
+            font-family: 'ZCOOL XiaoWei', serif; font-size: 1.2rem;
+            color: var(--accent-gold); margin-bottom: 10px; letter-spacing: 3px;
         }
-
-        .welcome-message p {
-            font-size: 0.85rem;
-            line-height: 2;
-        }
-
-        .agent-flow {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            margin-top: 12px;
-        }
-
-        .agent-flow-step {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.72rem;
-            color: var(--text-muted);
-            padding: 4px 0;
-        }
-
-        .agent-flow-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: var(--accent-lavender);
-            flex-shrink: 0;
-        }
-
+        .welcome-message p { font-size: 0.82rem; line-height: 2; }
+        .agent-flow { display: flex; flex-direction: column; gap: 5px; margin-top: 10px; }
+        .agent-flow-step { display: flex; align-items: center; gap: 7px; font-size: 0.7rem; color: var(--text-muted); padding: 3px 0; }
+        .agent-flow-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent-lavender); flex-shrink: 0; }
         .agent-flow-dot.warm { background: var(--accent-warm); }
         .agent-flow-dot.rose { background: var(--accent-rose); }
         .agent-flow-dot.gold { background: var(--accent-gold); }
+
+        @media (max-width: 900px) {
+            .main-layout { grid-template-columns: 1fr; }
+            .side-panel { flex-direction: row; overflow-x: auto; }
+            .side-card { min-width: 260px; }
+        }
+        @media (max-width: 600px) {
+            .app-container { padding: 10px; }
+            .logo-title { font-size: 1.8rem; letter-spacing: 4px; }
+            .chat-messages { max-height: 380px; }
+            .nav-tab { padding: 6px 14px; font-size: 0.75rem; }
+        }
     </style>
 </head>
 <body>
@@ -638,71 +397,89 @@
         <header>
             <div class="logo-title">心语日记</div>
             <div class="logo-subtitle">多智能体 AI 日记助手</div>
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="switchTab('chat')">✦ 对话</button>
+                <button class="nav-tab" onclick="switchTab('diaries')">📔 日记本</button>
+            </div>
         </header>
 
-        <div class="main-layout">
-            <div class="chat-panel">
-                <div class="chat-header">
-                    <div class="chat-header-title">✦ 对话</div>
-                    <div style="display:flex;align-items:center;gap:12px;">
-                        <div class="agent-badges">
-                            <span class="agent-badge" id="badge-emotion">情绪感知</span>
-                            <span class="agent-badge" id="badge-memory">记忆管家</span>
-                            <span class="agent-badge" id="badge-diary">日记生成</span>
-                            <span class="agent-badge" id="badge-dialog">对话精灵</span>
-                        </div>
-                        <button class="clear-btn" onclick="clearContext()">重置对话</button>
-                    </div>
-                </div>
-                <div class="chat-messages" id="chatMessages">
-                    <div class="welcome-message">
-                        <h3>你好，我是心语</h3>
-                        <p>
-                            我会倾听你的每一天，感知你的情绪，<br>
-                            记住那些重要的瞬间，为你写下温暖的日记。<br>
-                            试着告诉我，今天过得怎么样？
-                        </p>
-                        <div class="agent-flow">
-                            <div class="agent-flow-step"><span class="agent-flow-dot warm"></span>情绪感知器 — 识别你的情绪状态</div>
-                            <div class="agent-flow-step"><span class="agent-flow-dot rose"></span>记忆管家 — 检索与保存重要记忆</div>
-                            <div class="agent-flow-step"><span class="agent-flow-dot gold"></span>日记生成器 — 撰写个性化日记</div>
-                            <div class="agent-flow-step"><span class="agent-flow-dot"></span>对话精灵 — 整合温暖的回复</div>
+        <div id="tab-chat" class="tab-content active">
+            <div class="main-layout">
+                <div class="chat-panel">
+                    <div class="chat-header">
+                        <div class="chat-header-title">✦ 对话</div>
+                        <div class="header-actions">
+                            <div class="agent-badges">
+                                <span class="agent-badge" id="badge-emotion">情绪感知</span>
+                                <span class="agent-badge" id="badge-memory">记忆管家</span>
+                                <span class="agent-badge" id="badge-diary">日记生成</span>
+                                <span class="agent-badge" id="badge-dialog">对话精灵</span>
+                            </div>
+                            <button class="action-btn danger" onclick="clearContext()">重置</button>
                         </div>
                     </div>
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="welcome-message">
+                            <h3>你好，我是心语</h3>
+                            <p>我会倾听你的每一天，感知你的情绪，<br>记住那些重要的瞬间，为你写下温暖的日记。<br>试着告诉我，今天过得怎么样？</p>
+                            <div class="agent-flow">
+                                <div class="agent-flow-step"><span class="agent-flow-dot warm"></span>情绪感知器 — 识别你的情绪状态</div>
+                                <div class="agent-flow-step"><span class="agent-flow-dot rose"></span>记忆管家 — 检索与保存重要记忆</div>
+                                <div class="agent-flow-step"><span class="agent-flow-dot gold"></span>日记生成器 — 撰写个性化日记</div>
+                                <div class="agent-flow-step"><span class="agent-flow-dot"></span>对话精灵 — 整合温暖的回复</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chat-input-area">
+                        <textarea class="chat-input" id="chatInput" placeholder="说说今天的心情..." rows="1" onkeydown="handleKeyDown(event)"></textarea>
+                        <button class="send-btn" id="sendBtn" onclick="sendMessage()">➤</button>
+                    </div>
                 </div>
-                <div class="chat-input-area">
-                    <textarea class="chat-input" id="chatInput" placeholder="说说今天的心情..." rows="1" onkeydown="handleKeyDown(event)"></textarea>
-                    <button class="send-btn" id="sendBtn" onclick="sendMessage()">➤</button>
+                <div class="side-panel">
+                    <div class="side-card">
+                        <div class="side-card-title">✦ 情绪状态</div>
+                        <div class="emotion-display">
+                            <span class="emotion-emoji" id="emotionEmoji">🌙</span>
+                            <div class="emotion-name" id="emotionName">等待输入</div>
+                            <div class="emotion-bar-container">
+                                <div class="emotion-bar-label"><span>情绪强度</span><span id="emotionIntensity">0</span></div>
+                                <div class="emotion-bar"><div class="emotion-bar-fill" id="emotionBarFill" style="width:0%"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="side-card" style="flex:1;">
+                        <div class="side-card-title">✦ 长期记忆</div>
+                        <div class="memory-list" id="memoryList">
+                            <div class="empty-state"><span class="empty-state-icon">🧠</span>记忆库为空</div>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <div class="side-panel">
-                <div class="side-card">
-                    <div class="side-card-title">✦ 情绪状态</div>
-                    <div class="emotion-display" id="emotionDisplay">
-                        <span class="emotion-emoji" id="emotionEmoji">🌙</span>
-                        <div class="emotion-name" id="emotionName">等待输入</div>
-                        <div class="emotion-bar-container">
-                            <div class="emotion-bar-label">
-                                <span>情绪强度</span>
-                                <span id="emotionIntensity">0</span>
-                            </div>
-                            <div class="emotion-bar">
-                                <div class="emotion-bar-fill" id="emotionBarFill" style="width: 0%"></div>
-                            </div>
-                        </div>
-                    </div>
+        <div id="tab-diaries" class="tab-content">
+            <div class="diary-list-panel">
+                <div class="diary-list-header">
+                    <div class="diary-list-title">📔 我的日记本</div>
+                    <a class="export-all-btn" href="/api/diaries/export/all" download>导出全部</a>
                 </div>
+                <div class="diary-grid" id="diaryGrid">
+                    <div class="empty-state"><span class="empty-state-icon">📔</span>还没有日记，去对话页开始写吧</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                <div class="side-card" style="flex:1;">
-                    <div class="side-card-title">✦ 长期记忆</div>
-                    <div class="memory-list" id="memoryList">
-                        <div class="empty-state">
-                            <span class="empty-state-icon">🧠</span>
-                            记忆库为空，开始对话吧
-                        </div>
-                    </div>
-                </div>
+    <div class="diary-modal-overlay" id="diaryModal" onclick="closeDiaryModal(event)">
+        <div class="diary-modal" onclick="event.stopPropagation()">
+            <button class="diary-modal-close" onclick="closeDiaryModal()">✕</button>
+            <div class="diary-modal-date" id="modalDate"></div>
+            <span class="diary-modal-emotion" id="modalEmotion"></span>
+            <div class="diary-modal-input" id="modalInput"></div>
+            <div class="diary-modal-text" id="modalText"></div>
+            <div class="diary-modal-actions">
+                <button class="diary-card-btn" id="modalExport">📥 导出</button>
+                <button class="diary-card-btn del" id="modalDelete">删除</button>
             </div>
         </div>
     </div>
@@ -713,55 +490,62 @@
         const sendBtn = document.getElementById('sendBtn');
 
         const emotionEmojiMap = {
-            '开心': '😊', '悲伤': '🌧️', '焦虑': '😰', '愤怒': '🔥',
-            '平静': '🌙', '惊喜': '✨', '疲惫': '😴', '感动': '🥹'
+            '开心':'😊','悲伤':'🌧️','焦虑':'😰','愤怒':'🔥',
+            '平静':'🌙','惊喜':'✨','疲惫':'😴','感动':'🥹'
         };
-
         const emotionClassMap = {
-            '开心': 'happy', '悲伤': 'sad', '焦虑': 'anxious', '愤怒': 'angry',
-            '平静': 'calm', '惊喜': 'surprised', '疲惫': 'tired', '感动': 'moved'
+            '开心':'happy','悲伤':'sad','焦虑':'anxious','愤怒':'angry',
+            '平静':'calm','惊喜':'surprised','疲惫':'tired','感动':'moved'
         };
 
         function autoResize() {
             chatInput.style.height = 'auto';
             chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
         }
-
         chatInput.addEventListener('input', autoResize);
 
         function handleKeyDown(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-            }
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
         }
 
-        function addMessage(role, content, emotion = null, diary = null) {
+        function switchTab(tab) {
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('tab-' + tab).classList.add('active');
+            if (tab === 'diaries') loadDiaries();
+        }
+
+        function getTimeStr() {
+            const now = new Date();
+            return now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+        }
+
+        function addMessage(role, content, emotion = null, diary = null, diaryId = null) {
             const welcomeMsg = chatMessages.querySelector('.welcome-message');
             if (welcomeMsg) welcomeMsg.remove();
-
             const msgDiv = document.createElement('div');
             msgDiv.className = `message ${role}`;
-
             const avatar = document.createElement('div');
             avatar.className = 'message-avatar';
             avatar.textContent = role === 'user' ? '我' : '心';
-
+            const body = document.createElement('div');
+            body.className = 'message-body';
+            const time = document.createElement('div');
+            time.className = 'message-time';
+            time.textContent = getTimeStr();
             const contentDiv = document.createElement('div');
             contentDiv.className = 'message-content';
-
             if (role === 'assistant' && emotion) {
                 const emotionTag = document.createElement('span');
                 const eClass = emotionClassMap[emotion.emotion] || 'calm';
                 emotionTag.className = `emotion-tag ${eClass}`;
-                emotionTag.textContent = `${emotionEmojiMap[emotion.emotion] || '🌙'} ${emotion.emotion} · 强度 ${emotion.intensity}/10`;
+                emotionTag.textContent = `${emotionEmojiMap[emotion.emotion]||'🌙'} ${emotion.emotion} · 强度 ${emotion.intensity}/10`;
                 contentDiv.appendChild(emotionTag);
             }
-
             const textP = document.createElement('div');
             textP.textContent = content;
             contentDiv.appendChild(textP);
-
             if (role === 'assistant' && diary) {
                 const diarySection = document.createElement('div');
                 diarySection.className = 'diary-section';
@@ -769,11 +553,22 @@
                 diaryText.className = 'diary-text';
                 diaryText.textContent = diary;
                 diarySection.appendChild(diaryText);
+                if (diaryId) {
+                    const actions = document.createElement('div');
+                    actions.className = 'diary-actions';
+                    const exportBtn = document.createElement('button');
+                    exportBtn.className = 'diary-action-btn';
+                    exportBtn.textContent = '📥 导出日记';
+                    exportBtn.onclick = () => window.open(`/api/diaries/${diaryId}/export`, '_blank');
+                    actions.appendChild(exportBtn);
+                    diarySection.appendChild(actions);
+                }
                 contentDiv.appendChild(diarySection);
             }
-
+            body.appendChild(time);
+            body.appendChild(contentDiv);
             msgDiv.appendChild(avatar);
-            msgDiv.appendChild(contentDiv);
+            msgDiv.appendChild(body);
             chatMessages.appendChild(msgDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
@@ -781,21 +576,24 @@
         function addLoadingMessage() {
             const welcomeMsg = chatMessages.querySelector('.welcome-message');
             if (welcomeMsg) welcomeMsg.remove();
-
             const msgDiv = document.createElement('div');
-            msgDiv.className = 'message assistant typing-indicator show';
+            msgDiv.className = 'message assistant';
             msgDiv.id = 'loadingMsg';
-
             const avatar = document.createElement('div');
             avatar.className = 'message-avatar';
             avatar.textContent = '心';
-
+            const body = document.createElement('div');
+            body.className = 'message-body';
+            const time = document.createElement('div');
+            time.className = 'message-time';
+            time.textContent = getTimeStr();
             const contentDiv = document.createElement('div');
             contentDiv.className = 'message-content';
             contentDiv.innerHTML = '<div class="loading-dots"><span></span><span></span><span></span></div>';
-
+            body.appendChild(time);
+            body.appendChild(contentDiv);
             msgDiv.appendChild(avatar);
-            msgDiv.appendChild(contentDiv);
+            msgDiv.appendChild(body);
             chatMessages.appendChild(msgDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
@@ -805,48 +603,69 @@
             if (loading) loading.remove();
         }
 
-        async function activateBadge(id, duration = 2000) {
+        function setBadgeState(id, state) {
             const badge = document.getElementById(id);
-            badge.classList.add('active');
-            await new Promise(r => setTimeout(r, duration));
-            badge.classList.remove('active');
+            badge.classList.remove('working', 'done');
+            if (state) badge.classList.add(state);
+        }
+
+        function resetBadges() {
+            ['badge-emotion','badge-memory','badge-diary','badge-dialog'].forEach(id => setBadgeState(id, null));
         }
 
         async function sendMessage() {
             const text = chatInput.value.trim();
             if (!text) return;
-
             chatInput.value = '';
             chatInput.style.height = 'auto';
             sendBtn.disabled = true;
-
             addMessage('user', text);
-
             addLoadingMessage();
+            resetBadges();
 
             try {
-                await activateBadge('badge-emotion', 1500);
-                await activateBadge('badge-memory', 1500);
-                await activateBadge('badge-diary', 1500);
-                await activateBadge('badge-dialog', 1500);
-
-                const response = await fetch('/api/chat', {
+                const response = await fetch('/api/chat/stream', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ message: text })
                 });
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let buffer = '';
+                let lastEmotion = null;
+                let lastDiary = null;
+                let lastDiaryId = null;
 
-                const data = await response.json();
-                removeLoadingMessage();
-                addMessage('assistant', data.response, data.emotion, data.diary);
-
-                updateEmotionDisplay(data.emotion);
-                loadMemories();
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop() || '';
+                    for (const line of lines) {
+                        if (!line.startsWith('data: ')) continue;
+                        try {
+                            const data = JSON.parse(line.slice(6));
+                            if (data.type === 'progress') {
+                                setBadgeState('badge-' + data.agent, data.status === 'working' ? 'working' : 'done');
+                            } else if (data.type === 'emotion') {
+                                lastEmotion = data.data;
+                                updateEmotionDisplay(data.data);
+                            } else if (data.type === 'diary') {
+                                lastDiary = data.data;
+                            } else if (data.type === 'complete') {
+                                removeLoadingMessage();
+                                addMessage('assistant', data.response, data.emotion, data.diary, data.diary_id);
+                                loadMemories();
+                            }
+                        } catch(e) {}
+                    }
+                }
             } catch (err) {
                 removeLoadingMessage();
                 addMessage('assistant', '抱歉，我暂时无法回应，请稍后再试。');
             }
-
+            resetBadges();
             sendBtn.disabled = false;
             chatInput.focus();
         }
@@ -861,62 +680,101 @@
 
         async function loadMemories() {
             try {
-                const response = await fetch('/api/memories');
-                const data = await response.json();
+                const resp = await fetch('/api/memories');
+                const data = await resp.json();
                 const list = document.getElementById('memoryList');
-
                 if (!data.memories || data.memories.length === 0) {
-                    list.innerHTML = '<div class="empty-state"><span class="empty-state-icon">🧠</span>记忆库为空，开始对话吧</div>';
+                    list.innerHTML = '<div class="empty-state"><span class="empty-state-icon">🧠</span>记忆库为空</div>';
                     return;
                 }
-
                 list.innerHTML = '';
                 data.memories.slice().reverse().forEach(m => {
                     const item = document.createElement('div');
                     item.className = 'memory-item';
-
                     const content = document.createElement('div');
                     content.textContent = m.content;
-
                     const date = document.createElement('div');
                     date.className = 'memory-date';
-                    date.textContent = m.metadata?.date || m.metadata?.timestamp?.split('T')[0] || '';
-
+                    date.textContent = m.metadata?.date || '';
                     const delBtn = document.createElement('button');
                     delBtn.className = 'memory-delete';
                     delBtn.textContent = '✕';
                     delBtn.onclick = () => deleteMemory(m.id);
-
                     item.appendChild(content);
                     item.appendChild(date);
                     item.appendChild(delBtn);
                     list.appendChild(item);
                 });
-            } catch (err) {
-                console.error('Failed to load memories:', err);
-            }
+            } catch(e) {}
         }
 
         async function deleteMemory(id) {
-            try {
-                await fetch(`/api/memories/${id}`, { method: 'DELETE' });
-                loadMemories();
-            } catch (err) {
-                console.error('Failed to delete memory:', err);
-            }
+            await fetch(`/api/memories/${id}`, { method: 'DELETE' });
+            loadMemories();
         }
 
         async function clearContext() {
+            await fetch('/api/clear_context', { method: 'POST' });
+            chatMessages.innerHTML = `<div class="welcome-message"><h3>对话已重置</h3><p>短期记忆已清空，长期记忆仍保留。<br>继续和我聊聊吧！</p></div>`;
+        }
+
+        async function loadDiaries() {
             try {
-                await fetch('/api/clear_context', { method: 'POST' });
-                chatMessages.innerHTML = `
-                    <div class="welcome-message">
-                        <h3>对话已重置</h3>
-                        <p>短期记忆已清空，长期记忆仍保留。<br>继续和我聊聊吧！</p>
-                    </div>`;
-            } catch (err) {
-                console.error('Failed to clear context:', err);
-            }
+                const resp = await fetch('/api/diaries');
+                const data = await resp.json();
+                const grid = document.getElementById('diaryGrid');
+                if (!data.diaries || data.diaries.length === 0) {
+                    grid.innerHTML = '<div class="empty-state"><span class="empty-state-icon">📔</span>还没有日记，去对话页开始写吧</div>';
+                    return;
+                }
+                grid.innerHTML = '';
+                data.diaries.forEach(d => {
+                    const card = document.createElement('div');
+                    card.className = 'diary-card';
+                    card.onclick = () => openDiary(d.id);
+                    const dateDiv = document.createElement('div');
+                    dateDiv.className = 'diary-card-date';
+                    dateDiv.textContent = `${d.date} ${d.time}`;
+                    const emotionSpan = document.createElement('span');
+                    emotionSpan.className = `diary-card-emotion emotion-tag ${emotionClassMap[d.emotion]||'calm'}`;
+                    emotionSpan.textContent = `${emotionEmojiMap[d.emotion]||'🌙'} ${d.emotion}`;
+                    const preview = document.createElement('div');
+                    preview.className = 'diary-card-preview';
+                    preview.textContent = d.preview || '';
+                    card.appendChild(dateDiv);
+                    card.appendChild(emotionSpan);
+                    card.appendChild(preview);
+                    grid.appendChild(card);
+                });
+            } catch(e) {}
+        }
+
+        async function openDiary(id) {
+            try {
+                const resp = await fetch(`/api/diaries/${id}`);
+                const data = await resp.json();
+                if (data.error) return;
+                document.getElementById('modalDate').textContent = `${data.date} ${data.time}`;
+                const emotionEl = document.getElementById('modalEmotion');
+                emotionEl.className = `diary-modal-emotion emotion-tag ${emotionClassMap[data.emotion]||'calm'}`;
+                emotionEl.textContent = `${emotionEmojiMap[data.emotion]||'🌙'} ${data.emotion} · 强度 ${data.intensity}/10`;
+                document.getElementById('modalInput').textContent = data.user_input;
+                document.getElementById('modalText').textContent = data.diary;
+                document.getElementById('modalExport').onclick = () => window.open(`/api/diaries/${id}/export`, '_blank');
+                document.getElementById('modalDelete').onclick = () => deleteDiary(id);
+                document.getElementById('diaryModal').classList.add('show');
+            } catch(e) {}
+        }
+
+        function closeDiaryModal(e) {
+            if (e && e.target !== document.getElementById('diaryModal')) return;
+            document.getElementById('diaryModal').classList.remove('show');
+        }
+
+        async function deleteDiary(id) {
+            await fetch(`/api/diaries/${id}`, { method: 'DELETE' });
+            document.getElementById('diaryModal').classList.remove('show');
+            loadDiaries();
         }
 
         loadMemories();
