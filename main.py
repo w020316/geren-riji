@@ -148,6 +148,31 @@ async def clear_context():
     return {"success": True}
 
 
+@app.get("/api/stats")
+async def get_stats():
+    diaries = diary_store.get_all_diaries()
+    emotion_counts = {}
+    total_intensity = 0
+    for d in diaries:
+        e = d.get("emotion", "平静")
+        emotion_counts[e] = emotion_counts.get(e, 0) + 1
+        total_intensity += d.get("intensity", 5)
+    avg_intensity = round(total_intensity / len(diaries), 1) if diaries else 0
+    memory_count = orchestrator.memory_manager.collection.count()
+    return {
+        "total_diaries": len(diaries),
+        "total_memories": memory_count,
+        "emotion_distribution": emotion_counts,
+        "avg_intensity": avg_intensity,
+        "recent_diaries": diaries[:5]
+    }
+
+
+@app.get("/api/health")
+async def health():
+    return {"status": "ok", "timestamp": datetime.now().isoformat()}
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)

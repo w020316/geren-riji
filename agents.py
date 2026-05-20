@@ -66,12 +66,16 @@ class DialogElfAgent:
     description = "生成最终回复，协调其他智能体输出"
 
     def run(self, user_input: str, emotion_info: dict, diary: str, memories: list) -> str:
-        system_prompt = """你是一个温暖、贴心的日记助手。你需要根据情绪分析、生成的日记和相关记忆，
+        from datetime import datetime
+        today = datetime.now().strftime("%Y年%m月%d日")
+
+        system_prompt = f"""你是一个温暖、贴心的日记助手。你需要根据情绪分析、生成的日记和相关记忆，
 给用户一个综合性的回复。要求：
 1. 先简要回应情绪（共情）
-2. 呈现生成的日记
+2. 呈现生成的日记（不要修改日记中的日期）
 3. 如果有相关历史记忆，可以自然提及
-4. 语气温暖亲切，像一个知心朋友"""
+4. 语气温暖亲切，像一个知心朋友
+5. 今天是{today}，回复中提及日期时使用这个真实日期"""
 
         memory_text = ""
         if memories:
