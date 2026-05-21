@@ -365,6 +365,66 @@
         }
         .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+        /* 每日一句样式 */
+        .daily-quote {
+            font-size: 0.78rem; color: var(--accent-lavender); font-style: italic;
+            margin-top: 12px; padding: 8px 14px; border-left: 2px solid var(--accent-lavender);
+            background: rgba(155,142,196,0.04); border-radius: 0 8px 8px 0; line-height: 1.8;
+        }
+
+        /* 日记搜索样式 */
+        .diary-search { display: flex; gap: 6px; margin-bottom: 12px; }
+        .diary-search-input {
+            flex: 1; background: var(--bg-input); border: 1px solid var(--border-subtle);
+            border-radius: 8px; padding: 6px 12px; color: var(--text-primary); font-size: 0.75rem;
+            font-family: 'Noto Serif SC', serif; outline: none; transition: border-color 0.3s;
+        }
+        .diary-search-input:focus { border-color: var(--accent-lavender); }
+        .diary-search-input::placeholder { color: var(--text-muted); }
+        .diary-search-clear {
+            font-size: 0.65rem; padding: 4px 10px; border-radius: 8px;
+            border: 1px solid var(--border-subtle); color: var(--text-muted);
+            background: transparent; cursor: pointer; font-family: 'Noto Serif SC', serif;
+            transition: all 0.3s;
+        }
+        .diary-search-clear:hover { border-color: var(--accent-lavender); color: var(--accent-lavender); }
+
+        /* 情绪日历热力图样式 */
+        .emotion-calendar { margin-top: 8px; }
+        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .calendar-month { font-size: 0.78rem; color: var(--accent-gold); letter-spacing: 2px; }
+        .calendar-nav-btn {
+            font-size: 0.7rem; padding: 2px 8px; border-radius: 6px;
+            border: 1px solid var(--border-subtle); color: var(--text-muted);
+            background: transparent; cursor: pointer; transition: all 0.3s;
+            font-family: 'Noto Serif SC', serif;
+        }
+        .calendar-nav-btn:hover { border-color: var(--accent-lavender); color: var(--accent-lavender); }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+        .calendar-day-label { font-size: 0.55rem; color: var(--text-muted); text-align: center; padding: 3px 0; }
+        .calendar-cell {
+            aspect-ratio: 1; border-radius: 3px;
+            background: rgba(155,142,196,0.08);
+            transition: all 0.2s; position: relative; cursor: default;
+        }
+        .calendar-cell.has-diary { cursor: pointer; }
+        .calendar-cell.has-diary:hover { transform: scale(1.3); z-index: 2; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+        .calendar-cell-tip {
+            display: none; position: absolute; bottom: calc(100% + 4px); left: 50%; transform: translateX(-50%);
+            background: var(--bg-input); border: 1px solid var(--border-subtle); border-radius: 6px;
+            padding: 4px 8px; font-size: 0.55rem; color: var(--text-secondary); white-space: nowrap; z-index: 10;
+            pointer-events: none;
+        }
+        .calendar-cell:hover .calendar-cell-tip { display: block; }
+        .calendar-cell.empty { background: transparent; }
+        .calendar-cell.today { outline: 2px solid var(--accent-warm); outline-offset: -1px; }
+
+        /* 打字机光标动画 */
+        .typewriter-cursor::after {
+            content: '▌'; color: var(--accent-warm); animation: cursorBlink 0.8s infinite;
+        }
+        @keyframes cursorBlink { 0%,100%{opacity:1} 50%{opacity:0} }
+
         @media(max-width:860px) {
             .main-grid { grid-template-columns: 1fr; }
             .side-panel { flex-direction: row; overflow-x: auto; }
@@ -379,6 +439,8 @@
             .stats-summary { grid-template-columns: 1fr; }
             .quick-tags { padding: 6px 12px; }
             .chat-input-area { padding: 10px 12px; }
+            .calendar-cell { border-radius: 2px; }
+            .calendar-grid { gap: 2px; }
         }
     </style>
 </head>
@@ -413,6 +475,7 @@
                     <div class="welcome-msg" id="welcome">
                         <h3>你好，我是心语 💫</h3>
                         <p>我会倾听你的每一天，感知你的情绪，<br>记住那些重要的瞬间，为你写下温暖的日记。<br><br>💡 这是<strong style="color:var(--accent-gold)">在线体验版</strong>，所有功能都在浏览器中运行<br>试着输入一句话，感受多智能体的协作吧！</p>
+                        <div class="daily-quote" id="dailyQuote"></div>
                         <div class="agent-flow">
                             <div class="agent-flow-step"><span class="agent-flow-dot warm"></span>情绪感知器 — 识别情绪状态</div>
                             <div class="agent-flow-step"><span class="agent-flow-dot rose"></span>记忆管家 — 检索与保存记忆</div>
@@ -470,6 +533,10 @@
                     <button class="export-all-btn" onclick="exportAll()">📄 导出Markdown</button>
                 </div>
             </div>
+            <div class="diary-search">
+                <input class="diary-search-input" id="diarySearch" placeholder="搜索日记内容、情绪或日期..." oninput="filterDiaries()">
+                <button class="diary-search-clear" onclick="clearDiarySearch()">✕</button>
+            </div>
             <div class="diary-grid" id="diaryGrid">
                 <div class="empty-state"><span class="empty-state-icon">📔</span>还没有日记，去对话页开始写吧</div>
             </div>
@@ -486,6 +553,10 @@
                 <div class="stat-card"><div class="stat-value" id="statTotal">0</div><div class="stat-label">总日记数</div></div>
                 <div class="stat-card"><div class="stat-value" id="statStreak">0</div><div class="stat-label">连续记录天数</div></div>
                 <div class="stat-card"><div class="stat-value" id="statTop">-</div><div class="stat-label">最常情绪</div></div>
+            </div>
+            <div class="chart-section">
+                <div class="chart-title">📅 情绪日历</div>
+                <div class="emotion-calendar" id="emoCalendar"></div>
             </div>
             <div class="chart-section">
                 <div class="chart-title">🎭 情绪分布</div>
@@ -542,6 +613,43 @@ let memories = JSON.parse(localStorage.getItem('xinyu_memories') || '[]');
 let curDiaryId = null;
 let isEditing = false;
 
+/* 多轮对话短期记忆 */
+let shortTermMemory = [];
+const MAX_SHORT_MEMORY = 10;
+
+/* 对话历史持久化 */
+let chatHistory = JSON.parse(localStorage.getItem('xinyu_chat') || '[]');
+
+/* 打字机定时器 */
+let typewriterTimer = null;
+
+/* 情绪日历当前视图月份 */
+let calendarYear, calendarMonth;
+
+/* 每日一句 */
+const dailyQuotes = [
+    '每一天都是一个新的开始，温柔地对待自己。',
+    '你不必完美，你只需要真实。',
+    '生活不会总是如你所愿，但你可以选择微笑面对。',
+    '你的感受很重要，允许自己去感受。',
+    '慢慢来，比较快。',
+    '每一个不曾起舞的日子，都是对生命的辜负。',
+    '你值得被温柔以待。',
+    '今天的你，已经比昨天更好了。',
+    '接纳不完美的自己，也是一种勇气。',
+    '世界很大，幸福很小，但刚好够用。',
+    '愿你被这个世界温柔相待。',
+    '所有的经历，都是成长的礼物。',
+    '你比你想象的更坚强。',
+    '给自己一个拥抱，你辛苦了。',
+    '生活明朗，万物可爱。',
+    '心若向阳，无谓悲伤。',
+    '愿你所有的努力都不被辜负。',
+    '保持热爱，奔赴山海。',
+    '星光不问赶路人，时光不负有心人。',
+    '你笑起来真好看，像春天的花一样。',
+];
+
 function resize() { input.style.height='auto'; input.style.height=Math.min(input.scrollHeight,100)+'px'; }
 input.addEventListener('input', resize);
 
@@ -571,22 +679,57 @@ function showConfirm(text, onOk) {
 }
 function hideConfirm() { $('confirmOverlay').classList.remove('show'); }
 
-function addMsg(role, content, emotion=null, diary=null, did=null) {
+/* 打字机效果：逐字显示文本 */
+function typewriterEffect(element, text, speed) {
+    speed = speed || 30;
+    return new Promise(resolve => {
+        if (typewriterTimer) { clearInterval(typewriterTimer); typewriterTimer = null; }
+        let i = 0;
+        element.textContent = '';
+        element.classList.add('typewriter-cursor');
+        typewriterTimer = setInterval(() => {
+            if (i < text.length) {
+                element.textContent += text[i];
+                i++;
+                msgs.scrollTop = msgs.scrollHeight;
+            } else {
+                clearInterval(typewriterTimer);
+                typewriterTimer = null;
+                element.classList.remove('typewriter-cursor');
+                resolve();
+            }
+        }, speed);
+    });
+}
+
+/* 添加消息到聊天区域，skipTypewriter为true时跳过打字机效果（用于历史恢复） */
+function addMsg(role, content, emotion, diary, did, skipTypewriter) {
+    emotion = emotion || null;
+    diary = diary || null;
+    did = did || null;
+    skipTypewriter = skipTypewriter || false;
+
     const w=$('welcome'); if(w) w.remove();
     const d=document.createElement('div'); d.className=`msg ${role}`;
     const a=document.createElement('div'); a.className='msg-avatar'; a.textContent=role==='user'?'我':'心';
     const b=document.createElement('div'); b.className='msg-body';
     const t=document.createElement('div'); t.className='msg-time'; t.textContent=getTime();
     const c=document.createElement('div'); c.className='msg-content';
+
     if(role==='assistant'&&emotion){
         const tag=document.createElement('span');
         tag.className=`emotion-tag ${clsMap[emotion.emotion]||'calm'}`;
         tag.textContent=`${emoMap[emotion.emotion]||'🌙'} ${emotion.emotion} · 强度 ${emotion.intensity}/10`;
         c.appendChild(tag);
     }
-    const p=document.createElement('div'); p.textContent=content; c.appendChild(p);
-    if(role==='assistant'&&diary){
-        const ds=document.createElement('div'); ds.className='diary-section';
+
+    const p=document.createElement('div');
+    c.appendChild(p);
+
+    /* 辅助函数：创建日记区块 */
+    function createDiarySection() {
+        if(!diary) return;
+        const ds=document.createElement('div'); ds.className='diary-section'; ds.style.animation='msgIn 0.4s ease-out';
         const dt=document.createElement('div'); dt.className='diary-text'; dt.textContent=diary;
         ds.appendChild(dt);
         if(did){
@@ -595,9 +738,35 @@ function addMsg(role, content, emotion=null, diary=null, did=null) {
             acts.appendChild(eb); ds.appendChild(acts);
         }
         c.appendChild(ds);
+        msgs.scrollTop=msgs.scrollHeight;
     }
+
+    if(role==='assistant' && !skipTypewriter) {
+        /* 打字机效果：先逐字显示回复文本，再显示日记区块 */
+        typewriterEffect(p, content, 30).then(() => {
+            createDiarySection();
+        });
+    } else {
+        p.textContent=content;
+        if(role==='assistant'&&diary){
+            const ds=document.createElement('div'); ds.className='diary-section';
+            const dt=document.createElement('div'); dt.className='diary-text'; dt.textContent=diary;
+            ds.appendChild(dt);
+            if(did){
+                const acts=document.createElement('div'); acts.className='diary-actions';
+                const eb=document.createElement('button'); eb.className='diary-action-btn'; eb.textContent='📥 导出'; eb.onclick=()=>exportSingle(did);
+                acts.appendChild(eb); ds.appendChild(acts);
+            }
+            c.appendChild(ds);
+        }
+    }
+
     b.appendChild(t); b.appendChild(c); d.appendChild(a); d.appendChild(b);
     msgs.appendChild(d); msgs.scrollTop=msgs.scrollHeight;
+
+    /* 保存到对话历史 */
+    chatHistory.push({role, content, emotion, diary, did, time: getTime()});
+    saveChatHistory();
 }
 
 function addLoading() {
@@ -660,7 +829,9 @@ function extractMemories(text, emotion) {
     return extracts.slice(0,3);
 }
 
-function generateDiary(userInput, emotionInfo, relevantMemories) {
+/* 生成日记，利用多轮对话上下文让内容更连贯 */
+function generateDiary(userInput, emotionInfo, relevantMemories, context) {
+    context = context || [];
     const today=new Date();
     const dateStr=today.getFullYear()+'年'+('0'+(today.getMonth()+1)).slice(-2)+'月'+('0'+today.getDate()).slice(-2)+'日';
     const weekdays=['周日','周一','周二','周三','周四','周五','周六'];
@@ -670,15 +841,35 @@ function generateDiary(userInput, emotionInfo, relevantMemories) {
     const iW=intensityWords[emotionInfo.intensity]||'清晰的';
     const weatherWords=['微风','细雨','暖阳','晚风','晨光','流云','星光','月色'];
     const weather=weatherWords[Math.floor(Math.random()*weatherWords.length)];
+
+    /* 从上下文中提取之前的话题和情绪变化 */
+    let contextPara = '';
+    if (context.length >= 2) {
+        const prevUserMsgs = context.filter(m => m.role === 'user').slice(-3).map(m => m.content);
+        const prevEmotions = context.filter(m => m.emotion).map(m => m.emotion);
+        if (prevEmotions.length > 1) {
+            const lastEmo = prevEmotions[prevEmotions.length - 2];
+            if (lastEmo && lastEmo !== emo) {
+                contextPara = `\n\n从之前的${lastEmo}到现在的${emo}，情绪在不知不觉中流转。`;
+            }
+        }
+        if (prevUserMsgs.length > 0) {
+            const lastTopic = prevUserMsgs[prevUserMsgs.length - 1].substring(0, 20);
+            contextPara += `\n\n回想起之前聊到的「${lastTopic}」，和今天的感受交织在一起，构成了一幅更完整的内心图景。`;
+        }
+    }
+
     const templates=[
-        `${dateStr} ${weekday}\n\n今天的${emo}像一阵${weather}，轻轻拂过心头。\n\n${userInput}\n\n回想起来，这是一段值得记录的时刻。${iW}${emo}在心中荡漾，让我对生活有了新的感悟。\n\n${relevantMemories.length>0?'想起之前'+relevantMemories[0]+'，时光流转，心情却有了新的色彩。':''}或许这就是成长的痕迹——每一个当下都独一无二，每一份情绪都值得被认真对待。\n\n愿明天的自己，依然能以一颗柔软的心，拥抱这个世界。`,
-        `${dateStr} ${weekday}\n\n${userInput}\n\n这一天，我的内心是${emo}的。强度大约是${emotionInfo.intensity}/10分，不算太强烈，却足够真实。\n\n有时候我们不需要惊天动地的大事来定义一天的意义。一个瞬间的触动、一句暖心的话、一次小小的突破，都足以让平凡的日子闪闪发光。\n\n${relevantMemories.length>0?'记忆里还留着「'+relevantMemories[0]+'」，和今天的感受交织在一起，构成了属于我的独特叙事。':''}\n\n晚安，世界。明天又是新的一天。`,
-        `${dateStr} ${weekday}\n\n记录下今天：${userInput}\n\n情绪是${emo}的，带着${iW}的${emo}浓度。这种感觉很熟悉，又有些不同。\n\n生活就是这样，我们在不同的情绪之间穿行，时而明亮如昼，时而静谧如夜。重要的是学会与每一种情绪共处，不抗拒，也不沉溺。\n\n${relevantMemories.length>1?'想起之前那些日子——'+relevantMemories.slice(0,2).join('、')+'，每一段经历都是生命拼图的一块。':''}${relevantMemories.length===1?'想起之前「'+relevantMemories[0]+'」，那段记忆此刻显得格外清晰。':''}\n\n写下这些文字的时候，心里平静了许多。这就是记录的意义吧——让流动的时间有一个可以回望的锚点。`,
+        `${dateStr} ${weekday}\n\n今天的${emo}像一阵${weather}，轻轻拂过心头。\n\n${userInput}\n\n回想起来，这是一段值得记录的时刻。${iW}${emo}在心中荡漾，让我对生活有了新的感悟。\n\n${relevantMemories.length>0?'想起之前'+relevantMemories[0]+'，时光流转，心情却有了新的色彩。':''}或许这就是成长的痕迹——每一个当下都独一无二，每一份情绪都值得被认真对待。${contextPara}\n\n愿明天的自己，依然能以一颗柔软的心，拥抱这个世界。`,
+        `${dateStr} ${weekday}\n\n${userInput}\n\n这一天，我的内心是${emo}的。强度大约是${emotionInfo.intensity}/10分，不算太强烈，却足够真实。\n\n有时候我们不需要惊天动地的大事来定义一天的意义。一个瞬间的触动、一句暖心的话、一次小小的突破，都足以让平凡的日子闪闪发光。\n\n${relevantMemories.length>0?'记忆里还留着「'+relevantMemories[0]+'」，和今天的感受交织在一起，构成了属于我的独特叙事。':''}${contextPara}\n\n晚安，世界。明天又是新的一天。`,
+        `${dateStr} ${weekday}\n\n记录下今天：${userInput}\n\n情绪是${emo}的，带着${iW}的${emo}浓度。这种感觉很熟悉，又有些不同。\n\n生活就是这样，我们在不同的情绪之间穿行，时而明亮如昼，时而静谧如夜。重要的是学会与每一种情绪共处，不抗拒，也不沉溺。\n\n${relevantMemories.length>1?'想起之前那些日子——'+relevantMemories.slice(0,2).join('、')+'，每一段经历都是生命拼图的一块。':''}${relevantMemories.length===1?'想起之前「'+relevantMemories[0]+'」，那段记忆此刻显得格外清晰。':''}${contextPara}\n\n写下这些文字的时候，心里平静了许多。这就是记录的意义吧——让流动的时间有一个可以回望的锚点。`,
     ];
     return templates[Math.floor(Math.random()*templates.length)];
 }
 
-function generateResponse(userInput, emotionInfo, diary) {
+/* 生成回复，利用多轮对话上下文让回复更连贯 */
+function generateResponse(userInput, emotionInfo, diary, context) {
+    context = context || [];
     const responses={
         '开心':[
             `看到你这么开心，我也跟着高兴起来呢！☀️ 能感受到你今天的能量满满，这种感觉真好。为你写了一篇日记，希望以后翻看时还能记起这份快乐。`,
@@ -714,7 +905,32 @@ function generateResponse(userInput, emotionInfo, diary) {
         ],
     };
     const list=responses[emotionInfo.emotion]||responses['平静'];
-    return list[Math.floor(Math.random()*list.length)];
+    let response = list[Math.floor(Math.random()*list.length)];
+
+    /* 上下文感知：根据对话历史补充连贯性语句 */
+    if (context.length >= 2) {
+        const prevEmotions = context.filter(m => m.emotion).map(m => m.emotion);
+        const prevUserMsgs = context.filter(m => m.role === 'user').map(m => m.content);
+
+        /* 情绪变化提示 */
+        if (prevEmotions.length > 0) {
+            const lastEmo = prevEmotions[prevEmotions.length - 1];
+            if (lastEmo && lastEmo !== emotionInfo.emotion) {
+                const transitions = [
+                    `\n\n注意到你的心情从${lastEmo}变成了${emotionInfo.emotion}，每一种转变都值得被看见。`,
+                    `\n\n和之前的${lastEmo}相比，今天的感受有了新的色彩呢。`,
+                ];
+                response += transitions[Math.floor(Math.random() * transitions.length)];
+            }
+        }
+
+        /* 话题延续提示 */
+        if (prevUserMsgs.length > 1) {
+            response += '\n\n回想我们之前聊的，我能感受到你这一路的心路历程。';
+        }
+    }
+
+    return response;
 }
 
 function searchMemories(query) {
@@ -739,6 +955,12 @@ async function send() {
     input.value=''; input.style.height='auto'; sendBtn.disabled=true;
     addMsg('user',text); addLoading(); resetBadges();
 
+    /* 保存用户消息到短期记忆 */
+    shortTermMemory.push({role:'user', content:text, emotion:null});
+    if(shortTermMemory.length > MAX_SHORT_MEMORY * 2) {
+        shortTermMemory = shortTermMemory.slice(-MAX_SHORT_MEMORY * 2);
+    }
+
     setBadge('badge-e','working');
     await wait(600+Math.random()*400);
     const emotionInfo=analyzeEmotion(text);
@@ -758,20 +980,30 @@ async function send() {
 
     setBadge('badge-d','working');
     await wait(800+Math.random()*600);
-    const diary=generateDiary(text, emotionInfo, relevant);
+    const diary=generateDiary(text, emotionInfo, relevant, shortTermMemory);
     setBadge('badge-d','done');
 
     setBadge('badge-x','working');
     await wait(500+Math.random()*300);
-    const response=generateResponse(text, emotionInfo, diary);
+    const response=generateResponse(text, emotionInfo, diary, shortTermMemory);
     setBadge('badge-x','done');
+
+    /* 保存助手消息到短期记忆 */
+    shortTermMemory.push({role:'assistant', content:response, emotion:emotionInfo.emotion});
+    if(shortTermMemory.length > MAX_SHORT_MEMORY * 2) {
+        shortTermMemory = shortTermMemory.slice(-MAX_SHORT_MEMORY * 2);
+    }
 
     const did=saveDiary(text, diary, emotionInfo);
 
     rmLoading();
     addMsg('assistant', response, emotionInfo, diary, did);
-    resetBadges();
-    sendBtn.disabled=false; input.focus();
+
+    /* 打字机效果结束后再恢复按钮 */
+    setTimeout(() => {
+        resetBadges();
+        sendBtn.disabled=false; input.focus();
+    }, response.length * 30 + 200);
 }
 
 function quickSend(text) {
@@ -789,6 +1021,67 @@ function updateEmo(e) {
 }
 
 function saveMemories() { localStorage.setItem('xinyu_memories',JSON.stringify(memories)); }
+
+/* 保存对话历史到localStorage */
+function saveChatHistory() {
+    localStorage.setItem('xinyu_chat', JSON.stringify(chatHistory));
+}
+
+/* 从localStorage恢复对话历史 */
+function restoreChatHistory() {
+    if (chatHistory.length === 0) return;
+    const w = $('welcome');
+    if (w) w.remove();
+    /* 只恢复最近50条消息，避免性能问题 */
+    const toRestore = chatHistory.slice(-50);
+    toRestore.forEach(msg => {
+        /* 恢复时跳过打字机效果 */
+        addMsgRestore(msg.role, msg.content, msg.emotion, msg.diary, msg.did, msg.time);
+    });
+    /* 从恢复的历史中重建短期记忆 */
+    buildShortTermMemory();
+}
+
+/* 恢复消息（不触发打字机效果，不重复保存历史） */
+function addMsgRestore(role, content, emotion, diary, did, time) {
+    const d=document.createElement('div'); d.className=`msg ${role}`;
+    const a=document.createElement('div'); a.className='msg-avatar'; a.textContent=role==='user'?'我':'心';
+    const b=document.createElement('div'); b.className='msg-body';
+    const t=document.createElement('div'); t.className='msg-time'; t.textContent=time||getTime();
+    const c=document.createElement('div'); c.className='msg-content';
+    if(role==='assistant'&&emotion){
+        const tag=document.createElement('span');
+        tag.className=`emotion-tag ${clsMap[emotion.emotion]||'calm'}`;
+        tag.textContent=`${emoMap[emotion.emotion]||'🌙'} ${emotion.emotion} · 强度 ${emotion.intensity}/10`;
+        c.appendChild(tag);
+    }
+    const p=document.createElement('div'); p.textContent=content;
+    c.appendChild(p);
+    if(role==='assistant'&&diary){
+        const ds=document.createElement('div'); ds.className='diary-section';
+        const dt=document.createElement('div'); dt.className='diary-text'; dt.textContent=diary;
+        ds.appendChild(dt);
+        if(did){
+            const acts=document.createElement('div'); acts.className='diary-actions';
+            const eb=document.createElement('button'); eb.className='diary-action-btn'; eb.textContent='📥 导出'; eb.onclick=()=>exportSingle(did);
+            acts.appendChild(eb); ds.appendChild(acts);
+        }
+        c.appendChild(ds);
+    }
+    b.appendChild(t); b.appendChild(c); d.appendChild(a); d.appendChild(b);
+    msgs.appendChild(d);
+    msgs.scrollTop=msgs.scrollHeight;
+}
+
+/* 从对话历史重建短期记忆 */
+function buildShortTermMemory() {
+    shortTermMemory = chatHistory.slice(-MAX_SHORT_MEMORY * 2).map(m => ({
+        role: m.role,
+        content: m.content,
+        emotion: m.emotion ? m.emotion.emotion : null
+    }));
+}
+
 function saveDiary(userInput, diary, emotion) {
     const now=new Date();
     const id=now.getTime().toString();
@@ -798,7 +1091,8 @@ function saveDiary(userInput, diary, emotion) {
     return id;
 }
 
-function renderMemories(filter='') {
+function renderMemories(filter) {
+    filter = filter || '';
     const list=$('memList');
     let items=[...memories].reverse();
     if(filter){
@@ -830,11 +1124,26 @@ function delMemory(idx) {
     }
 }
 
-function renderDiaries() {
+/* 渲染日记列表，支持搜索过滤 */
+function renderDiaries(filter) {
+    filter = filter || '';
     const grid=$('diaryGrid');
-    if(!diaries.length){grid.innerHTML='<div class="empty-state"><span class="empty-state-icon">📔</span>还没有日记，去对话页开始写吧</div>';return;}
+    let filtered = diaries;
+    if (filter) {
+        const f = filter.toLowerCase();
+        filtered = diaries.filter(d =>
+            d.diary.toLowerCase().includes(f) ||
+            d.userInput.toLowerCase().includes(f) ||
+            (d.emotion && d.emotion.includes(f)) ||
+            (d.date && d.date.includes(f))
+        );
+    }
+    if(!filtered.length){
+        grid.innerHTML=`<div class="empty-state"><span class="empty-state-icon">📔</span>${filter?'未找到匹配的日记':'还没有日记，去对话页开始写吧'}</div>`;
+        return;
+    }
     grid.innerHTML='';
-    diaries.forEach(d=>{
+    filtered.forEach(d=>{
         const card=document.createElement('div'); card.className='diary-card'; card.onclick=()=>openModal(d.id);
         card.innerHTML=`
             <div class="diary-card-date">${d.date} ${d.time}</div>
@@ -842,6 +1151,72 @@ function renderDiaries() {
             <div class="diary-card-preview">${d.diary.substring(0,70)}...</div>`;
         grid.appendChild(card);
     });
+}
+
+/* 日记搜索 */
+function filterDiaries() { renderDiaries($('diarySearch').value); }
+function clearDiarySearch() { $('diarySearch').value=''; renderDiaries(); }
+
+/* 渲染情绪日历热力图 */
+function renderEmotionCalendar() {
+    const cal=$('emoCalendar');
+    const now=new Date();
+    if(calendarYear===undefined){
+        calendarYear=now.getFullYear();
+        calendarMonth=now.getMonth();
+    }
+    const firstDay=new Date(calendarYear,calendarMonth,1).getDay();
+    const daysInMonth=new Date(calendarYear,calendarMonth+1,0).getDate();
+    const monthNames=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+    const todayStr=now.toLocaleDateString('zh-CN');
+
+    let html=`<div class="calendar-header">
+        <button class="calendar-nav-btn" onclick="navCalendar(-1)">◀</button>
+        <span class="calendar-month">${calendarYear}年${monthNames[calendarMonth]}</span>
+        <button class="calendar-nav-btn" onclick="navCalendar(1)">▶</button>
+    </div><div class="calendar-grid">`;
+
+    const dayLabels=['日','一','二','三','四','五','六'];
+    dayLabels.forEach(d => {
+        html+=`<div class="calendar-day-label">${d}</div>`;
+    });
+
+    /* 空白占位 */
+    for(let i=0;i<firstDay;i++){
+        html+=`<div class="calendar-cell empty"></div>`;
+    }
+
+    /* 每一天的格子 */
+    for(let day=1;day<=daysInMonth;day++){
+        const cellDate=new Date(calendarYear,calendarMonth,day);
+        const dateStr=cellDate.toLocaleDateString('zh-CN');
+        const dayDiaries=diaries.filter(d=>d.date===dateStr);
+        const isToday=dateStr===todayStr;
+
+        if(dayDiaries.length>0){
+            /* 统计当天主要情绪 */
+            const emoCount={};
+            dayDiaries.forEach(d=>{if(d.emotion) emoCount[d.emotion]=(emoCount[d.emotion]||0)+1;});
+            const topEmo=Object.entries(emoCount).sort((a,b)=>b[1]-a[1])[0][0];
+            const color=emoColors[topEmo]||'#9b8ec4';
+            const avgIntensity=Math.round(dayDiaries.reduce((s,d)=>s+(d.intensity||5),0)/dayDiaries.length);
+            const opacity=(0.35+(avgIntensity/10)*0.65).toFixed(2);
+            html+=`<div class="calendar-cell has-diary${isToday?' today':''}" style="background:${color};opacity:${opacity}"><div class="calendar-cell-tip">${('0'+(calendarMonth+1)).slice(-2)}/${('0'+day).slice(-2)} ${emoMap[topEmo]||'🌙'} ${topEmo} 强度${avgIntensity}/10</div></div>`;
+        } else {
+            html+=`<div class="calendar-cell${isToday?' today':''}"><div class="calendar-cell-tip">${('0'+(calendarMonth+1)).slice(-2)}/${('0'+day).slice(-2)} 无记录</div></div>`;
+        }
+    }
+
+    html+='</div>';
+    cal.innerHTML=html;
+}
+
+/* 情绪日历月份导航 */
+function navCalendar(dir) {
+    calendarMonth+=dir;
+    if(calendarMonth<0){calendarMonth=11;calendarYear--;}
+    if(calendarMonth>11){calendarMonth=0;calendarYear++;}
+    renderEmotionCalendar();
 }
 
 function renderStats() {
@@ -892,6 +1267,9 @@ function renderStats() {
         const label=document.createElement('div'); label.className='trend-label'; label.textContent=d.shortD;
         labelsEl.appendChild(label);
     });
+
+    /* 渲染情绪日历热力图 */
+    renderEmotionCalendar();
 }
 
 function calcStreak() {
@@ -1027,12 +1405,28 @@ function download(content,filename) {
 
 function clearCtx() {
     showConfirm('确定要清空对话记录吗？\n长期记忆和日记仍会保留。',()=>{
-        msgs.innerHTML=`<div class="welcome-msg"><h3>对话已重置</h3><p>短期对话已清空。<br>长期记忆和日记仍保留在浏览器中。</p></div>`;
+        if(typewriterTimer){clearInterval(typewriterTimer);typewriterTimer=null;}
+        shortTermMemory=[];
+        chatHistory=[];
+        saveChatHistory();
+        msgs.innerHTML=`<div class="welcome-msg" id="welcome"><h3>对话已重置</h3><p>短期对话已清空。<br>长期记忆和日记仍保留在浏览器中。</p><div class="daily-quote" id="dailyQuote"></div></div>`;
+        setDailyQuote();
         showToast('对话已清空');
     });
 }
 
+/* 设置每日一句 */
+function setDailyQuote() {
+    const el = $('dailyQuote');
+    if (el) {
+        el.textContent = '✨ ' + dailyQuotes[Math.floor(Math.random() * dailyQuotes.length)];
+    }
+}
+
+/* 页面初始化 */
+setDailyQuote();
 renderMemories();
+restoreChatHistory();
 </script>
 </body>
 </html>
