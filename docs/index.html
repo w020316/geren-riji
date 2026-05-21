@@ -8,299 +8,683 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0f0d12;
-            --bg-card: #1a1620;
-            --bg-elevated: #231e2a;
-            --accent: #e8a87c;
+            --bg-deep: #0f0d12;
+            --bg-card: #16131a;
+            --bg-input: #1e1a24;
+            --bg-hover: #23202a;
+            --accent-warm: #e8a87c;
             --accent-rose: #d4758c;
             --accent-lavender: #9b8ec4;
             --accent-gold: #d4b896;
-            --text: #ede8e3;
-            --text-dim: #8a8095;
-            --border: rgba(155,142,196,0.12);
+            --accent-mint: #7ec4a5;
+            --text-primary: #ede8e3;
+            --text-secondary: #a89fb5;
+            --text-muted: #6e6479;
+            --border-subtle: rgba(155,142,196,0.12);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Noto Serif SC', serif; background: var(--bg);
-            color: var(--text); line-height: 1.7; overflow-x: hidden;
-        }
-        .hero {
-            min-height: 100vh; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; text-align: center;
-            padding: 40px 20px; position: relative;
+            font-family: 'Noto Serif SC', serif;
+            background: var(--bg-deep); color: var(--text-primary);
+            min-height: 100vh; overflow-x: hidden;
         }
         body::before {
             content: ''; position: fixed; top: -50%; left: -50%;
             width: 200%; height: 200%;
             background:
-                radial-gradient(ellipse at 30% 20%, rgba(232,168,124,0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 70% 80%, rgba(212,117,140,0.06) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, rgba(155,142,196,0.04) 0%, transparent 60%);
+                radial-gradient(ellipse at 15% 10%, rgba(232,168,124,0.07) 0%, transparent 50%),
+                radial-gradient(ellipse at 85% 90%, rgba(212,117,140,0.05) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(155,142,196,0.03) 0%, transparent 60%);
             z-index: 0; pointer-events: none;
         }
-        .hero > * { position: relative; z-index: 1; }
-        .logo-icon {
-            width: 72px; height: 72px; border-radius: 20px;
-            background: linear-gradient(135deg, var(--accent), var(--accent-rose));
-            display: flex; align-items: center; justify-content: center;
-            font-size: 32px; margin-bottom: 24px;
-            animation: float 6s ease-in-out infinite;
-        }
-        @keyframes float {
-            0%,100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        h1 {
-            font-family: 'ZCOOL XiaoWei', serif; font-size: clamp(2.4rem, 6vw, 3.8rem);
-            background: linear-gradient(135deg, var(--accent), var(--accent-rose), var(--accent-lavender));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            letter-spacing: 10px; margin-bottom: 16px;
-        }
-        .subtitle {
-            font-size: 1rem; color: var(--text-dim); letter-spacing: 4px;
-            margin-bottom: 40px; max-width: 500px;
-        }
-        .cta-group { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
-        .btn {
-            padding: 13px 28px; border-radius: 14px; font-size: 0.9rem;
-            font-family: 'Noto Serif SC', serif; cursor: pointer; transition: all 0.3s ease;
-            text-decoration: none; letter-spacing: 1px;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, var(--accent), var(--accent-rose));
-            color: white; border: none; font-weight: 600;
-        }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(232,168,124,0.25); }
-        .btn-secondary {
-            background: transparent; color: var(--text-dim);
-            border: 1px solid var(--border);
-        }
-        .btn-secondary:hover { border-color: var(--accent-lavender); color: var(--accent-lavender); }
+        .app { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 16px; }
 
-        section { max-width: 960px; margin: 0 auto; padding: 80px 24px; }
-        .section-title {
-            font-family: 'ZCOOL XiaoWei', serif; font-size: 1.8rem;
-            color: var(--accent-gold); text-align: center; letter-spacing: 4px;
-            margin-bottom: 48px; position: relative;
-        }
-        .section-title::after {
-            content: ''; position: absolute; bottom: -12px; left: 50%;
-            transform: translateX(-50%); width: 60px; height: 2px;
-            background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
-        }
+        header { text-align: center; padding: 28px 0 12px; position: relative; }
+        header::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 100px; height: 1px; background: linear-gradient(90deg, transparent, var(--accent-lavender), transparent); opacity: 0.5; }
+        .logo-title { font-family: 'ZCOOL XiaoWei', serif; font-size: 2.2rem; background: linear-gradient(135deg, var(--accent-warm), var(--accent-rose), var(--accent-lavender)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 7px; margin-bottom: 4px; }
+        .logo-sub { font-size: 0.78rem; color: var(--text-muted); letter-spacing: 3px; }
 
-        .features-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px;
-        }
-        .feature-card {
-            background: var(--bg-card); border: 1px solid var(--border);
-            border-radius: 18px; padding: 28px; transition: all 0.3s ease;
-        }
-        .feature-card:hover {
-            border-color: rgba(232,168,124,0.3); transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.3);
-        }
-        .feature-icon { font-size: 2rem; margin-bottom: 14px; }
-        .feature-title { font-size: 1.05rem; color: var(--accent); margin-bottom: 8px; font-weight: 600; }
-        .feature-desc { font-size: 0.85rem; color: var(--text-dim); line-height: 1.8; }
-
-        .arch-section { background: var(--bg-card); border-radius: 22px; border: 1px solid var(--border); padding: 40px; margin-top: 60px; }
-        .arch-flow {
-            display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-            justify-content: center; margin-top: 28px;
-        }
-        .arch-step {
-            padding: 10px 18px; border-radius: 12px; font-size: 0.82rem;
-            border: 1px solid var(--border); background: var(--bg-elevated);
-            white-space: nowrap;
-        }
-        .arch-arrow { color: var(--accent-lavender); font-size: 1.2rem; }
-
-        .agents-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 36px;
-        }
-        .agent-card {
-            background: var(--bg-card); border: 1px solid var(--border);
-            border-radius: 14px; padding: 22px; text-align: center;
+        .nav-tabs { display: flex; justify-content: center; gap: 3px; margin-top: 14px; }
+        .nav-tab {
+            font-family: 'Noto Serif SC', serif; padding: 7px 20px; border-radius: 11px 11px 0 0;
+            border: 1px solid var(--border-subtle); border-bottom: none; background: transparent;
+            color: var(--text-muted); cursor: pointer; font-size: 0.8rem; letter-spacing: 2px;
             transition: all 0.3s ease;
         }
-        .agent-card:hover { border-color: var(--accent); }
-        .agent-avatar { font-size: 2rem; margin-bottom: 10px; }
-        .agent-name { font-size: 0.95rem; color: var(--accent-gold); font-weight: 600; margin-bottom: 6px; }
-        .agent-role { font-size: 0.78rem; color: var(--text-dim); }
+        .nav-tab:hover { color: var(--text-secondary); background: rgba(155,142,196,0.04); }
+        .nav-tab.active { color: var(--accent-gold); background: var(--bg-card); border-color: rgba(155,142,196,0.2); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
 
-        .code-block {
-            background: #0d0b10; border: 1px solid var(--border);
-            border-radius: 14px; padding: 24px; margin-top: 32px;
-            overflow-x: auto;
-        }
-        .code-block pre { font-family: 'Consolas', monospace; font-size: 0.82rem; color: #a89fb5; line-height: 1.7; }
-        .code-block .kw { color: var(--accent-rose); }
-        .code-block .str { color: var(--accent); }
-        .code-block .cmd { color: var(--accent-mint); }
+        .main-grid { display: grid; grid-template-columns: 1fr 300px; gap: 16px; margin-top: -1px; }
 
-        footer {
-            text-align: center; padding: 48px 24px; color: var(--text-dim);
-            font-size: 0.82rem; border-top: 1px solid var(--border);
-            margin-top: 60px;
+        /* Chat Panel */
+        .chat-panel {
+            background: var(--bg-card); border-radius: 0 18px 18px 18px;
+            border: 1px solid var(--border-subtle); overflow: hidden; display: flex; flex-direction: column;
+            min-height: 520px;
         }
-        footer a { color: var(--accent-lavender); text-decoration: none; }
-        footer a:hover { text-decoration: underline; }
+        .chat-panel::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-warm), var(--accent-rose), transparent); opacity: 0.45;
+        }
+        .chat-header {
+            padding: 12px 18px; border-bottom: 1px solid var(--border-subtle);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .chat-header-title { font-size: 0.88rem; color: var(--accent-gold); letter-spacing: 2px; font-weight: 600; }
+        .agent-badges { display: flex; gap: 4px; flex-wrap: wrap; }
+        .agent-badge {
+            font-size: 0.58rem; padding: 2px 7px; border-radius: 20px;
+            border: 1px solid var(--border-subtle); color: var(--text-muted);
+            background: rgba(155,142,196,0.06); letter-spacing: 1px; transition: all 0.35s ease; white-space: nowrap;
+        }
+        .agent-badge.working {
+            border-color: var(--accent-warm); color: var(--accent-warm); background: rgba(232,168,124,0.1);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        .agent-badge.done { border-color: var(--accent-mint); color: var(--accent-mint); background: rgba(126,196,165,0.08); }
+        @keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(232,168,124,0.15)} 50%{box-shadow:0 0 10px 2px rgba(232,168,124,0.1)} }
+        .header-actions { display: flex; gap: 8px; align-items: center; }
+        .action-btn {
+            font-size: 0.65rem; padding: 3px 10px; border-radius: 10px;
+            border: 1px solid var(--border-subtle); color: var(--text-muted); background: transparent;
+            cursor: pointer; transition: all 0.3s; font-family: 'Noto Serif SC', serif;
+        }
+        .action-btn:hover { border-color: var(--accent-rose); color: var(--accent-rose); }
 
-        .tech-badges { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 20px; }
-        .tech-badge {
-            padding: 5px 14px; border-radius: 20px; font-size: 0.75rem;
-            border: 1px solid var(--border); color: var(--text-dim);
+        .chat-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 14px; max-height: 480px; scroll-behavior: smooth; }
+        .chat-messages::-webkit-scrollbar { width: 3px; }
+        .chat-messages::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 3px; }
+
+        .msg { display: flex; gap: 8px; animation: msgIn 0.4s ease-out; }
+        @keyframes msgIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+        .msg.user { flex-direction: row-reverse; }
+        .msg-avatar {
+            width: 32px; height: 32px; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; font-size: 0.82rem; flex-shrink: 0;
+        }
+        .msg.user .msg-avatar { background: linear-gradient(135deg, var(--accent-warm), var(--accent-rose)); }
+        .msg.assistant .msg-avatar { background: linear-gradient(135deg, var(--accent-lavender), var(--accent-rose)); }
+        .msg-body { max-width: 76%; }
+        .msg-time { font-size: 0.58rem; color: var(--text-muted); margin-bottom: 2px; padding: 0 3px; }
+        .msg.user .msg-time { text-align: right; }
+        .msg-content {
+            padding: 10px 14px; border-radius: 14px; font-size: 0.85rem; line-height: 1.8; position: relative;
+        }
+        .msg.user .msg-content {
+            background: linear-gradient(135deg, rgba(232,168,124,0.13), rgba(212,117,140,0.1));
+            border: 1px solid rgba(232,168,124,0.18); border-bottom-right-radius: 3px;
+        }
+        .msg.assistant .msg-content {
+            background: rgba(155,142,196,0.06); border: 1px solid var(--border-subtle); border-bottom-left-radius: 3px;
+        }
+        .emotion-tag {
+            display: inline-block; font-size: 0.65rem; padding: 2px 9px; border-radius: 11px;
+            margin-bottom: 5px; letter-spacing: 1px;
+        }
+        .emotion-tag.happy { background: rgba(255,200,87,0.14); color: #ffc857; border: 1px solid rgba(255,200,87,0.28); }
+        .emotion-tag.sad { background: rgba(100,149,237,0.14); color: #6495ed; border: 1px solid rgba(100,149,237,0.28); }
+        .emotion-tag.anxious { background: rgba(255,127,80,0.14); color: #ff7f50; border: 1px solid rgba(255,127,80,0.28); }
+        .emotion-tag.angry { background: rgba(220,80,80,0.14); color: #dc5050; border: 1px solid rgba(220,80,80,0.28); }
+        .emotion-tag.calm { background: rgba(130,200,160,0.14); color: #82c8a0; border: 1px solid rgba(130,200,160,0.28); }
+        .emotion-tag.surprised { background: rgba(200,130,255,0.14); color: #c882ff; border: 1px solid rgba(200,130,255,0.28); }
+        .emotion-tag.tired { background: rgba(160,160,180,0.14); color: #a0a0b4; border: 1px solid rgba(160,160,180,0.28); }
+        .emotion-tag.moved { background: rgba(255,160,180,0.14); color: #ffa0b4; border: 1px solid rgba(255,160,180,0.28); }
+
+        .diary-section {
+            margin-top: 8px; padding: 10px 12px; background: rgba(212,184,150,0.05);
+            border: 1px solid rgba(212,184,150,0.12); border-radius: 11px; position: relative;
+        }
+        .diary-section::before {
+            content: '📝 今日日记'; position: absolute; top: -8px; left: 10px;
+            font-size: 0.58rem; color: var(--accent-gold); background: var(--bg-card); padding: 0 5px; letter-spacing: 2px;
+        }
+        .diary-text { font-size: 0.81rem; line-height: 2; white-space: pre-wrap; }
+        .diary-actions { display: flex; gap: 6px; margin-top: 8px; justify-content: flex-end; }
+        .diary-action-btn {
+            font-size: 0.62rem; padding: 2px 9px; border-radius: 7px; border: 1px solid var(--border-subtle);
+            color: var(--text-muted); background: transparent; cursor: pointer; transition: all 0.3s; font-family: 'Noto Serif SC', serif;
+        }
+        .diary-action-btn:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
+
+        .chat-input-area { padding: 12px 18px; border-top: 1px solid var(--border-subtle); display: flex; gap: 8px; }
+        .chat-input {
+            flex: 1; background: var(--bg-input); border: 1px solid var(--border-subtle);
+            border-radius: 12px; padding: 9px 14px; color: var(--text-primary); font-size: 0.85rem;
+            font-family: 'Noto Serif SC', serif; outline: none; resize: none; min-height: 40px; max-height: 100px;
+            transition: border-color 0.3s;
+        }
+        .chat-input:focus { border-color: var(--accent-lavender); }
+        .chat-input::placeholder { color: var(--text-muted); }
+        .send-btn {
+            width: 40px; height: 40px; border-radius: 12px; border: none;
+            background: linear-gradient(135deg, var(--accent-warm), var(--accent-rose));
+            color: white; font-size: 1rem; cursor: pointer; transition: all 0.3s;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .send-btn:hover { transform: scale(1.05); box-shadow: 0 4px 18px rgba(232,168,124,0.25); }
+        .send-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+        .loading-dots { display: inline-flex; gap: 3px; padding: 5px 0; }
+        .loading-dots span { width: 5px; height: 5px; border-radius: 50%; background: var(--accent-lavender); animation: bounce 1.4s infinite; }
+        .loading-dots span:nth-child(2){animation-delay:.2s} .loading-dots span:nth-child(3){animation-delay:.4s}
+        @keyframes bounce { 0%,80%,100%{transform:scale(.55);opacity:.35} 40%{transform:scale(1);opacity:1} }
+
+        /* Side Panel */
+        .side-panel { display: flex; flex-direction: column; gap: 14px; }
+        .side-card {
+            background: var(--bg-card); border-radius: 18px; border: 1px solid var(--border-subtle);
+            padding: 14px; position: relative; overflow: hidden;
+        }
+        .side-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-lavender), transparent); opacity: 0.35;
+        }
+        .side-card-title { font-size: 0.78rem; color: var(--accent-gold); letter-spacing: 3px; margin-bottom: 10px; font-weight: 600; }
+        .emotion-display { text-align: center; padding: 10px 0; }
+        .emotion-emoji { font-size: 2.4rem; margin-bottom: 4px; display: block; }
+        .emotion-name { font-size: 0.92rem; color: var(--accent-warm); letter-spacing: 2px; }
+        .emotion-bar-container { margin-top: 8px; }
+        .emotion-bar-label { font-size: 0.65rem; color: var(--text-muted); margin-bottom: 2px; display: flex; justify-content: space-between; }
+        .emotion-bar { height: 3px; background: rgba(155,142,196,0.12); border-radius: 2px; overflow: hidden; }
+        .emotion-bar-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--accent-warm), var(--accent-rose)); transition: width 0.8s ease; }
+        .memory-list { display: flex; flex-direction: column; gap: 5px; max-height: 180px; overflow-y: auto; }
+        .memory-list::-webkit-scrollbar { width: 2px; }
+        .memory-list::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 2px; }
+        .memory-item {
+            padding: 7px 9px; background: rgba(155,142,196,0.05); border: 1px solid var(--border-subtle);
+            border-radius: 9px; font-size: 0.72rem; line-height: 1.6; color: var(--text-secondary); transition: all 0.3s;
+        }
+        .memory-item:hover { border-color: var(--accent-lavender); background: rgba(155,142,196,0.09); }
+        .memory-date { font-size: 0.58rem; color: var(--text-muted); margin-top: 2px; }
+        .empty-state { text-align: center; padding: 16px 0; color: var(--text-muted); font-size: 0.75rem; }
+        .empty-state-icon { font-size: 1.6rem; margin-bottom: 4px; display: block; opacity: 0.45; }
+
+        /* Diary List */
+        .diary-list-panel {
+            background: var(--bg-card); border-radius: 0 18px 18px 18px;
+            border: 1px solid var(--border-subtle); padding: 18px; min-height: 500px;
+        }
+        .diary-list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border-subtle); }
+        .diary-list-title { font-size: 0.9rem; color: var(--accent-gold); letter-spacing: 2px; }
+        .export-all-btn {
+            font-size: 0.68rem; padding: 4px 12px; border-radius: 9px; border: 1px solid var(--accent-gold);
+            color: var(--accent-gold); background: transparent; cursor: pointer; transition: all 0.3s; font-family: 'Noto Serif SC', serif; text-decoration: none;
+        }
+        .export-all-btn:hover { background: rgba(212,184,150,0.08); }
+        .diary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; max-height: 550px; overflow-y: auto; padding-right: 3px; }
+        .diary-grid::-webkit-scrollbar { width: 3px; }
+        .diary-grid::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 3px; }
+        .diary-card {
+            background: rgba(155,142,196,0.05); border: 1px solid var(--border-subtle);
+            border-radius: 12px; padding: 12px; cursor: pointer; transition: all 0.3s;
+        }
+        .diary-card:hover { border-color: var(--accent-lavender); background: rgba(155,142,196,0.09); transform: translateY(-2px); }
+        .diary-card-date { font-size: 0.68rem; color: var(--accent-gold); margin-bottom: 5px; }
+        .diary-card-emotion { font-size: 0.58rem; padding: 2px 7px; border-radius: 9px; display: inline-block; margin-bottom: 6px; }
+        .diary-card-preview { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.65; }
+
+        /* Modal */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6); z-index: 100; justify-content: center; align-items: center;
+        }
+        .modal-overlay.show { display: flex; }
+        .modal {
+            background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 18px;
+            padding: 22px; max-width: 580px; width: 90%; max-height: 78vh; overflow-y: auto;
+            position: relative; animation: modalIn 0.3s ease-out;
+        }
+        @keyframes modalIn { from{opacity:0;transform:scale(.95)} to{opacity:1;transform:scale(1)} }
+        .modal-close { position: absolute; top: 10px; right: 14px; background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.1rem; transition: color 0.3s; }
+        .modal-close:hover { color: var(--accent-rose); }
+        .modal-date { font-size: 0.82rem; color: var(--accent-gold); margin-bottom: 6px; }
+        .modal-emotion { font-size: 0.68rem; padding: 3px 9px; border-radius: 10px; display: inline-block; margin-bottom: 12px; }
+        .modal-input { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.75; padding: 9px; background: rgba(155,142,196,0.05); border-radius: 9px; }
+        .modal-text { font-size: 0.85rem; line-height: 2; white-space: pre-wrap; }
+        .modal-actions { display: flex; gap: 7px; margin-top: 14px; justify-content: flex-end; }
+        .modal-btn {
+            font-size: 0.62rem; padding: 3px 9px; border-radius: 7px; border: 1px solid var(--border-subtle);
+            color: var(--text-muted); background: transparent; cursor: pointer; transition: all 0.3s; font-family: 'Noto Serif SC', serif;
+        }
+        .modal-btn:hover { border-color: var(--accent-lavender); color: var(--accent-lavender); }
+        .modal-btn.del:hover { border-color: var(--accent-rose); color: var(--accent-rose); }
+
+        /* Welcome */
+        .welcome-msg { text-align: center; padding: 26px 14px; color: var(--text-muted); }
+        .welcome-msg h3 { font-family: 'ZCOOL XiaoWei', serif; font-size: 1.1rem; color: var(--accent-gold); margin-bottom: 8px; letter-spacing: 3px; }
+        .welcome-msg p { font-size: 0.8rem; line-height: 2; }
+        .agent-flow { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
+        .agent-flow-step { display: flex; align-items: center; gap: 6px; font-size: 0.68rem; color: var(--text-muted); padding: 2px 0; }
+        .agent-flow-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent-lavender); flex-shrink: 0; }
+        .agent-flow-dot.warm { background: var(--accent-warm); }
+        .agent-flow-dot.rose { background: var(--accent-rose); }
+        .agent-flow-dot.gold { background: var(--accent-gold); }
+
+        /* Demo Badge */
+        .demo-badge {
+            display: inline-block; font-size: 0.6rem; padding: 2px 8px; border-radius: 8px;
+            background: rgba(126,196,165,0.1); color: var(--accent-mint); border: 1px solid rgba(126,196,165,0.25);
+            vertical-align: middle; margin-left: 8px; letter-spacing: 1px;
         }
 
-        .screenshot-container {
-            margin-top: 40px; border-radius: 18px; overflow: hidden;
-            border: 1px solid var(--border); background: var(--bg-card);
-        }
-        .screenshot-placeholder {
-            aspect-ratio: 16/10; display: flex; align-items: center; justify-content: center;
-            background: linear-gradient(135deg, var(--bg-card), var(--bg-elevated));
-            color: var(--text-dim); font-size: 1rem;
-        }
-        @media (max-width: 600px) {
-            h1 { letter-spacing: 4px; }
-            .btn { padding: 11px 22px; font-size: 0.85rem; }
-            section { padding: 56px 16px; }
-        }
+        @media(max-width:860px) { .main-grid { grid-template-columns: 1fr; } .side-panel { flex-direction: row; overflow-x: auto; } .side-card { min-width: 240px; } }
+        @media(max-width:560px) { .app { padding: 8px; } .logo-title { font-size: 1.7rem; } .chat-messages { max-height: 360px; } .nav-tab { padding: 5px 12px; font-size: 0.72rem; } }
     </style>
 </head>
 <body>
+<div class="app">
+    <header>
+        <div class="logo-title">心语日记 <span class="demo-badge">在线体验版</span></div>
+        <div class="logo-sub">多智能体 AI 日记助手</div>
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('chat')">✦ 对话</button>
+            <button class="nav-tab" onclick="switchTab('diaries')">📔 日记本</button>
+        </div>
+    </header>
 
-<div class="hero">
-    <div class="logo-icon">📔</div>
-    <h1>心语日记</h1>
-    <p class="subtitle">基于多智能体协作的 AI 日记助手<br>感知情绪 · 记忆瞬间 · 书写温暖</p>
-    <div class="cta-group">
-        <a href="https://github.com/w020316/geren-riji" class="btn btn-primary" target="_blank">⭐ 查看源码</a>
-        <a href="#features" class="btn btn-secondary">了解功能</a>
-        <a href="#quickstart" class="btn btn-secondary">快速开始</a>
+    <div id="tab-chat" class="tab-content active">
+        <div class="main-grid">
+            <div class="chat-panel">
+                <div class="chat-header">
+                    <div class="chat-header-title">✦ 对话</div>
+                    <div class="header-actions">
+                        <div class="agent-badges">
+                            <span class="agent-badge" id="badge-e">情绪感知</span>
+                            <span class="agent-badge" id="badge-m">记忆管家</span>
+                            <span class="agent-badge" id="badge-d">日记生成</span>
+                            <span class="agent-badge" id="badge-x">对话精灵</span>
+                        </div>
+                        <button class="action-btn" onclick="clearCtx()">重置</button>
+                    </div>
+                </div>
+                <div class="chat-messages" id="msgs">
+                    <div class="welcome-msg" id="welcome">
+                        <h3>你好，我是心语 💫</h3>
+                        <p>我会倾听你的每一天，感知你的情绪，<br>记住那些重要的瞬间，为你写下温暖的日记。<br><br>💡 这是<strong style="color:var(--accent-gold)">在线体验版</strong>，所有功能都在浏览器中运行<br>试着输入一句话，感受多智能体的协作吧！</p>
+                        <div class="agent-flow">
+                            <div class="agent-flow-step"><span class="agent-flow-dot warm"></span>情绪感知器 — 识别情绪状态</div>
+                            <div class="agent-flow-step"><span class="agent-flow-dot rose"></span>记忆管家 — 检索与保存记忆</div>
+                            <div class="agent-flow-step"><span class="agent-flow-dot gold"></span>日记生成器 — 撰写个性化日记</div>
+                            <div class="agent-flow-step"><span class="agent-flow-dot"></span>对话精灵 — 整合温暖回复</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-input-area">
+                    <textarea class="chat-input" id="input" placeholder="说说今天的心情..." rows="1" onkeydown="kd(event)" oninput="resize()"></textarea>
+                    <button class="send-btn" id="sendBtn" onclick="send()">➤</button>
+                </div>
+            </div>
+            <div class="side-panel">
+                <div class="side-card">
+                    <div class="side-card-title">✦ 情绪状态</div>
+                    <div class="emotion-display">
+                        <span class="emotion-emoji" id="emoEmoji">🌙</span>
+                        <div class="emotion-name" id="emoName">等待输入</div>
+                        <div class="emotion-bar-container">
+                            <div class="emotion-bar-label"><span>强度</span><span id="emoInt">0</span></div>
+                            <div class="emotion-bar"><div class="emotion-bar-fill" id="emoBar" style="width:0%"></div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="side-card" style="flex:1;">
+                    <div class="side-card-title">✦ 长期记忆</div>
+                    <div class="memory-list" id="memList">
+                        <div class="empty-state"><span class="empty-state-icon">🧠</span>记忆库为空</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="tech-badges" style="margin-top: 36px;">
-        <span class="tech-badge">Python 3.12</span>
-        <span class="tech-badge">FastAPI</span>
-        <span class="tech-badge">ChromaDB</span>
-        <span class="tech-badge">DeepSeek API</span>
-        <span class="tech-badge">BGE Embedding</span>
-        <span class="tech-badge">SSE Streaming</span>
+
+    <div id="tab-diaries" class="tab-content">
+        <div class="diary-list-panel">
+            <div class="diary-list-header">
+                <div class="diary-list-title">📔 我的日记本</div>
+                <button class="export-all-btn" onclick="exportAll()">导出全部 Markdown</button>
+            </div>
+            <div class="diary-grid" id="diaryGrid">
+                <div class="empty-state"><span class="empty-state-icon">📔</span>还没有日记，去对话页开始写吧</div>
+            </div>
+        </div>
     </div>
 </div>
 
-<section id="features">
-    <h2 class="section-title">核心功能</h2>
-    <div class="features-grid">
-        <div class="feature-card">
-            <div class="feature-icon">🎭</div>
-            <div class="feature-title">情绪感知</div>
-            <div class="feature-desc">自动识别用户输入中的情绪状态，分析情绪强度和关键词，让日记更有情感深度。</div>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon">🧠</div>
-            <div class="feature-title">长期记忆</div>
-            <div class="feature-desc">基于 ChromaDB 向量数据库和 BGE 中文嵌入模型，智能检索和保存重要记忆，跨对话连贯。</div>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon">📝</div>
-            <div class="feature-title">日记生成</div>
-            <div class="feature-desc">融合情绪分析和历史记忆，自动生成温暖、个性化的日记文本，支持 Markdown 导出。</div>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon">✨</div>
-            <div class="feature-title">实时进度</div>
-            <div class="feature-desc">SSE 流式响应，实时显示每个智能体的处理状态（working → done），告别等待焦虑。</div>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon">📔</div>
-            <div class="feature-title">日记管理</div>
-            <div class="feature-desc">自动保存每篇日记，支持历史浏览、详情查看、单篇/批量导出 Markdown 文件。</div>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon">🌙</div>
-            <div class="feature-title">精美界面</div>
-            <div class="feature-desc">暗色主题设计，渐变背景动效，响应式布局，移动端完美适配，沉浸式体验。</div>
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+        <button class="modal-close" onclick="closeModal()">✕</button>
+        <div class="modal-date" id="mDate"></div>
+        <span class="modal-emotion" id="mEmo"></span>
+        <div class="modal-input" id="mInput"></div>
+        <div class="modal-text" id="mText"></div>
+        <div class="modal-actions">
+            <button class="modal-btn" id="mExp" onclick="exportOne()">📥 导出</button>
+            <button class="modal-btn del" id="mDel" onclick="delDiary()">删除</button>
         </div>
     </div>
-</section>
+</div>
 
-<section id="architecture">
-    <h2 class="section-title">多智能体架构</h2>
-    <div class="agents-grid">
-        <div class="agent-card"><div class="agent-avatar">🎭</div><div class="agent-name">情绪感知器</div><div class="agent-role">识别情绪 · 分析强度</div></div>
-        <div class="agent-card"><div class="agent-avatar">🧠</div><div class="agent-name">记忆管家</div><div class="agent-role">检索记忆 · 保存信息</div></div>
-        <div class="agent-card"><div class="agent-avatar">📝</div><div class="agent-name">日记生成器</div><div class="agent-role">融合情绪与记忆写日记</div></div>
-        <div class="agent-card"><div class="agent-avatar">✨</div><div class="agent-name">对话精灵</div><div class="agent-role">整合输出 · 温暖回复</div></div>
-    </div>
-    <div class="arch-section">
-        <h3 style="color:var(--accent-gold);font-size:1.05rem;text-align:center;margin-bottom:8px;">数据流</h3>
-        <div class="arch-flow">
-            <span class="arch-step">👤 用户输入</span>
-            <span class="arch-arrow">→</span>
-            <span class="arch-step">🎭 情绪分析</span>
-            <span class="arch-arrow">→</span>
-            <span class="arch-step">🧠 记忆检索</span>
-            <span class="arch-arrow">→</span>
-            <span class="arch-step">📝 日记生成</span>
-            <span class="arch-arrow">→</span>
-            <span class="arch-step">✨ 整合回复</span>
-            <span class="arch-arrow">→</span>
-            <span class="arch-step">👤 用户</span>
-        </div>
-    </div>
-</section>
+<script>
+const $ = id => document.getElementById(id);
+const msgs = $('msgs'), input = $('input'), sendBtn = $('sendBtn');
 
-<section id="quickstart">
-    <h2 class="section-title">快速开始</h2>
-    <div class="code-block">
-<pre><span class="cmd"># 克隆项目</span>
-git clone https://github.com/w020316/geren-riji.git
-cd geren-riji
+const emoMap = {'开心':'😊','悲伤':'🌧️','焦虑':'😰','愤怒':'🔥','平静':'🌙','惊喜':'✨','疲惫':'😴','感动':'🥹'};
+const clsMap = {'开心':'happy','悲伤':'sad','焦虑':'anxious','愤怒':'angry','平静':'calm','惊喜':'surprised','疲惫':'tired','感动':'moved'};
 
-<span class="cmd"># 安装依赖</span>
-pip install -r requirements.txt
+let diaries = JSON.parse(localStorage.getItem('xinyu_diaries') || '[]');
+let memories = JSON.parse(localStorage.getItem('xinyu_memories') || '[]');
+let curDiaryId = null;
 
-<span class="cmd"># 配置环境变量</span>
-cp .env.example .env
-<span class="str"># 编辑 .env 填入 DeepSeek API Key</span>
+function resize() { input.style.height='auto'; input.style.height=Math.min(input.scrollHeight,100)+'px'; }
+input.addEventListener('input', resize);
 
-<span class="cmd"># 启动服务</span>
-python main.py
+function kd(e) { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();} }
 
-<span class="kw"># 浏览器访问 http://localhost:8000</span></pre>
-    </div>
-</section>
+function switchTab(tab) {
+    document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+    event.target.classList.add('active');
+    $('tab-'+tab).classList.add('active');
+    if(tab==='diaries') renderDiaries();
+}
 
-<section>
-    <h2 class="section-title">项目结构</h2>
-    <div class="code-block">
-<pre>geren-riji/
-├── main.py              <span class="kw"># FastAPI 后端入口</span>
-├── agents.py            <span class="kw"># 4个智能体 + 编排器</span>
-├── tools.py             <span class="kw"># 工具函数</span>
-├── memory.py            <span class="kw"># ChromaDB 长期 + 短期记忆</span>
-├── diary_store.py       <span class="kw"># 日记持久化 & 导出</span>
-├── llm_client.py        <span class="kw"># DeepSeek API 封装</span>
-├── config.py            <span class="kw"># 配置管理</span>
-├── static/
-│   └── index.html       <span class="kw"># 暗色主题前端界面</span>
-├── docs/
-│   └── architecture.svg <span class="kw"># 架构图</span>
-├── Dockerfile           <span class="kw"># Docker 部署</span>
-├── docker-compose.yml   <span class="kw"># Compose 编排</span>
-└── requirements.txt     <span class="kw"># Python 依赖</span></pre>
-    </div>
-</section>
+function getTime() { const n=new Date(); return ('0'+n.getHours()).slice(-2)+':'+('0'+n.getMinutes()).slice(-2); }
 
-<footer>
-    <p>📔 心语日记 — 多智能体 AI 日记助手</p>
-    <p style="margin-top:8px;">
-        <a href="https://github.com/w020316/geren-riji" target="_blank">GitHub</a> ·
-        Built with ❤️ using Python · FastAPI · DeepSeek
-    </p>
-</footer>
+function addMsg(role, content, emotion=null, diary=null, did=null) {
+    const w=$('welcome'); if(w) w.remove();
+    const d=document.createElement('div'); d.className=`msg ${role}`;
+    const a=document.createElement('div'); a.className='msg-avatar'; a.textContent=role==='user'?'我':'心';
+    const b=document.createElement('div'); b.className='msg-body';
+    const t=document.createElement('div'); t.className='msg-time'; t.textContent=getTime();
+    const c=document.createElement('div'); c.className='msg-content';
+    if(role==='assistant'&&emotion){
+        const tag=document.createElement('span');
+        tag.className=`emotion-tag ${clsMap[emotion.emotion]||'calm'}`;
+        tag.textContent=`${emoMap[emotion.emotion]||'🌙'} ${emotion.emotion} · 强度 ${emotion.intensity}/10`;
+        c.appendChild(tag);
+    }
+    const p=document.createElement('div'); p.textContent=content; c.appendChild(p);
+    if(role==='assistant'&&diary){
+        const ds=document.createElement('div'); ds.className='diary-section';
+        const dt=document.createElement('div'); dt.className='diary-text'; dt.textContent=diary;
+        ds.appendChild(dt);
+        if(did){
+            const acts=document.createElement('div'); acts.className='diary-actions';
+            const eb=document.createElement('button'); eb.className='diary-action-btn'; eb.textContent='📥 导出'; eb.onclick=()=>exportSingle(did);
+            acts.appendChild(eb); ds.appendChild(acts);
+        }
+        c.appendChild(ds);
+    }
+    b.appendChild(t); b.appendChild(c); d.appendChild(a); d.appendChild(b);
+    msgs.appendChild(d); msgs.scrollTop=msgs.scrollHeight;
+}
 
+function addLoading() {
+    const w=$('welcome'); if(w) w.remove();
+    const d=document.createElement('div'); d.className='msg assistant'; d.id='ld';
+    const a=document.createElement('div'); a.className='msg-avatar'; a.textContent='心';
+    const b=document.createElement('div'); b.className='msg-body';
+    const t=document.createElement('div'); t.className='msg-time'; t.textContent=getTime();
+    const c=document.createElement('div'); c.className='msg-content';
+    c.innerHTML='<div class="loading-dots"><span></span><span></span><span></span></div>';
+    b.appendChild(t); b.appendChild(c); d.appendChild(a); d.appendChild(b);
+    msgs.appendChild(d); msgs.scrollTop=msgs.scrollHeight;
+}
+function rmLoading() { const el=$('ld'); if(el) el.remove(); }
+
+function setBadge(id, state) {
+    const el=$(id); el.classList.remove('working','done'); if(state) el.classList.add(state);
+}
+function resetBadges() { ['e','m','d','x'].forEach(id=>setBadge('badge-'+id,null)); }
+
+// === Emotion Analysis Engine ===
+function analyzeEmotion(text) {
+    const rules = [
+        {emo:'开心',kw:['开心','高兴','快乐','棒','太好了','哈哈','笑','兴奋','满足','幸福','喜欢','爱','美好','阳光','成功','完成','达成','庆祝','赞','优秀','厉害','不错','好耶'],w:1},
+        {emo:'悲伤',kw:['难过','伤心','悲伤','哭','泪','痛','失去','离开','孤独','寂寞','无助','绝望','遗憾','可惜','不舍','想念','思念','委屈','难受','心碎'],w:1},
+        {emo:'焦虑',kw:['焦虑','紧张','担心','害怕','恐惧','不安','压力','慌','烦','急','不确定','迷茫','困惑','纠结','犹豫','失眠','噩梦','考试','面试','截止','来不及'],w:1},
+        {emo:'愤怒',kw:['生气','愤怒','火大','烦死','气死','讨厌','恶心','不公平','凭什么','忍不了','滚','混蛋','垃圾','傻X','靠','无语','离谱'],w:1},
+        {emo:'惊喜',kw:['惊喜','惊讶','哇','天哪','居然','竟然','没想到','太意外了','不敢相信','中了','中奖','好消息','突然','居然'],w:1},
+        {emo:'疲惫',kw:['累','疲惫','困',' tired ','不想动','没力气','精疲力尽','加班','熬夜','通宵','忙死了','累死了','身体不舒服','头痛','腰酸'],w:1},
+        {emo:'感动',kw:['感动','温暖','谢谢','感激','感谢','暖心','治愈','珍惜','幸福','爱','陪伴','支持','鼓励','理解','包容','温柔','善良','美好回忆','值得'],w:1},
+    ];
+    let best={emo:'平静',intensity:5,score:0};
+    for(const r of rules) {
+        let s=0;
+        for(const k of r.kw) {
+            const re=new RegExp(k,'gi');
+            const m=text.match(re);
+            if(m) s+=m.length*(k.includes(' ') ? 1.5 : 1);
+        }
+        if(s>best.score){best={emo:r.emo,intensity:Math.min(10,Math.round(4+s*1.2)),score:s};}
+    }
+    if(best.score===0) best.intensity=Math.floor(Math.random()*3)+3;
+    return best;
+}
+
+// === Memory Extraction ===
+function extractMemories(text, emotion) {
+    const extracts=[];
+    const patterns=[
+        /(?:去了|到|在|去了|遇见|遇到|见到|见了)\s*[《「]?([^\n，。！？\》」]{2,20})/g,
+        /(?:和|跟|同|与|一起)([^\n，。！？]{2,15?})(?:一起|聊天|吃饭|散步|玩|工作|学习)/g,
+        /([^\n，。！？]{3,20})(?:了|完|成|过|好|成功|失败|通过)/g,
+        /(面试|考试|比赛|会议|项目|报告|答辩|演讲)[^\n，。！？]{0,15}/g,
+        /(?:今天是|今天)([^\n，。！？]{3,25})/g,
+    ];
+    for(const p of patterns) {
+        let m;
+        while((m=p.exec(text))!==null) {
+            if(m[1] && m[1].length>=2 && !extracts.includes(m[1])) extracts.push(m[1].trim());
+        }
+    }
+    return extracts.slice(0,3);
+}
+
+// === Diary Generation ===
+function generateDiary(userInput, emotionInfo, relevantMemories) {
+    const today=new Date();
+    const dateStr=today.getFullYear()+'年'+('0'+(today.getMonth()+1)).slice(-2)+'月'+('0'+today.getDate()).slice(-2)+'日';
+    const weekdays=['周一','周二','周三','周四','周五','周六','周日'];
+    const weekday=weekdays[today.getDay()];
+    const intensityWords={1:'一丝',2:'淡淡的',3:'微微的',4:'明显的',5:'清晰的',6:'较强的',7:'强烈的',8:'很深的',9:'极度的',10:'满溢的'};
+    const templates=[
+        `${dateStr} ${weekday}\n\n今天的${emotionInfo.emotion}像一阵${['微风','细雨','暖阳','晚风','晨光'][Math.floor(Math.random()*5)]}，轻轻拂过心头。\n\n${userInput}\n\n回想起来，这是一段值得记录的时刻。${intensityWords[emotionInfo.intensity]}${emotionInfo.em情}在心中荡漾，让我对生活有了新的感悟。\n\n${relevantMemories.length>0?'想起之前'+relevantMemories[0]+'，时光流转，心情却有了新的色彩。':''}或许这就是成长的痕迹——每一个当下都独一无二，每一份情绪都值得被认真对待。\n\n愿明天的自己，依然能以一颗柔软的心，拥抱这个世界。`,
+        `${dateStr} ${weekday}\n\n${userInput}\n\n这一天，我的内心是${emotionInfo.em情}的。强度大约是${emotionInfo.intensity}/10分，不算太强烈，却足够真实。\n\n有时候我们不需要惊天动地的大事来定义一天的意义。一个瞬间的触动、一句暖心的话、一次小小的突破，都足以让平凡的日子闪闪发光。\n\n${relevantMemories.length>0?'记忆里还留着「'+relevantMemories[0]+'」，和今天的感受交织在一起，构成了属于我的独特叙事。':''}\n\n晚安，世界。明天又是新的一天。`,
+        `${dateStr} ${weekday}\n\n记录下今天：${userInput}\n\n情绪是${emotionInfo.em情}的，带着${intensityWords[emotionInfo.intensity]}的${emotionInfo.em情}浓度。这种感觉很熟悉，又有些不同。\n\n生活就是这样，我们在不同的情绪之间穿行，时而明亮如昼，时而静谧如夜。重要的是学会与每一种情绪共处，不抗拒，也不沉溺。\n\n${relevantMemories.length>1?'想起之前那些日子——'+relevantMemories.slice(0,2).join('、')+'，每一段经历都是生命拼图的一块。':''}${relevantMemories.length===1?'想起之前「'+relevantMemories[0]+'」，那段记忆此刻显得格外清晰。':''}\n\n写下这些文字的时候，心里平静了许多。这就是记录的意义吧——让流动的时间有一个可以回望的锚点。`,
+    ];
+    return templates[Math.floor(Math.random()*templates.length)];
+}
+
+// === Response Generation ===
+function generateResponse(userInput, emotionInfo, diary) {
+    const responses={
+        '开心':[
+            `看到你这么开心，我也跟着高兴起来呢！☀️ 能感受到你今天的能量满满，这种感觉真好。为你写了一篇日记，希望以后翻看时还能记起这份快乐。`,
+            `呀，你的快乐都要溢出屏幕啦！😊 真诚地为你的好心情感到开心。已经帮你把这份喜悦存进日记里了，以后随时可以回顾哦~`,
+        ],
+        '悲伤':[
+            `抱抱你 🤗 感觉到你今天不太容易，想哭就哭出来吧，眼泪也是一种释放。我把你的心情和今天的经历都记下来了，无论发生什么，你都不是一个人。`,
+            `听到了你心里的声音。难过的时候允许自己脆弱一会儿，这没什么不对的。日记已经写好了，等心情平复些再回头看，也许会有不一样的感受。`,
+        ],
+        '焦虑':[
+            `深呼吸～ 🌿 我感觉到你有点紧张。其实很多时候事情没有想象中那么可怕，一步一步来就好。把今天的想法写进日记，也是一种梳理的方式。`,
+            `别担心，慢慢来。焦虑说明你在乎，但也要记得照顾好自己哦。日记已保存，等这件事过去再读，你会发现其实你已经做得很好了。`,
+        ],
+        '愤怒':[
+            `嗯，确实挺让人火大的 😤 有情绪就发泄出来吧，憋着更不好受。我已经把今天的情况记录下来，等冷静下来再看看，也许能找到更好的处理方式。`,
+            `生气是正常的反应，说明你有自己的底线。不过别让怒火烧到自己哦～ 日记已保存，作为今天的一个见证。`,
+        ],
+        '平静':[
+            `今天是一段安静而美好的时光呢 🌙 平静的日子里也藏着很多小确幸，谢谢你愿意和我分享。日记已经写好了，愿这份宁静常伴你左右。`,
+            `喜欢这样平和的状态 ✨ 不需要太多波澜，安安静静地度过一天也很珍贵。日记已保存，这是属于你的平静篇章。`,
+        ],
+        '惊喜':[
+            `哇！听起来是很棒的惊喜呢 🎉 这种 unexpected 的感觉最让人心动了！必须好好记录下来，以后回味起来一定会嘴角上扬的~`,
+            `太令人惊喜了吧！😍 生活总是会在不经意间给我们礼物。已经帮你把这份惊喜封存在日记里了！`,
+        ],
+        '疲惫':[
+            `辛苦了... 😴 感觉到你真的很累，今天就好好休息吧，什么都不用想。日记先帮你存着，等你恢复精力了再看。`,
+            `抱抱，今天一定过得很不容易吧 💤 允许自己停下来歇一歇。日记已保存，现在最重要的任务就是——休息！`,
+        ],
+        '感动':[
+            `眼眶有点湿润了呢 🥹 这么温暖的时刻，真的很难得。谢谢你愿意分享给我，已经把它珍重地写进日记里了。`,
+            `被你的故事触动了... ❤️ 生活中有这么多温柔的瞬间，值得我们用心收藏。日记已保存，这份感动永远在这里。`,
+        ],
+    };
+    const list=responses[emotionInfo.emo]||responses['平静'];
+    return list[Math.floor(Math.random()*list.length)];
+}
+
+// === Search Memories ===
+function searchMemories(query) {
+    if(memories.length===0) return [];
+    const q=query.toLowerCase();
+    const scored=memories.map((m,i)=>{
+        let score=0;
+        const qWords=q.split(/\s+/).filter(w=>w.length>1);
+        const mWords=m.content.toLowerCase().split(/\s+/).filter(w=>w.length>1);
+        for(const qw of qWords) for(const mw of mWords) if(mw.includes(qw)||qw.includes(mw)) score+=2;
+        if(m.content.toLowerCase().includes(q)) score+=3;
+        if(m.emotion&&query.includes(m.emotion)) score+=1;
+        return {...m,idx:i,score};
+    }).filter(s=>s.score>0).sort((a,b)=>b.score-a.score).slice(0,5);
+    if(scored.length===0 && memories.length>0) return memories.slice(-3).map((m,i)=>({...m,idx:memories.length-1-i,score:0.5}));
+    return scored.map(s=>({content:s.content,date:s.date||'',emotion:s.emotion||''}));
+}
+
+async function send() {
+    const text=input.value.trim();
+    if(!text) return;
+    input.value=''; input.style.height='auto'; sendBtn.disabled=true;
+    addMsg('user',text); addLoading(); resetBadges();
+
+    // Step 1: Emotion
+    setBadge('badge-e','working');
+    await wait(600+Math.random()*400);
+    const emotionInfo=analyzeEmotion(text);
+    setBadge('badge-e','done');
+    updateEmo(emotionInfo);
+
+    // Step 2: Memory search & save
+    setBadge('badge-m','working');
+    await wait(500+Math.random()*300);
+    const relevant=searchMemories(text);
+    setBadge('badge-m','done');
+    const newMems=extractMemories(text, emotionInfo);
+    newMems.forEach(m=>{
+        memories.push({content:m,emotion:emotionInfo.emo,date:new Date().toLocaleDateString('zh-CN')});
+    });
+    saveMemories();
+    renderMemories();
+
+    // Step 3: Generate diary
+    setBadge('badge-d','working');
+    await wait(800+Math.random()*600);
+    const diary=generateDiary(text, emotionInfo, relevant);
+    setBadge('badge-d','done');
+
+    // Step 4: Response
+    setBadge('badge-x','working');
+    await wait(500+Math.random()*300);
+    const response=generateResponse(text, emotionInfo, diary);
+    setBadge('badge-x','done');
+
+    // Save diary
+    const did=saveDiary(text, diary, emotionInfo);
+
+    rmLoading();
+    addMsg('assistant', response, emotionInfo, diary, did);
+    resetBadges();
+    sendBtn.disabled=false; input.focus();
+}
+
+function wait(ms) { return new Promise(r=>setTimeout(r,ms)); }
+
+function updateEmo(e) {
+    $('emoEmoji').textContent=emoMap[e.emo]||'🌙';
+    $('emoName').textContent=e.emo||'平静';
+    $('emoInt').textContent=e.int||0;
+    $('emoBar').style.width=(e.int||0)*10+'%';
+}
+
+function saveMemories() { localStorage.setItem('xinyu_memories',JSON.stringify(memories)); }
+function saveDiary(input, diary, emotion) {
+    const now=new Date();
+    const id=now.getTime().toString();
+    const entry={id,date:now.toLocaleDateString('zh-CN'),time:getTime(),emotion:emotion.emo,intensity:emotion.int,userInput:input,diary:diary};
+    diaries.unshift(entry);
+    localStorage.setItem('xinyu_diaries',JSON.stringify(diaries));
+    return id;
+}
+
+function renderMemories() {
+    const list=$('memList');
+    if(!memories.length){list.innerHTML='<div class="empty-state"><span class="empty-state-icon">🧠</span>记忆库为空</div>';return;}
+    list.innerHTML='';
+    [...memories].reverse().slice(0,15).forEach(m=>{
+        const item=document.createElement('div'); item.className='memory-item';
+        item.innerHTML=`<div>${m.content}</div><div class="memory-date">${m.date||''}</div>`;
+        list.appendChild(item);
+    });
+}
+
+function renderDiaries() {
+    const grid=$('diaryGrid');
+    if(!diaries.length){grid.innerHTML='<div class="empty-state"><span class="empty-state-icon">📔</span>还没有日记，去对话页开始写吧</div>';return;}
+    grid.innerHTML='';
+    diaries.forEach(d=>{
+        const card=document.createElement('div'); card.className='diary-card'; card.onclick=()=>openModal(d.id);
+        card.innerHTML=`
+            <div class="diary-card-date">${d.date} ${d.time}</div>
+            <span class="diary-card-emotion emotion-tag ${clsMap[d.emotion]||'calm'}">${emoMap[d.emotion]||'🌙'} ${d.emotion}</span>
+            <div class="diary-card-preview">${d.diary.substring(0,70)}...</div>`;
+        grid.appendChild(card);
+    });
+}
+
+function openModal(id) {
+    const d=diaries.find(x=>x.id==id); if(!d) return;
+    curDiaryId=id;
+    $('mDate').textContent=d.date+' '+d.time;
+    const me=$('mEmo'); me.className='modal-emotion emotion-tag '+ (clsMap[d.emotion]||'calm'); me.textContent=(emoMap[d.emotion]||'🌙')+' '+d.emotion+' · 强度 '+d.intensity+'/10';
+    $('mInput').textContent=d.userInput;
+    $('mText').textContent=d.diary;
+    $('mExp').onclick=()=>exportSingle(id);
+    $('mDel').onclick=()=>delDiary();
+    $('modal').classList.add('show');
+}
+function closeModal(e) { if(e&&e.target!=='modal')return; $('modal').classList.remove('show'); }
+function delDiary() {
+    if(!curDiaryId) return;
+    diaries=diaries.filter(d=>d.id!=curDiaryId);
+    localStorage.setItem('xinyu_diaries',JSON.stringify(diaries));
+    closeModal(); renderDiaries();
+}
+
+function exportSingle(id) {
+    const d=diaries.find(x=>x.id==id); if(!d) return;
+    download(`# ${d.date} ${d.time}\n> ${d.emotion} · 强度 ${d.intensity}/10\n\n## 心语\n\n${d.userInput}\n\n---\n\n${d.diary}`,`心语日记_${d.id}.md`);
+}
+function exportAll() {
+    if(!diaries.length){alert('暂无日记');return;}
+    let md='# 📔 心语日记合集\n\n';
+    diaries.forEach(d=>{
+        md+=`## ${d.date} ${d.time}\n> ${d.emotion} · 强度 ${d.intensity}/10\n\n${d.diary}\n\n---\n\n`;
+    });
+    download(md,'心语日记_全部.md');
+}
+function download(content,filename) {
+    const blob=new Blob([content],{type:'text/markdown;charset=utf-8'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=filename; a.click(); URL.revokeObjectURL(a.href);
+}
+
+function clearCtx() {
+    msgs.innerHTML=`<div class="welcome-msg"><h3>对话已重置</h3><p>短期对话已清空。<br>长期记忆和日记仍保留在浏览器中。</p></div>`;
+}
+
+renderMemories();
+</script>
 </body>
 </html>
