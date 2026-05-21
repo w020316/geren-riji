@@ -44,7 +44,7 @@
         .logo-title { font-family: 'ZCOOL XiaoWei', serif; font-size: 2.2rem; background: linear-gradient(135deg, var(--accent-warm), var(--accent-rose), var(--accent-lavender)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 7px; margin-bottom: 4px; }
         .logo-sub { font-size: 0.78rem; color: var(--text-muted); letter-spacing: 3px; }
 
-        .nav-tabs { display: flex; justify-content: center; gap: 3px; margin-top: 14px; }
+        .nav-tabs { display: flex; justify-content: center; gap: 3px; margin-top: 14px; flex-wrap: wrap; }
         .nav-tab {
             font-family: 'Noto Serif SC', serif; padding: 7px 20px; border-radius: 11px 11px 0 0;
             border: 1px solid var(--border-subtle); border-bottom: none; background: transparent;
@@ -58,11 +58,10 @@
 
         .main-grid { display: grid; grid-template-columns: 1fr 300px; gap: 16px; margin-top: -1px; }
 
-        /* Chat Panel */
         .chat-panel {
             background: var(--bg-card); border-radius: 0 18px 18px 18px;
             border: 1px solid var(--border-subtle); overflow: hidden; display: flex; flex-direction: column;
-            min-height: 520px;
+            min-height: 520px; position: relative;
         }
         .chat-panel::before {
             content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
@@ -148,6 +147,14 @@
         }
         .diary-action-btn:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
 
+        .quick-tags { display: flex; gap: 6px; flex-wrap: wrap; padding: 8px 18px; border-top: 1px solid var(--border-subtle); }
+        .quick-tag {
+            font-size: 0.68rem; padding: 4px 10px; border-radius: 16px;
+            border: 1px solid var(--border-subtle); color: var(--text-muted); background: transparent;
+            cursor: pointer; transition: all 0.3s; font-family: 'Noto Serif SC', serif; white-space: nowrap;
+        }
+        .quick-tag:hover { border-color: var(--accent-lavender); color: var(--accent-lavender); background: rgba(155,142,196,0.06); }
+
         .chat-input-area { padding: 12px 18px; border-top: 1px solid var(--border-subtle); display: flex; gap: 8px; }
         .chat-input {
             flex: 1; background: var(--bg-input); border: 1px solid var(--border-subtle);
@@ -171,7 +178,6 @@
         .loading-dots span:nth-child(2){animation-delay:.2s} .loading-dots span:nth-child(3){animation-delay:.4s}
         @keyframes bounce { 0%,80%,100%{transform:scale(.55);opacity:.35} 40%{transform:scale(1);opacity:1} }
 
-        /* Side Panel */
         .side-panel { display: flex; flex-direction: column; gap: 14px; }
         .side-card {
             background: var(--bg-card); border-radius: 18px; border: 1px solid var(--border-subtle);
@@ -189,30 +195,54 @@
         .emotion-bar-label { font-size: 0.65rem; color: var(--text-muted); margin-bottom: 2px; display: flex; justify-content: space-between; }
         .emotion-bar { height: 3px; background: rgba(155,142,196,0.12); border-radius: 2px; overflow: hidden; }
         .emotion-bar-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--accent-warm), var(--accent-rose)); transition: width 0.8s ease; }
+
+        .memory-search { display: flex; gap: 6px; margin-bottom: 8px; }
+        .memory-search-input {
+            flex: 1; background: var(--bg-input); border: 1px solid var(--border-subtle);
+            border-radius: 8px; padding: 5px 10px; color: var(--text-primary); font-size: 0.7rem;
+            font-family: 'Noto Serif SC', serif; outline: none;
+        }
+        .memory-search-input:focus { border-color: var(--accent-lavender); }
+        .memory-search-input::placeholder { color: var(--text-muted); }
+        .memory-search-btn {
+            font-size: 0.62rem; padding: 4px 8px; border-radius: 8px; border: 1px solid var(--border-subtle);
+            color: var(--text-muted); background: transparent; cursor: pointer; font-family: 'Noto Serif SC', serif;
+        }
+        .memory-search-btn:hover { border-color: var(--accent-lavender); color: var(--accent-lavender); }
+
         .memory-list { display: flex; flex-direction: column; gap: 5px; max-height: 180px; overflow-y: auto; }
         .memory-list::-webkit-scrollbar { width: 2px; }
         .memory-list::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 2px; }
         .memory-item {
             padding: 7px 9px; background: rgba(155,142,196,0.05); border: 1px solid var(--border-subtle);
             border-radius: 9px; font-size: 0.72rem; line-height: 1.6; color: var(--text-secondary); transition: all 0.3s;
+            position: relative;
         }
         .memory-item:hover { border-color: var(--accent-lavender); background: rgba(155,142,196,0.09); }
         .memory-date { font-size: 0.58rem; color: var(--text-muted); margin-top: 2px; }
+        .memory-del {
+            position: absolute; top: 4px; right: 6px; font-size: 0.55rem; color: var(--text-muted);
+            cursor: pointer; opacity: 0; transition: all 0.3s; background: none; border: none; padding: 2px;
+        }
+        .memory-item:hover .memory-del { opacity: 1; }
+        .memory-del:hover { color: var(--accent-rose); }
         .empty-state { text-align: center; padding: 16px 0; color: var(--text-muted); font-size: 0.75rem; }
         .empty-state-icon { font-size: 1.6rem; margin-bottom: 4px; display: block; opacity: 0.45; }
 
-        /* Diary List */
         .diary-list-panel {
             background: var(--bg-card); border-radius: 0 18px 18px 18px;
             border: 1px solid var(--border-subtle); padding: 18px; min-height: 500px;
         }
-        .diary-list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border-subtle); }
+        .diary-list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border-subtle); flex-wrap: wrap; gap: 8px; }
         .diary-list-title { font-size: 0.9rem; color: var(--accent-gold); letter-spacing: 2px; }
-        .export-all-btn {
+        .diary-list-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+        .export-all-btn, .data-btn {
             font-size: 0.68rem; padding: 4px 12px; border-radius: 9px; border: 1px solid var(--accent-gold);
             color: var(--accent-gold); background: transparent; cursor: pointer; transition: all 0.3s; font-family: 'Noto Serif SC', serif; text-decoration: none;
         }
-        .export-all-btn:hover { background: rgba(212,184,150,0.08); }
+        .export-all-btn:hover, .data-btn:hover { background: rgba(212,184,150,0.08); }
+        .data-btn { border-color: var(--accent-lavender); color: var(--accent-lavender); }
+        .data-btn:hover { background: rgba(155,142,196,0.08); }
         .diary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; max-height: 550px; overflow-y: auto; padding-right: 3px; }
         .diary-grid::-webkit-scrollbar { width: 3px; }
         .diary-grid::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 3px; }
@@ -225,7 +255,42 @@
         .diary-card-emotion { font-size: 0.58rem; padding: 2px 7px; border-radius: 9px; display: inline-block; margin-bottom: 6px; }
         .diary-card-preview { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.65; }
 
-        /* Modal */
+        .stats-panel {
+            background: var(--bg-card); border-radius: 0 18px 18px 18px;
+            border: 1px solid var(--border-subtle); padding: 18px; min-height: 500px;
+        }
+        .stats-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; padding-bottom: 10px; border-bottom: 1px solid var(--border-subtle); }
+        .stats-title { font-size: 0.9rem; color: var(--accent-gold); letter-spacing: 2px; }
+        .stats-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+        .stat-card {
+            background: rgba(155,142,196,0.05); border: 1px solid var(--border-subtle);
+            border-radius: 12px; padding: 14px; text-align: center;
+        }
+        .stat-value { font-size: 1.6rem; font-weight: 700; background: linear-gradient(135deg, var(--accent-warm), var(--accent-rose)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .stat-label { font-size: 0.68rem; color: var(--text-muted); margin-top: 4px; letter-spacing: 1px; }
+        .chart-section { margin-bottom: 20px; }
+        .chart-title { font-size: 0.78rem; color: var(--accent-lavender); letter-spacing: 2px; margin-bottom: 12px; }
+        .bar-chart { display: flex; flex-direction: column; gap: 8px; }
+        .bar-row { display: flex; align-items: center; gap: 8px; }
+        .bar-label { font-size: 0.68rem; color: var(--text-secondary); width: 40px; text-align: right; flex-shrink: 0; }
+        .bar-track { flex: 1; height: 20px; background: rgba(155,142,196,0.08); border-radius: 10px; overflow: hidden; position: relative; }
+        .bar-fill { height: 100%; border-radius: 10px; transition: width 0.8s ease; display: flex; align-items: center; justify-content: flex-end; padding-right: 6px; }
+        .bar-fill span { font-size: 0.55rem; color: var(--bg-deep); font-weight: 600; }
+        .trend-chart { display: flex; align-items: flex-end; gap: 4px; height: 120px; padding: 0 4px; }
+        .trend-bar {
+            flex: 1; min-width: 16px; border-radius: 4px 4px 0 0; transition: height 0.6s ease;
+            position: relative; cursor: pointer;
+        }
+        .trend-bar:hover { opacity: 0.85; }
+        .trend-bar-tip {
+            display: none; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+            background: var(--bg-input); border: 1px solid var(--border-subtle); border-radius: 6px;
+            padding: 3px 7px; font-size: 0.55rem; color: var(--text-secondary); white-space: nowrap; z-index: 10;
+        }
+        .trend-bar:hover .trend-bar-tip { display: block; }
+        .trend-labels { display: flex; gap: 4px; padding: 4px 4px 0; }
+        .trend-label { flex: 1; min-width: 16px; text-align: center; font-size: 0.5rem; color: var(--text-muted); }
+
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0,0,0,0.6); z-index: 100; justify-content: center; align-items: center;
@@ -243,15 +308,20 @@
         .modal-emotion { font-size: 0.68rem; padding: 3px 9px; border-radius: 10px; display: inline-block; margin-bottom: 12px; }
         .modal-input { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.75; padding: 9px; background: rgba(155,142,196,0.05); border-radius: 9px; }
         .modal-text { font-size: 0.85rem; line-height: 2; white-space: pre-wrap; }
-        .modal-actions { display: flex; gap: 7px; margin-top: 14px; justify-content: flex-end; }
+        .modal-text.editing {
+            background: var(--bg-input); border: 1px solid var(--accent-lavender);
+            border-radius: 9px; padding: 9px; outline: none; min-height: 120px;
+        }
+        .modal-actions { display: flex; gap: 7px; margin-top: 14px; justify-content: flex-end; flex-wrap: wrap; }
         .modal-btn {
             font-size: 0.62rem; padding: 3px 9px; border-radius: 7px; border: 1px solid var(--border-subtle);
             color: var(--text-muted); background: transparent; cursor: pointer; transition: all 0.3s; font-family: 'Noto Serif SC', serif;
         }
         .modal-btn:hover { border-color: var(--accent-lavender); color: var(--accent-lavender); }
         .modal-btn.del:hover { border-color: var(--accent-rose); color: var(--accent-rose); }
+        .modal-btn.save { border-color: var(--accent-mint); color: var(--accent-mint); }
+        .modal-btn.save:hover { background: rgba(126,196,165,0.08); }
 
-        /* Welcome */
         .welcome-msg { text-align: center; padding: 26px 14px; color: var(--text-muted); }
         .welcome-msg h3 { font-family: 'ZCOOL XiaoWei', serif; font-size: 1.1rem; color: var(--accent-gold); margin-bottom: 8px; letter-spacing: 3px; }
         .welcome-msg p { font-size: 0.8rem; line-height: 2; }
@@ -262,15 +332,54 @@
         .agent-flow-dot.rose { background: var(--accent-rose); }
         .agent-flow-dot.gold { background: var(--accent-gold); }
 
-        /* Demo Badge */
         .demo-badge {
             display: inline-block; font-size: 0.6rem; padding: 2px 8px; border-radius: 8px;
             background: rgba(126,196,165,0.1); color: var(--accent-mint); border: 1px solid rgba(126,196,165,0.25);
             vertical-align: middle; margin-left: 8px; letter-spacing: 1px;
         }
 
-        @media(max-width:860px) { .main-grid { grid-template-columns: 1fr; } .side-panel { flex-direction: row; overflow-x: auto; } .side-card { min-width: 240px; } }
-        @media(max-width:560px) { .app { padding: 8px; } .logo-title { font-size: 1.7rem; } .chat-messages { max-height: 360px; } .nav-tab { padding: 5px 12px; font-size: 0.72rem; } }
+        .confirm-overlay {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); z-index: 200; justify-content: center; align-items: center;
+        }
+        .confirm-overlay.show { display: flex; }
+        .confirm-box {
+            background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 14px;
+            padding: 20px; max-width: 340px; width: 90%; text-align: center;
+        }
+        .confirm-text { font-size: 0.85rem; color: var(--text-primary); margin-bottom: 16px; line-height: 1.8; }
+        .confirm-actions { display: flex; gap: 10px; justify-content: center; }
+        .confirm-btn {
+            font-size: 0.72rem; padding: 6px 18px; border-radius: 10px; border: 1px solid var(--border-subtle);
+            color: var(--text-muted); background: transparent; cursor: pointer; font-family: 'Noto Serif SC', serif; transition: all 0.3s;
+        }
+        .confirm-btn:hover { border-color: var(--text-secondary); color: var(--text-secondary); }
+        .confirm-btn.danger { border-color: var(--accent-rose); color: var(--accent-rose); }
+        .confirm-btn.danger:hover { background: rgba(212,117,140,0.1); }
+
+        .toast {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(80px);
+            background: var(--bg-card); border: 1px solid var(--accent-mint); color: var(--accent-mint);
+            padding: 10px 22px; border-radius: 12px; font-size: 0.78rem; z-index: 300;
+            opacity: 0; transition: all 0.4s ease; pointer-events: none;
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        @media(max-width:860px) {
+            .main-grid { grid-template-columns: 1fr; }
+            .side-panel { flex-direction: row; overflow-x: auto; }
+            .side-card { min-width: 240px; }
+            .stats-summary { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media(max-width:560px) {
+            .app { padding: 8px; }
+            .logo-title { font-size: 1.7rem; letter-spacing: 4px; }
+            .chat-messages { max-height: 360px; }
+            .nav-tab { padding: 5px 12px; font-size: 0.72rem; }
+            .stats-summary { grid-template-columns: 1fr; }
+            .quick-tags { padding: 6px 12px; }
+            .chat-input-area { padding: 10px 12px; }
+        }
     </style>
 </head>
 <body>
@@ -279,8 +388,9 @@
         <div class="logo-title">心语日记 <span class="demo-badge">在线体验版</span></div>
         <div class="logo-sub">多智能体 AI 日记助手</div>
         <div class="nav-tabs">
-            <button class="nav-tab active" onclick="switchTab('chat')">✦ 对话</button>
-            <button class="nav-tab" onclick="switchTab('diaries')">📔 日记本</button>
+            <button class="nav-tab active" data-tab="chat" onclick="switchTab('chat',this)">✦ 对话</button>
+            <button class="nav-tab" data-tab="diaries" onclick="switchTab('diaries',this)">📔 日记本</button>
+            <button class="nav-tab" data-tab="stats" onclick="switchTab('stats',this)">📊 情绪统计</button>
         </div>
     </header>
 
@@ -311,6 +421,14 @@
                         </div>
                     </div>
                 </div>
+                <div class="quick-tags" id="quickTags">
+                    <button class="quick-tag" onclick="quickSend('今天心情不错')">😊 开心</button>
+                    <button class="quick-tag" onclick="quickSend('今天有点累')">😴 疲惫</button>
+                    <button class="quick-tag" onclick="quickSend('有点焦虑')">😰 焦虑</button>
+                    <button class="quick-tag" onclick="quickSend('今天很平静')">🌙 平静</button>
+                    <button class="quick-tag" onclick="quickSend('遇到了一件感动的事')">🥹 感动</button>
+                    <button class="quick-tag" onclick="quickSend('今天有什么值得记录的？')">💡 每日一问</button>
+                </div>
                 <div class="chat-input-area">
                     <textarea class="chat-input" id="input" placeholder="说说今天的心情..." rows="1" onkeydown="kd(event)" oninput="resize()"></textarea>
                     <button class="send-btn" id="sendBtn" onclick="send()">➤</button>
@@ -330,6 +448,10 @@
                 </div>
                 <div class="side-card" style="flex:1;">
                     <div class="side-card-title">✦ 长期记忆</div>
+                    <div class="memory-search">
+                        <input class="memory-search-input" id="memSearch" placeholder="搜索记忆..." oninput="filterMemories()">
+                        <button class="memory-search-btn" onclick="clearMemSearch()">✕</button>
+                    </div>
                     <div class="memory-list" id="memList">
                         <div class="empty-state"><span class="empty-state-icon">🧠</span>记忆库为空</div>
                     </div>
@@ -342,10 +464,37 @@
         <div class="diary-list-panel">
             <div class="diary-list-header">
                 <div class="diary-list-title">📔 我的日记本</div>
-                <button class="export-all-btn" onclick="exportAll()">导出全部 Markdown</button>
+                <div class="diary-list-actions">
+                    <button class="data-btn" onclick="importData()">📥 导入数据</button>
+                    <button class="data-btn" onclick="exportData()">📤 导出数据</button>
+                    <button class="export-all-btn" onclick="exportAll()">📄 导出Markdown</button>
+                </div>
             </div>
             <div class="diary-grid" id="diaryGrid">
                 <div class="empty-state"><span class="empty-state-icon">📔</span>还没有日记，去对话页开始写吧</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="tab-stats" class="tab-content">
+        <div class="stats-panel">
+            <div class="stats-header">
+                <div class="stats-title">📊 情绪统计</div>
+                <div style="font-size:0.65rem;color:var(--text-muted)">基于你的日记数据</div>
+            </div>
+            <div class="stats-summary" id="statsSummary">
+                <div class="stat-card"><div class="stat-value" id="statTotal">0</div><div class="stat-label">总日记数</div></div>
+                <div class="stat-card"><div class="stat-value" id="statStreak">0</div><div class="stat-label">连续记录天数</div></div>
+                <div class="stat-card"><div class="stat-value" id="statTop">-</div><div class="stat-label">最常情绪</div></div>
+            </div>
+            <div class="chart-section">
+                <div class="chart-title">🎭 情绪分布</div>
+                <div class="bar-chart" id="emoDist"></div>
+            </div>
+            <div class="chart-section">
+                <div class="chart-title">📈 近7天情绪趋势</div>
+                <div class="trend-chart" id="trendChart"></div>
+                <div class="trend-labels" id="trendLabels"></div>
             </div>
         </div>
     </div>
@@ -359,11 +508,26 @@
         <div class="modal-input" id="mInput"></div>
         <div class="modal-text" id="mText"></div>
         <div class="modal-actions">
+            <button class="modal-btn" id="mEdit" onclick="editDiary()">✏️ 编辑</button>
             <button class="modal-btn" id="mExp" onclick="exportOne()">📥 导出</button>
             <button class="modal-btn del" id="mDel" onclick="delDiary()">删除</button>
         </div>
     </div>
 </div>
+
+<div class="confirm-overlay" id="confirmOverlay">
+    <div class="confirm-box">
+        <div class="confirm-text" id="confirmText"></div>
+        <div class="confirm-actions">
+            <button class="confirm-btn" onclick="hideConfirm()">取消</button>
+            <button class="confirm-btn danger" id="confirmOk">确定</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<input type="file" id="importFile" accept=".json" style="display:none" onchange="handleImport(event)">
 
 <script>
 const $ = id => document.getElementById(id);
@@ -371,25 +535,41 @@ const msgs = $('msgs'), input = $('input'), sendBtn = $('sendBtn');
 
 const emoMap = {'开心':'😊','悲伤':'🌧️','焦虑':'😰','愤怒':'🔥','平静':'🌙','惊喜':'✨','疲惫':'😴','感动':'🥹'};
 const clsMap = {'开心':'happy','悲伤':'sad','焦虑':'anxious','愤怒':'angry','平静':'calm','惊喜':'surprised','疲惫':'tired','感动':'moved'};
+const emoColors = {'开心':'#ffc857','悲伤':'#6495ed','焦虑':'#ff7f50','愤怒':'#dc5050','平静':'#82c8a0','惊喜':'#c882ff','疲惫':'#a0a0b4','感动':'#ffa0b4'};
 
 let diaries = JSON.parse(localStorage.getItem('xinyu_diaries') || '[]');
 let memories = JSON.parse(localStorage.getItem('xinyu_memories') || '[]');
 let curDiaryId = null;
+let isEditing = false;
 
 function resize() { input.style.height='auto'; input.style.height=Math.min(input.scrollHeight,100)+'px'; }
 input.addEventListener('input', resize);
 
 function kd(e) { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();} }
 
-function switchTab(tab) {
+function switchTab(tab, btn) {
     document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
-    event.target.classList.add('active');
+    if(btn) btn.classList.add('active');
+    else document.querySelector(`.nav-tab[data-tab="${tab}"]`).classList.add('active');
     $('tab-'+tab).classList.add('active');
     if(tab==='diaries') renderDiaries();
+    if(tab==='stats') renderStats();
 }
 
 function getTime() { const n=new Date(); return ('0'+n.getHours()).slice(-2)+':'+('0'+n.getMinutes()).slice(-2); }
+
+function showToast(msg) {
+    const t=$('toast'); t.textContent=msg; t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'),2000);
+}
+
+function showConfirm(text, onOk) {
+    $('confirmText').textContent=text;
+    $('confirmOverlay').classList.add('show');
+    $('confirmOk').onclick=()=>{hideConfirm();onOk();};
+}
+function hideConfirm() { $('confirmOverlay').classList.remove('show'); }
 
 function addMsg(role, content, emotion=null, diary=null, did=null) {
     const w=$('welcome'); if(w) w.remove();
@@ -438,36 +618,34 @@ function setBadge(id, state) {
 }
 function resetBadges() { ['e','m','d','x'].forEach(id=>setBadge('badge-'+id,null)); }
 
-// === Emotion Analysis Engine ===
 function analyzeEmotion(text) {
     const rules = [
-        {emo:'开心',kw:['开心','高兴','快乐','棒','太好了','哈哈','笑','兴奋','满足','幸福','喜欢','爱','美好','阳光','成功','完成','达成','庆祝','赞','优秀','厉害','不错','好耶'],w:1},
-        {emo:'悲伤',kw:['难过','伤心','悲伤','哭','泪','痛','失去','离开','孤独','寂寞','无助','绝望','遗憾','可惜','不舍','想念','思念','委屈','难受','心碎'],w:1},
-        {emo:'焦虑',kw:['焦虑','紧张','担心','害怕','恐惧','不安','压力','慌','烦','急','不确定','迷茫','困惑','纠结','犹豫','失眠','噩梦','考试','面试','截止','来不及'],w:1},
-        {emo:'愤怒',kw:['生气','愤怒','火大','烦死','气死','讨厌','恶心','不公平','凭什么','忍不了','滚','混蛋','垃圾','傻X','靠','无语','离谱'],w:1},
-        {emo:'惊喜',kw:['惊喜','惊讶','哇','天哪','居然','竟然','没想到','太意外了','不敢相信','中了','中奖','好消息','突然','居然'],w:1},
-        {emo:'疲惫',kw:['累','疲惫','困',' tired ','不想动','没力气','精疲力尽','加班','熬夜','通宵','忙死了','累死了','身体不舒服','头痛','腰酸'],w:1},
-        {emo:'感动',kw:['感动','温暖','谢谢','感激','感谢','暖心','治愈','珍惜','幸福','爱','陪伴','支持','鼓励','理解','包容','温柔','善良','美好回忆','值得'],w:1},
+        {emo:'开心',kw:['开心','高兴','快乐','棒','太好了','哈哈','笑','兴奋','满足','幸福','喜欢','爱','美好','阳光','成功','完成','达成','庆祝','赞','优秀','厉害','不错','好耶','愉快','欣喜','甜蜜'],w:1},
+        {emo:'悲伤',kw:['难过','伤心','悲伤','哭','泪','痛','失去','离开','孤独','寂寞','无助','绝望','遗憾','可惜','不舍','想念','思念','委屈','难受','心碎','低落','消沉','忧郁'],w:1},
+        {emo:'焦虑',kw:['焦虑','紧张','担心','害怕','恐惧','不安','压力','慌','烦','急','不确定','迷茫','困惑','纠结','犹豫','失眠','噩梦','考试','面试','截止','来不及','忐忑','忧心'],w:1},
+        {emo:'愤怒',kw:['生气','愤怒','火大','烦死','气死','讨厌','恶心','不公平','凭什么','忍不了','滚','混蛋','垃圾','无语','离谱','暴怒','恼火','愤慨'],w:1},
+        {emo:'惊喜',kw:['惊喜','惊讶','哇','天哪','居然','竟然','没想到','太意外了','不敢相信','中了','中奖','好消息','突然','出乎意料'],w:1},
+        {emo:'疲惫',kw:['累','疲惫','困','疲倦','不想动','没力气','精疲力尽','加班','熬夜','通宵','忙死了','累死了','身体不舒服','头痛','腰酸','乏力','倦怠'],w:1},
+        {emo:'感动',kw:['感动','温暖','谢谢','感激','感谢','暖心','治愈','珍惜','陪伴','支持','鼓励','理解','包容','温柔','善良','美好回忆','值得','触动'],w:1},
     ];
-    let best={emo:'平静',intensity:5,score:0};
+    let best={emotion:'平静',intensity:5,score:0};
     for(const r of rules) {
         let s=0;
         for(const k of r.kw) {
             const re=new RegExp(k,'gi');
             const m=text.match(re);
-            if(m) s+=m.length*(k.includes(' ') ? 1.5 : 1);
+            if(m) s+=m.length;
         }
-        if(s>best.score){best={emo:r.emo,intensity:Math.min(10,Math.round(4+s*1.2)),score:s};}
+        if(s>best.score){best={emotion:r.emo,intensity:Math.min(10,Math.round(4+s*1.2)),score:s};}
     }
     if(best.score===0) best.intensity=Math.floor(Math.random()*3)+3;
     return best;
 }
 
-// === Memory Extraction ===
 function extractMemories(text, emotion) {
     const extracts=[];
     const patterns=[
-        /(?:去了|到|在|去了|遇见|遇到|见到|见了)\s*[《「]?([^\n，。！？\》」]{2,20})/g,
+        /(?:去了|到|在|遇见|遇到|见到|见了)\s*[《「]?([^\n，。！？\》」]{2,20})/g,
         /(?:和|跟|同|与|一起)([^\n，。！？]{2,15?})(?:一起|聊天|吃饭|散步|玩|工作|学习)/g,
         /([^\n，。！？]{3,20})(?:了|完|成|过|好|成功|失败|通过)/g,
         /(面试|考试|比赛|会议|项目|报告|答辩|演讲)[^\n，。！？]{0,15}/g,
@@ -482,22 +660,24 @@ function extractMemories(text, emotion) {
     return extracts.slice(0,3);
 }
 
-// === Diary Generation ===
 function generateDiary(userInput, emotionInfo, relevantMemories) {
     const today=new Date();
     const dateStr=today.getFullYear()+'年'+('0'+(today.getMonth()+1)).slice(-2)+'月'+('0'+today.getDate()).slice(-2)+'日';
-    const weekdays=['周一','周二','周三','周四','周五','周六','周日'];
+    const weekdays=['周日','周一','周二','周三','周四','周五','周六'];
     const weekday=weekdays[today.getDay()];
     const intensityWords={1:'一丝',2:'淡淡的',3:'微微的',4:'明显的',5:'清晰的',6:'较强的',7:'强烈的',8:'很深的',9:'极度的',10:'满溢的'};
+    const emo=emotionInfo.emotion;
+    const iW=intensityWords[emotionInfo.intensity]||'清晰的';
+    const weatherWords=['微风','细雨','暖阳','晚风','晨光','流云','星光','月色'];
+    const weather=weatherWords[Math.floor(Math.random()*weatherWords.length)];
     const templates=[
-        `${dateStr} ${weekday}\n\n今天的${emotionInfo.emotion}像一阵${['微风','细雨','暖阳','晚风','晨光'][Math.floor(Math.random()*5)]}，轻轻拂过心头。\n\n${userInput}\n\n回想起来，这是一段值得记录的时刻。${intensityWords[emotionInfo.intensity]}${emotionInfo.em情}在心中荡漾，让我对生活有了新的感悟。\n\n${relevantMemories.length>0?'想起之前'+relevantMemories[0]+'，时光流转，心情却有了新的色彩。':''}或许这就是成长的痕迹——每一个当下都独一无二，每一份情绪都值得被认真对待。\n\n愿明天的自己，依然能以一颗柔软的心，拥抱这个世界。`,
-        `${dateStr} ${weekday}\n\n${userInput}\n\n这一天，我的内心是${emotionInfo.em情}的。强度大约是${emotionInfo.intensity}/10分，不算太强烈，却足够真实。\n\n有时候我们不需要惊天动地的大事来定义一天的意义。一个瞬间的触动、一句暖心的话、一次小小的突破，都足以让平凡的日子闪闪发光。\n\n${relevantMemories.length>0?'记忆里还留着「'+relevantMemories[0]+'」，和今天的感受交织在一起，构成了属于我的独特叙事。':''}\n\n晚安，世界。明天又是新的一天。`,
-        `${dateStr} ${weekday}\n\n记录下今天：${userInput}\n\n情绪是${emotionInfo.em情}的，带着${intensityWords[emotionInfo.intensity]}的${emotionInfo.em情}浓度。这种感觉很熟悉，又有些不同。\n\n生活就是这样，我们在不同的情绪之间穿行，时而明亮如昼，时而静谧如夜。重要的是学会与每一种情绪共处，不抗拒，也不沉溺。\n\n${relevantMemories.length>1?'想起之前那些日子——'+relevantMemories.slice(0,2).join('、')+'，每一段经历都是生命拼图的一块。':''}${relevantMemories.length===1?'想起之前「'+relevantMemories[0]+'」，那段记忆此刻显得格外清晰。':''}\n\n写下这些文字的时候，心里平静了许多。这就是记录的意义吧——让流动的时间有一个可以回望的锚点。`,
+        `${dateStr} ${weekday}\n\n今天的${emo}像一阵${weather}，轻轻拂过心头。\n\n${userInput}\n\n回想起来，这是一段值得记录的时刻。${iW}${emo}在心中荡漾，让我对生活有了新的感悟。\n\n${relevantMemories.length>0?'想起之前'+relevantMemories[0]+'，时光流转，心情却有了新的色彩。':''}或许这就是成长的痕迹——每一个当下都独一无二，每一份情绪都值得被认真对待。\n\n愿明天的自己，依然能以一颗柔软的心，拥抱这个世界。`,
+        `${dateStr} ${weekday}\n\n${userInput}\n\n这一天，我的内心是${emo}的。强度大约是${emotionInfo.intensity}/10分，不算太强烈，却足够真实。\n\n有时候我们不需要惊天动地的大事来定义一天的意义。一个瞬间的触动、一句暖心的话、一次小小的突破，都足以让平凡的日子闪闪发光。\n\n${relevantMemories.length>0?'记忆里还留着「'+relevantMemories[0]+'」，和今天的感受交织在一起，构成了属于我的独特叙事。':''}\n\n晚安，世界。明天又是新的一天。`,
+        `${dateStr} ${weekday}\n\n记录下今天：${userInput}\n\n情绪是${emo}的，带着${iW}的${emo}浓度。这种感觉很熟悉，又有些不同。\n\n生活就是这样，我们在不同的情绪之间穿行，时而明亮如昼，时而静谧如夜。重要的是学会与每一种情绪共处，不抗拒，也不沉溺。\n\n${relevantMemories.length>1?'想起之前那些日子——'+relevantMemories.slice(0,2).join('、')+'，每一段经历都是生命拼图的一块。':''}${relevantMemories.length===1?'想起之前「'+relevantMemories[0]+'」，那段记忆此刻显得格外清晰。':''}\n\n写下这些文字的时候，心里平静了许多。这就是记录的意义吧——让流动的时间有一个可以回望的锚点。`,
     ];
     return templates[Math.floor(Math.random()*templates.length)];
 }
 
-// === Response Generation ===
 function generateResponse(userInput, emotionInfo, diary) {
     const responses={
         '开心':[
@@ -521,7 +701,7 @@ function generateResponse(userInput, emotionInfo, diary) {
             `喜欢这样平和的状态 ✨ 不需要太多波澜，安安静静地度过一天也很珍贵。日记已保存，这是属于你的平静篇章。`,
         ],
         '惊喜':[
-            `哇！听起来是很棒的惊喜呢 🎉 这种 unexpected 的感觉最让人心动了！必须好好记录下来，以后回味起来一定会嘴角上扬的~`,
+            `哇！听起来是很棒的惊喜呢 🎉 这种意想不到的感觉最让人心动了！必须好好记录下来，以后回味起来一定会嘴角上扬的~`,
             `太令人惊喜了吧！😍 生活总是会在不经意间给我们礼物。已经帮你把这份惊喜封存在日记里了！`,
         ],
         '疲惫':[
@@ -533,11 +713,10 @@ function generateResponse(userInput, emotionInfo, diary) {
             `被你的故事触动了... ❤️ 生活中有这么多温柔的瞬间，值得我们用心收藏。日记已保存，这份感动永远在这里。`,
         ],
     };
-    const list=responses[emotionInfo.emo]||responses['平静'];
+    const list=responses[emotionInfo.emotion]||responses['平静'];
     return list[Math.floor(Math.random()*list.length)];
 }
 
-// === Search Memories ===
 function searchMemories(query) {
     if(memories.length===0) return [];
     const q=query.toLowerCase();
@@ -560,38 +739,33 @@ async function send() {
     input.value=''; input.style.height='auto'; sendBtn.disabled=true;
     addMsg('user',text); addLoading(); resetBadges();
 
-    // Step 1: Emotion
     setBadge('badge-e','working');
     await wait(600+Math.random()*400);
     const emotionInfo=analyzeEmotion(text);
     setBadge('badge-e','done');
     updateEmo(emotionInfo);
 
-    // Step 2: Memory search & save
     setBadge('badge-m','working');
     await wait(500+Math.random()*300);
     const relevant=searchMemories(text);
     setBadge('badge-m','done');
     const newMems=extractMemories(text, emotionInfo);
     newMems.forEach(m=>{
-        memories.push({content:m,emotion:emotionInfo.emo,date:new Date().toLocaleDateString('zh-CN')});
+        memories.push({content:m,emotion:emotionInfo.emotion,date:new Date().toLocaleDateString('zh-CN')});
     });
     saveMemories();
     renderMemories();
 
-    // Step 3: Generate diary
     setBadge('badge-d','working');
     await wait(800+Math.random()*600);
     const diary=generateDiary(text, emotionInfo, relevant);
     setBadge('badge-d','done');
 
-    // Step 4: Response
     setBadge('badge-x','working');
     await wait(500+Math.random()*300);
     const response=generateResponse(text, emotionInfo, diary);
     setBadge('badge-x','done');
 
-    // Save diary
     const did=saveDiary(text, diary, emotionInfo);
 
     rmLoading();
@@ -600,34 +774,60 @@ async function send() {
     sendBtn.disabled=false; input.focus();
 }
 
+function quickSend(text) {
+    input.value=text;
+    send();
+}
+
 function wait(ms) { return new Promise(r=>setTimeout(r,ms)); }
 
 function updateEmo(e) {
-    $('emoEmoji').textContent=emoMap[e.emo]||'🌙';
-    $('emoName').textContent=e.emo||'平静';
-    $('emoInt').textContent=e.int||0;
-    $('emoBar').style.width=(e.int||0)*10+'%';
+    $('emoEmoji').textContent=emoMap[e.emotion]||'🌙';
+    $('emoName').textContent=e.emotion||'平静';
+    $('emoInt').textContent=e.intensity||0;
+    $('emoBar').style.width=(e.intensity||0)*10+'%';
 }
 
 function saveMemories() { localStorage.setItem('xinyu_memories',JSON.stringify(memories)); }
-function saveDiary(input, diary, emotion) {
+function saveDiary(userInput, diary, emotion) {
     const now=new Date();
     const id=now.getTime().toString();
-    const entry={id,date:now.toLocaleDateString('zh-CN'),time:getTime(),emotion:emotion.emo,intensity:emotion.int,userInput:input,diary:diary};
+    const entry={id,date:now.toLocaleDateString('zh-CN'),time:getTime(),emotion:emotion.emotion,intensity:emotion.intensity,userInput:userInput,diary:diary};
     diaries.unshift(entry);
     localStorage.setItem('xinyu_diaries',JSON.stringify(diaries));
     return id;
 }
 
-function renderMemories() {
+function renderMemories(filter='') {
     const list=$('memList');
-    if(!memories.length){list.innerHTML='<div class="empty-state"><span class="empty-state-icon">🧠</span>记忆库为空</div>';return;}
+    let items=[...memories].reverse();
+    if(filter){
+        const f=filter.toLowerCase();
+        items=items.filter(m=>m.content.toLowerCase().includes(f)||(m.emotion&&m.emotion.includes(f)));
+    }
+    if(!items.length){
+        list.innerHTML=`<div class="empty-state"><span class="empty-state-icon">🧠</span>${filter?'未找到匹配记忆':'记忆库为空'}</div>`;
+        return;
+    }
     list.innerHTML='';
-    [...memories].reverse().slice(0,15).forEach(m=>{
+    items.slice(0,15).forEach((m,i)=>{
+        const realIdx=memories.length-1-[...memories].reverse().slice(0,15).indexOf(m);
         const item=document.createElement('div'); item.className='memory-item';
-        item.innerHTML=`<div>${m.content}</div><div class="memory-date">${m.date||''}</div>`;
+        item.innerHTML=`<div>${m.content}</div><div class="memory-date">${m.date||''}</div><button class="memory-del" onclick="delMemory(${realIdx})" title="删除">✕</button>`;
         list.appendChild(item);
     });
+}
+
+function filterMemories() { renderMemories($('memSearch').value); }
+function clearMemSearch() { $('memSearch').value=''; renderMemories(); }
+
+function delMemory(idx) {
+    if(idx>=0&&idx<memories.length){
+        memories.splice(idx,1);
+        saveMemories();
+        renderMemories($('memSearch').value);
+        showToast('记忆已删除');
+    }
 }
 
 function renderDiaries() {
@@ -644,44 +844,192 @@ function renderDiaries() {
     });
 }
 
+function renderStats() {
+    $('statTotal').textContent=diaries.length;
+
+    const streak=calcStreak();
+    $('statStreak').textContent=streak;
+
+    const emoCount={};
+    diaries.forEach(d=>{if(d.emotion) emoCount[d.emotion]=(emoCount[d.emotion]||0)+1;});
+    const sorted=Object.entries(emoCount).sort((a,b)=>b[1]-a[1]);
+    $('statTop').textContent=sorted.length?sorted[0][0]:'-';
+
+    const distEl=$('emoDist');
+    const maxCount=sorted.length?sorted[0][1]:1;
+    const allEmos=['开心','平静','焦虑','悲伤','疲惫','感动','愤怒','惊喜'];
+    distEl.innerHTML='';
+    allEmos.forEach(emo=>{
+        const count=emoCount[emo]||0;
+        const pct=maxCount?Math.round(count/maxCount*100):0;
+        const color=emoColors[emo]||'#9b8ec4';
+        const row=document.createElement('div'); row.className='bar-row';
+        row.innerHTML=`<div class="bar-label">${emoMap[emo]||'🌙'}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${color}">${count?`<span>${count}</span>`:''}</div></div>`;
+        distEl.appendChild(row);
+    });
+
+    const trendEl=$('trendChart');
+    const labelsEl=$('trendLabels');
+    trendEl.innerHTML=''; labelsEl.innerHTML='';
+    const days=[];
+    for(let i=6;i>=0;i--){
+        const d=new Date(); d.setDate(d.getDate()-i);
+        const ds=d.toLocaleDateString('zh-CN');
+        const dayDiaries=diaries.filter(di=>di.date===ds);
+        const avgIntensity=dayDiaries.length?Math.round(dayDiaries.reduce((s,d)=>s+(d.intensity||5),0)/dayDiaries.length):0;
+        const topEmo=dayDiaries.length?dayDiaries.reduce((acc,d)=>{acc[d.emotion]=(acc[d.emotion]||0)+1;return acc;},{}):{};
+        const mainEmo=Object.entries(topEmo).sort((a,b)=>b[1]-a[1])[0];
+        days.push({date:ds,shortD:('0'+(d.getMonth()+1)).slice(-2)+'/'+('0'+d.getDate()).slice(-2),intensity:avgIntensity,emotion:mainEmo?mainEmo[0]:null,count:dayDiaries.length});
+    }
+    const maxI=Math.max(...days.map(d=>d.intensity),1);
+    days.forEach(d=>{
+        const h=d.intensity?Math.max(d.intensity/maxI*100,8):8;
+        const color=d.emotion?emoColors[d.emotion]||'#9b8ec4':'rgba(155,142,196,0.2)';
+        const bar=document.createElement('div'); bar.className='trend-bar';
+        bar.style.height=h+'%'; bar.style.background=color;
+        bar.innerHTML=`<div class="trend-bar-tip">${d.emotion||'无'} ${d.intensity?d.intensity+'/10':'无记录'}</div>`;
+        trendEl.appendChild(bar);
+        const label=document.createElement('div'); label.className='trend-label'; label.textContent=d.shortD;
+        labelsEl.appendChild(label);
+    });
+}
+
+function calcStreak() {
+    if(!diaries.length) return 0;
+    const dates=[...new Set(diaries.map(d=>d.date))].sort().reverse();
+    let streak=0;
+    const today=new Date().toLocaleDateString('zh-CN');
+    const yesterday=new Date(Date.now()-86400000).toLocaleDateString('zh-CN');
+    if(dates[0]!==today&&dates[0]!==yesterday) return 0;
+    let checkDate=new Date(dates[0]===today?Date.now():Date.now()-86400000);
+    for(let i=0;i<365;i++){
+        const ds=checkDate.toLocaleDateString('zh-CN');
+        if(dates.includes(ds)){streak++;checkDate=new Date(checkDate.getTime()-86400000);}
+        else break;
+    }
+    return streak;
+}
+
 function openModal(id) {
     const d=diaries.find(x=>x.id==id); if(!d) return;
-    curDiaryId=id;
+    curDiaryId=id; isEditing=false;
     $('mDate').textContent=d.date+' '+d.time;
     const me=$('mEmo'); me.className='modal-emotion emotion-tag '+ (clsMap[d.emotion]||'calm'); me.textContent=(emoMap[d.emotion]||'🌙')+' '+d.emotion+' · 强度 '+d.intensity+'/10';
     $('mInput').textContent=d.userInput;
-    $('mText').textContent=d.diary;
-    $('mExp').onclick=()=>exportSingle(id);
-    $('mDel').onclick=()=>delDiary();
+    const mt=$('mText'); mt.textContent=d.diary; mt.contentEditable=false; mt.classList.remove('editing');
+    $('mEdit').textContent='✏️ 编辑';
     $('modal').classList.add('show');
 }
-function closeModal(e) { if(e&&e.target!=='modal')return; $('modal').classList.remove('show'); }
+
+function closeModal(e) {
+    if(e&&e.target!==e.currentTarget) return;
+    $('modal').classList.remove('show');
+    if(isEditing) saveDiaryEdit();
+}
+
+function editDiary() {
+    const mt=$('mText');
+    if(!isEditing){
+        isEditing=true;
+        mt.contentEditable=true; mt.classList.add('editing'); mt.focus();
+        $('mEdit').textContent='💾 保存';
+        $('mEdit').classList.add('save');
+    } else {
+        saveDiaryEdit();
+    }
+}
+
+function saveDiaryEdit() {
+    const d=diaries.find(x=>x.id==curDiaryId);
+    if(d){
+        d.diary=$('mText').textContent;
+        localStorage.setItem('xinyu_diaries',JSON.stringify(diaries));
+        showToast('日记已保存');
+    }
+    isEditing=false;
+    $('mText').contentEditable=false; $('mText').classList.remove('editing');
+    $('mEdit').textContent='✏️ 编辑'; $('mEdit').classList.remove('save');
+}
+
 function delDiary() {
     if(!curDiaryId) return;
-    diaries=diaries.filter(d=>d.id!=curDiaryId);
-    localStorage.setItem('xinyu_diaries',JSON.stringify(diaries));
-    closeModal(); renderDiaries();
+    showConfirm('确定要删除这篇日记吗？删除后无法恢复。',()=>{
+        diaries=diaries.filter(d=>d.id!=curDiaryId);
+        localStorage.setItem('xinyu_diaries',JSON.stringify(diaries));
+        $('modal').classList.remove('show');
+        renderDiaries();
+        showToast('日记已删除');
+    });
 }
 
 function exportSingle(id) {
     const d=diaries.find(x=>x.id==id); if(!d) return;
     download(`# ${d.date} ${d.time}\n> ${d.emotion} · 强度 ${d.intensity}/10\n\n## 心语\n\n${d.userInput}\n\n---\n\n${d.diary}`,`心语日记_${d.id}.md`);
 }
+
 function exportAll() {
-    if(!diaries.length){alert('暂无日记');return;}
+    if(!diaries.length){showToast('暂无日记');return;}
     let md='# 📔 心语日记合集\n\n';
     diaries.forEach(d=>{
         md+=`## ${d.date} ${d.time}\n> ${d.emotion} · 强度 ${d.intensity}/10\n\n${d.diary}\n\n---\n\n`;
     });
     download(md,'心语日记_全部.md');
 }
+
+function exportData() {
+    const data=JSON.stringify({diaries,memories,exportDate:new Date().toISOString()},null,2);
+    download(data,'心语日记_数据备份.json');
+    showToast('数据已导出');
+}
+
+function importData() {
+    $('importFile').click();
+}
+
+function handleImport(event) {
+    const file=event.target.files[0];
+    if(!file) return;
+    const reader=new FileReader();
+    reader.onload=function(e){
+        try{
+            const data=JSON.parse(e.target.result);
+            if(data.diaries&&Array.isArray(data.diaries)){
+                const existingIds=new Set(diaries.map(d=>d.id));
+                let imported=0;
+                data.diaries.forEach(d=>{
+                    if(!existingIds.has(d.id)){diaries.push(d);imported++;}
+                });
+                diaries.sort((a,b)=>parseInt(b.id)-parseInt(a.id));
+                localStorage.setItem('xinyu_diaries',JSON.stringify(diaries));
+            }
+            if(data.memories&&Array.isArray(data.memories)){
+                const existingMem=new Set(memories.map(m=>m.content));
+                let importedM=0;
+                data.memories.forEach(m=>{
+                    if(!existingMem.has(m.content)){memories.push(m);importedM++;}
+                });
+                localStorage.setItem('xinyu_memories',JSON.stringify(memories));
+            }
+            renderDiaries(); renderMemories();
+            showToast('数据导入成功！');
+        }catch(err){
+            showToast('导入失败：文件格式不正确');
+        }
+    };
+    reader.readAsText(file);
+    event.target.value='';
+}
+
 function download(content,filename) {
-    const blob=new Blob([content],{type:'text/markdown;charset=utf-8'});
+    const blob=new Blob([content],{type:'text/plain;charset=utf-8'});
     const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=filename; a.click(); URL.revokeObjectURL(a.href);
 }
 
 function clearCtx() {
-    msgs.innerHTML=`<div class="welcome-msg"><h3>对话已重置</h3><p>短期对话已清空。<br>长期记忆和日记仍保留在浏览器中。</p></div>`;
+    showConfirm('确定要清空对话记录吗？\n长期记忆和日记仍会保留。',()=>{
+        msgs.innerHTML=`<div class="welcome-msg"><h3>对话已重置</h3><p>短期对话已清空。<br>长期记忆和日记仍保留在浏览器中。</p></div>`;
+        showToast('对话已清空');
+    });
 }
 
 renderMemories();
