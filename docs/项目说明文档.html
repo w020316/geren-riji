@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>心语日记 - 多智能体AI日记助手 · 项目说明文档</title>
+    <style>
+        @page { size: A4; margin: 20mm 18mm; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Noto Serif SC', 'SimSun', 'Microsoft YaHei', serif;
+            color: #1a1a2e;
+            line-height: 1.8;
+            background: #fff;
+            font-size: 11pt;
+        }
+        .cover {
+            page-break-after: always;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            background: linear-gradient(135deg, #0f0d12 0%, #1a1525 50%, #0f0d12 100%);
+            color: #ede8e3;
+            position: relative;
+            overflow: hidden;
+        }
+        .cover::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            left: -20%;
+            width: 60%;
+            height: 80%;
+            background: radial-gradient(circle, rgba(232,168,124,0.08) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .cover::after {
+            content: '';
+            position: absolute;
+            bottom: -25%;
+            right: -15%;
+            width: 55%;
+            height: 70%;
+            background: radial-gradient(circle, rgba(212,117,140,0.06) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .cover-badge {
+            display: inline-block;
+            font-size: 9pt;
+            letter-spacing: 4px;
+            color: #7ec4a5;
+            border: 1px solid rgba(126,196,165,0.3);
+            padding: 6px 24px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+        }
+        .cover-title {
+            font-family: 'SimSun', serif;
+            font-size: 42pt;
+            font-weight: 900;
+            letter-spacing: 16px;
+            background: linear-gradient(135deg, #e8a87c, #d4758c, #9b8ec4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 14px;
+            position: relative;
+            z-index: 1;
+        }
+        .cover-subtitle {
+            font-size: 13pt;
+            color: rgba(237,232,227,0.65);
+            letter-spacing: 6px;
+            margin-bottom: 48px;
+            position: relative;
+            z-index: 1;
+        }
+        .cover-github {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(155,142,196,0.1);
+            border: 1px solid rgba(155,142,196,0.25);
+            padding: 12px 28px;
+            border-radius: 12px;
+            color: #9b8ec4;
+            font-size: 11pt;
+            font-family: 'Consolas', monospace;
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+            z-index: 1;
+        }
+        .cover-github:hover { background: rgba(155,142,196,0.18); }
+        .cover-github svg { width: 22px; height: 22px; fill: currentColor; }
+        .cover-meta {
+            margin-top: 56px;
+            font-size: 9pt;
+            color: rgba(237,232,227,0.35);
+            letter-spacing: 2px;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 20pt;
+            color: #1a1a2e;
+            border-left: 4px solid #d4758c;
+            padding-left: 14px;
+            margin: 36px 0 18px;
+            page-break-after: avoid;
+        }
+        h2 {
+            font-size: 15pt;
+            color: #2d2d44;
+            border-bottom: 1.5px solid #eee;
+            padding-bottom: 6px;
+            margin: 28px 0 14px;
+            page-break-after: avoid;
+        }
+        h3 {
+            font-size: 12pt;
+            color: #3d3d5c;
+            margin: 20px 0 10px;
+            page-break-after: avoid;
+        }
+        p { margin: 8px 0; text-indent: 2em; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 14px 0;
+            font-size: 10pt;
+        }
+        th {
+            background: #f5f0eb;
+            color: #1a1a2e;
+            font-weight: 600;
+            padding: 8px 12px;
+            text-align: left;
+            border: 1px solid #e8e0da;
+        }
+        td {
+            padding: 7px 12px;
+            border: 1px solid #efe9e3;
+            vertical-align: top;
+        }
+        tr:nth-child(even) td { background: #faf8f5; }
+        ul, ol { margin: 8px 0 8px 2em; }
+        li { margin: 4px 0; }
+        pre {
+            background: #1a1a2e;
+            color: #ede8e3;
+            padding: 16px 18px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 9pt;
+            line-height: 1.6;
+            margin: 12px 0;
+            page-break-inside: avoid;
+        }
+        code {
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 9.5pt;
+            background: #f5f0eb;
+            padding: 1px 5px;
+            border-radius: 3px;
+            color: #d4758c;
+        }
+        pre code { background: none; padding: 0; color: inherit; }
+        .comment { color: #6e6479; }
+        .keyword { color: #d4758c; }
+        .string { color: #7ec4a5; }
+        .function { color: #e8a87c; }
+        .class-name { color: #9b8ec4; }
+        .number { color: #d4b896; }
+
+        .section { page-break-before: always; }
+        .section:first-of-type { page-break-before: avoid; }
+        .toc { background: #faf8f5; padding: 24px 32px; border-radius: 10px; margin: 20px 0; }
+        .toc-title { font-size: 16pt; font-weight: bold; margin-bottom: 14px; color: #1a1a2e; }
+        .toc a { color: #2d2d44; text-decoration: none; display: block; padding: 4px 0; font-size: 10.5pt; }
+        .toc a:hover { color: #d4758c; }
+        .toc-num { display: inline-block; width: 28px; color: #999; }
+
+        .arch-diagram {
+            background: #faf8f5;
+            border: 1px solid #e8e0da;
+            border-radius: 10px;
+            padding: 28px;
+            margin: 18px 0;
+            text-align: center;
+        }
+        .arch-box {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 10pt;
+            font-weight: 600;
+            margin: 4px;
+            min-width: 100px;
+        }
+        .arch-arrow { font-size: 14pt; color: #ccc; margin: 6px 0; }
+        .agent-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 10px 0; }
+
+        .info-card {
+            background: linear-gradient(135deg, #faf8f5, #f5f0eb);
+            border: 1px solid #e8e0da;
+            border-radius: 10px;
+            padding: 18px 22px;
+            margin: 14px 0;
+        }
+        .info-card h3 { margin-top: 0; color: #d4758c; }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 14px 0;
+        }
+        .feature-item {
+            background: #faf8f5;
+            border: 1px solid #e8e0da;
+            border-radius: 8px;
+            padding: 14px 16px;
+        }
+        .feature-item h4 { font-size: 11pt; color: #2d2d44; margin-bottom: 4px; }
+        .feature-item p { font-size: 9.5pt; color: #666; text-indent: 0; margin: 0; }
+
+        .footer-note {
+            margin-top: 48px;
+            padding-top: 16px;
+            border-top: 1px solid #eee;
+            font-size: 9pt;
+            color: #999;
+            text-align: center;
+        }
+        @media print {
+            body { font-size: 10pt; }
+            .cover { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            pre { break-inside: avoid; }
+            .section { page-break-before: always; }
+            h1, h2, h3 { page-break-after: avoid; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ==================== 封面 ==================== -->
+<div class="cover">
+    <div class="cover-badge">Multi-Agent AI System</div>
+    <div class="cover-title">心语日记</div>
+    <div class="cover-subtitle">多智能体 AI 日记助手 · 项目说明文档</div>
+    <a href="https://github.com/w020316/geren-riji" target="_blank" class="cover-github">
+        <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        github.com/w020316/geren-riji
+    </a>
+    <div class="cover-meta">
+        课程：大模型应用开发 &nbsp;|&nbsp; 日期：2026年5月
+    </div>
+</div>
+
+<!-- ==================== 目录 ==================== -->
+<h1 style="text-align:center;border:none;padding:0;margin-bottom:8px;">目 录</h1>
+<div class="toc">
+    <div class="toc-title">CONTENTS</div>
+    <a href="#s1"><span class="toc-num">01</span> 一、项目概述</a>
+    <a href="#s2"><span class="toc-num">02</span> 二、技术方案</a>
+    <a href="#s3"><span class="toc-num">03</span> 三、系统架构</a>
+    <a href="#s4"><span class="toc-num">04</span> 四、核心代码</a>
+    <a href="#s5"><span class="toc-num">05</span> 五、功能模块详解</a>
+    <a href="#s6"><span class="toc-num">06</span> 六、部署与演示</a>
+</div>
+
+<!-- ==================== 一、项目概述 ==================== -->
+<div class="section" id="s1">
+<h1>一、项目概述</h1>
+
+<h2>1.1 项目背景</h2>
+<p>在快节奏的现代生活中，人们越来越需要一个能够倾听内心声音、记录生活点滴的智能伙伴。传统日记应用往往只是简单的文本记录工具，缺乏对用户情绪的感知和个性化内容的生成能力。本项目基于<strong>多智能体协作架构（Multi-Agent Architecture）</strong>，打造了一款具有情绪感知能力、长期记忆管理和个性化日记生成的 AI 日记助手——<strong>「心语日记」</strong>。</p>
+
+<h2>1.2 项目目标</h2>
+<ul>
+    <li><strong>情绪感知</strong>：通过大语言模型分析用户输入文本中的情绪状态，识别8种基本情绪类型及强度</li>
+    <li><strong>记忆管理</strong>：基于 ChromaDB 向量数据库实现语义级记忆存储与检索，支持长期记忆积累</li>
+    <li><strong>日记生成</strong>：结合情绪分析和历史记忆，自动生成温暖、个性化的日记内容</li>
+    <li><strong>实时交互</strong>：通过 SSE（Server-Sent Events）技术实时推送多智能体协作进度，透明化 AI 工作过程</li>
+    <li><strong>在线体验</strong>：提供纯前端在线体验版，无需本地部署即可使用全部核心功能</li>
+</ul>
+
+<h2>1.3 技术栈总览</h2>
+<table>
+    <tr><th>层级</th><th>技术选型</th><th>用途说明</th></tr>
+    <tr><td>大语言模型</td><td>DeepSeek API</td><td>情绪分析、信息提取、日记生成、对话回复</td></tr>
+    <tr><td>向量数据库</td><td>ChromaDB + BGE嵌入模型</td><td>长期记忆的向量化存储与语义检索</td></tr>
+    <tr><td>后端框架</td><td>FastAPI + uvicorn</td><td>RESTful API 服务、SSE 流式响应</td></tr>
+    <tr><td>前端技术</td><td>HTML/CSS/JavaScript</td><td>暗色主题交互界面、SSE 消息接收</td></tr>
+    <tr><td>数据持久化</td><td>JSON 文件 / localStorage</td><td>日记本地存储、浏览器端数据缓存</td></tr>
+    <tr><td>部署方式</td><td>Docker / GitHub Pages</td><td>容器化部署、静态站点托管</td></tr>
+</table>
+
+<h2>1.4 在线体验地址</h2>
+<div class="info-card" style="background:#f0fdf4;border-color:#86efac;">
+    <p style="text-indent:0;text-align:center;font-size:12pt;">
+        🌐 在线体验：<code>https://w020316.github.io/geren-riji/</code>
+    </p>
+    <p style="text-indent:0;text-align:center;font-size:10pt;color:#666;">
+        💡 纯前端运行，无需注册登录，打开即用
+    </p>
+</div>
+</div>
+
+<!-- ==================== 二、技术方案 ==================== -->
+<div class="section" id="s2">
+<h1>二、技术方案</h1>
+
+<h2>2.1 多智能体协作架构设计</h2>
+<p>本项目的核心创新在于采用了<strong>多智能体协作（Multi-Agent Collaboration）</strong>的设计模式。不同于传统的单一 AI 调用方式，我们将日记生成的完整流程拆分为四个专业化的智能体角色，每个智能体负责特定的子任务：</p>
+
+<div class="feature-grid">
+    <div class="feature-item">
+        <h4>🎭 情绪感知器 (EmotionSensor)</h4>
+        <p>负责分析用户输入的情绪状态，识别情绪类型（开心/悲伤/焦虑等）和强度（1-10级），为后续处理提供情感基调。</p>
+    </div>
+    <div class="feature-item">
+        <h4>🧠 记忆管家 (MemoryManager)</h4>
+        <p>负责从对话中提取关键信息存入长期记忆库，并在需要时进行语义检索，找到与当前话题相关的历史记忆。</p>
+    </div>
+    <div class="feature-item">
+        <h4>✍️ 日记生成器 (DiaryGenerator)</h4>
+        <p>结合用户输入、情绪分析和相关记忆，调用大语言模型生成个性化、有温度的日记内容。</p>
+    </div>
+    <div class="feature-item">
+        <h4>💬 对话精灵 (DialogElf)</h4>
+        <p>整合所有智能体的输出结果，生成最终的用户回复，协调情绪共情、日记呈现和记忆关联。</p>
+    </div>
+</div>
+
+<h2>2.2 记忆系统的双层架构</h2>
+<p>为了兼顾记忆的深度和效率，本系统设计了<strong>双层记忆架构</strong>：</p>
+<table>
+    <tr><th>记忆类型</th><th>存储介质</th><th>容量</th><th>用途</th></tr>
+    <tr><td><strong>短期记忆</strong><br>(Short-Term Memory)</td><td>内存列表</td><td>最近 10 轮对话</td><td>提供上下文窗口，让 AI 理解当前对话的前因后果</td></tr>
+    <tr><td><strong>长期记忆</strong><br>(Long-Term Memory)</td><td>ChromaDB 向量数据库</td><td>无限制</td><td>语义级存储关键信息，支持跨会话的记忆检索与关联</td></tr>
+</table>
+
+<p>长期记忆采用 <strong>BGE 中文嵌入模型（BAAI/bge-small-zh-v1.5）</strong>将文本转换为高维向量，使用余弦相似度进行语义匹配。这意味着即使查询词与存储的内容表面文字不同，只要语义相近就能被检索到。</p>
+
+<h2>2.3 SSE 实时进度推送</h2>
+<p>为了让用户直观地感受多智能体的工作过程，系统采用 <strong>Server-Sent Events (SSE)</strong> 技术实现实时进度推送。当用户发送消息后，前端依次接收到以下事件：</p>
+<ol>
+    <li><code>emotion_start</code> → 情绪感知器开始工作</li>
+    <li><code>emotion_done</code> → 情绪分析完成，附带情绪标签</li>
+    <li><code>memory_start</code> → 记忆管家开始检索</li>
+    <li><code>memory_done</code> → 记忆检索完成，返回相关记忆数量</li>
+    <li><code>diary_start</code> → 日记生成器开始撰写</li>
+    <li><code>diary_done</code> → 日记生成完成，返回日记全文</li>
+    <li><code>response_start</code> → 对话精灵开始整合回复</li>
+    <li><code>response_done</code> → 回复完成，返回完整回复内容</li>
+</ol>
+
+<h2>2.4 在线体验版的技术降级策略</h2>
+<p>由于 GitHub Pages 仅支持静态文件托管，无法运行 Python 后端服务，我们为在线体验版设计了<strong>纯前端模拟方案</strong>：</p>
+<table>
+    <tr><th>功能模块</th><th>完整版实现</th><th>体验版替代方案</th></tr>
+    <tr><td>情绪分析</td><td>DeepSeek LLM API</td><td>关键词规则引擎（20+ 关键词 × 8 种情绪）</td></tr>
+    <tr><td>记忆存储</td><td>ChromaDB 向量数据库</td><td>localStorage JSON 存储 + 关键词匹配搜索</td></tr>
+    <tr><td>日记生成</td><td>DeepSeek LLM API</td><td>模板化生成（3 种日记模板随机选择 + 变量填充）</td></tr>
+    <tr><td>对话回复</td><td>DeepSeek LLM API</td><td>按情绪分类的回复模板（每种情绪 2 个变体）</td></tr>
+    <tr><td>数据持久化</td><td>JSON 文件系统</td><td>localStorage 浏览器本地存储</td></tr>
+</table>
+</div>
+
+<!-- ==================== 三、系统架构 ==================== -->
+<div class="section" id="s3">
+<h1>三、系统架构</h1>
+
+<h2>3.1 整体架构图</h2>
+<div class="arch-diagram">
+    <!-- 用户层 -->
+    <div class="arch-box" style="background:#e8f5e9;border:2px solid #4caf50;color:#2e7d32;">
+        👤 用户输入
+    </div>
+    <div class="arch-arrow">↓</div>
+
+    <!-- 编排器 -->
+    <div class="arch-box" style="background:#e3f2fd;border:2px solid #2196f3;color:#1565c0;width:280px;">
+        ⚙️ MultiAgentOrchestrator<br><span style="font-size:9pt;font-weight:normal;color:#666;">多智能体编排器 — 协调调度</span>
+    </div>
+    <div class="arch-arrow">↓</div>
+
+    <!-- 四个智能体 -->
+    <div class="agent-row">
+        <div class="arch-box" style="background:#fce4ec;border:2px solid #e91e63;color:#c2185b;">
+            🎭 情绪感知器<br><span style="font-size:8pt;font-weight:normal;">EmotionSensor</span>
+        </div>
+        <div class="arch-box" style="background:#e0f7fa;border:2px solid #00bcd4;color:#00838f;">
+            🧠 记忆管家<br><span style="font-size:8pt;font-weight:normal;">MemoryManager</span>
+        </div>
+    </div>
+    <div class="agent-row">
+        <div class="arch-box" style="background:#fff3e0;border:2px solid #ff9800;color:#e65100;">
+            ✍️ 日记生成器<br><span style="font-size:8pt;font-weight:normal;">DiaryGenerator</span>
+        </div>
+        <div class="arch-box" style="background:#f3e5f5;border:2px solid #9c27b0;color:#7b1fa2;">
+            💬 对话精灵<br><span style="font-size:8pt;font-weight:normal;">DialogElf</span>
+        </div>
+    </div>
+    <div class="arch-arrow">↓</div>
+
+    <!-- 输出层 -->
+    <div class="arch-box" style="background:#fff8e1;border:2px solid #ffc107;color:#ff8f00;width:300px;">
+        📝 输出：情绪标签 + 个性化日记 + 温暖回复
+    </div>
+</div>
+
+<h2>3.2 数据流图</h2>
+<pre style="font-size:9pt;line-height:1.8;">
+<span class="comment">// 用户发送消息后的完整数据流</span>
+
+用户输入文本 "今天面试通过了，太开心了！"
+       │
+       ▼
+┌─────────────────────────────────┐
+│ ① EmotionSensorAgent.run()     │  ← 调用 DeepSeek API
+│    返回: {emotion:"开心",      │
+│           intensity:9,          │
+│           keywords:["面试","通过"]}
+└──────────────┬──────────────────┘
+               │
+       ┌───────┼───────┐
+       ▼               ▼
+┌──────────┐   ┌──────────────┐
+│② Memory  │   │③ DiaryGen    │
+│Manager   │   │erator.run()  │
+│.search() │   │              │
+│.save()   │   │ 输入+情绪+记忆 │
+│          │   │ → DeepSeek    │
+│ 检索相关  │   │ → 生成日记    │
+│ 提取新记忆│   │              │
+└─────┬────┘   └──────┬───────┘
+      │               │
+      └───────┬───────┘
+              ▼
+┌──────────────────────────────┐
+│④ DialogElfAgent.run()       │  ← 整合全部输出
+│   情绪共情 + 日记呈现 + 记忆 │
+│   → DeepSeek → 温暖回复     │
+└──────────────┬───────────────┘
+               ▼
+         SSE 推送到前端显示
+</pre>
+
+<h2>3.3 项目目录结构</h2>
+<pre>
+geren-riji/
+├── main.py              <span class="comment"># FastAPI 主入口，API 路由定义</span>
+├── config.py            <span class="comment"># 配置管理（API Key、路径等）</span>
+├── agents.py            <span class="comment"># 四个智能体类 + 编排器</span>
+├── tools.py             <span class="comment"># 工具函数（情绪分析、日记生成）</span>
+├── memory.py            <span class="comment"># 记忆系统（ChromaDB + 短期记忆）</span>
+├── llm_client.py        <span class="comment"># DeepSeek API 调用封装</span>
+├── diary_store.py       <span class="comment"># 日记 JSON 文件持久化</span>
+├── static/
+│   └── index.html       <span class="comment"># 本地运行前端界面</span>
+├── docs/
+│   ├── index.html       <span class="comment"># GitHub Pages 在线体验版</span>
+│   └── architecture.svg <span class="comment"># 架构图 SVG</span>
+├── Dockerfile           <span class="comment"># 容器化部署配置</span>
+├── docker-compose.yml   <span class="comment"># Docker Compose 编排</span>
+├── requirements.txt     <span class="comment"># Python 依赖</span>
+└── README.md            <span class="comment"># 项目文档</span>
+</pre>
+</div>
+
+<!-- ==================== 四、核心代码 ==================== -->
+<div class="section" id="s4">
+<h1>四、核心代码</h1>
+
+<h2>4.1 多智能体编排器 (agents.py)</h2>
+<p>编排器是整个系统的中枢，负责按顺序调度四个智能体并传递中间结果：</p>
+<pre><code><span class="keyword">class</span> <span class="class-name">MultiAgentOrchestrator</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(self):
+        self.memory_manager = MemoryManager()
+        self.short_memory = ShortTermMemory(max_turns=SHORT_MEMORY_MAX_TURNS)
+        self.emotion_agent = EmotionSensorAgent()
+        self.memory_agent = MemoryManagerAgent(self.memory_manager)
+        self.diary_agent = DiaryGeneratorAgent()
+        self.dialog_agent = DialogElfAgent()
+
+    <span class="keyword">def</span> <span class="function">process</span>(self, user_input: str) -> dict:
+        <span class="comment"># 1. 存入短期记忆</span>
+        self.short_memory.add(<span class="string">"user"</span>, user_input)
+
+        <span class="comment"># 2. 情绪感知器分析情绪</span>
+        emotion_info = self.emotion_agent.run(user_input)
+
+        <span class="comment"># 3. 记忆管家：检索相关记忆 + 提取保存新记忆</span>
+        relevant_memories = self.memory_agent.search_relevant(user_input)
+        self.memory_agent.extract_and_save(user_input, emotion_info)
+
+        <span class="comment"># 4. 日记生成器：结合输入、情绪、记忆生成日记</span>
+        diary = self.diary_agent.run(user_input, emotion_info, relevant_memories)
+
+        <span class="comment"># 5. 对话精灵：整合全部输出，生成温暖回复</span>
+        response = self.dialog_agent.run(
+            user_input, emotion_info, diary, relevant_memories
+        )
+
+        <span class="comment"># 6. 将回复存入短期记忆</span>
+        self.short_memory.add(<span class="string">"assistant"</span>, response)
+
+        <span class="keyword">return</span> {
+            <span class="string">"emotion"</span>: emotion_info,
+            <span class="string">"diary"</span>: diary,
+            <span class="string">"response"</span>: response,
+            <span class="string">"memories_found"</span>: len(relevant_memories),
+            <span class="string">"short_memory_context"</span>: self.short_memory.get_context()
+        }</code></pre>
+
+<h2>4.2 情绪分析工具函数 (tools.py)</h2>
+<pre><code><span class="keyword">def</span> <span class="function">analyze_emotion</span>(text: str) -> dict:
+    system_prompt = <span class="string">"""你是一个情绪分析专家。请分析用户输入文本中的情绪状态。
+返回JSON格式，包含以下字段：
+- emotion: 主要情绪（开心/悲伤/焦虑/愤怒/平静/惊喜/疲惫/感动）
+- intensity: 情绪强度（1-10，10为最强）
+- keywords: 情绪关键词列表
+- brief_analysis: 一句话情绪分析
+
+只返回JSON，不要其他内容。"""</span>
+
+    user_message = f<span class="string">"请分析以下文本的情绪：\n\n{text}"</span>
+    result = call_llm(system_prompt, user_message, temperature=<span class="number">0.3</span>)
+    <span class="keyword">return</span> json.loads(result)</code></pre>
+
+<h2>4.3 日记生成工具函数 (tools.py)</h2>
+<pre><code><span class="keyword">def</span> <span class="function">generate_diary</span>(user_input: str, emotion_info: dict, memories: list) -> str:
+    today = datetime.now()
+    today_str = today.strftime(<span class="string">"%Y年%m月%d日"</span>)
+    weekday_map = [<span class="string">"周一"</span>, <span class="string">"周二"</span>, ..., <span class="string">"周日"</span>]
+    weekday = weekday_map[today.weekday()]
+
+    system_prompt = f<span class="string">"""你是一位温暖、细腻的日记撰写助手。
+重要规则：
+- 今天是{today_str}，{weekday}。必须使用这个真实日期，禁止编造其他日期
+- 以第一人称撰写
+- 融入情绪分析结果，让日记有情感深度
+- 适当引用历史记忆，体现连贯性
+- 语言优美但不做作，真实自然
+- 篇幅适中（200-500字）"""</span>
+
+    <span class="keyword">return</span> call_llm(system_prompt, user_message, temperature=<span class="number">0.8</span>)</code></pre>
+
+<h2>4.4 ChromaDB 向量记忆管理 (memory.py)</h2>
+<pre><code><span class="keyword">class</span> <span class="class-name">MemoryManager</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(self):
+        <span class="comment"># 初始化 ChromaDB 持久化客户端</span>
+        self.client = chromadb.PersistentClient(path=CHROMA_DB_DIR)
+        self.collection = self.client.get_or_create_collection(
+            name=<span class="string">"diary_memories"</span>,
+            metadata={<span class="string">"hnsw:space"</span>: <span class="string">"cosine"</span>}  <span class="comment"># 余弦相似度</span>
+        )
+        <span class="comment"># 加载 BGE 中文嵌入模型</span>
+        self.encoder = SentenceTransformer(EMBEDDING_MODEL)
+
+    <span class="keyword">def</span> <span class="function">save_memory</span>(self, content: str, metadata: dict) -> str:
+        <span class="comment"># 文本向量化后存入 ChromaDB</span>
+        embedding = self._encode(content)
+        memory_id = str(uuid.uuid4())
+        self.collection.add(
+            ids=[memory_id],
+            embeddings=[embedding],
+            documents=[content],
+            metadatas=[metadata]
+        )
+        <span class="keyword">return</span> memory_id
+
+    <span class="keyword">def</span> <span class="function">search_memory</span>(self, query: str, n_results: int = 5) -> list:
+        <span class="comment"># 语义检索：查询文本向量化后在向量空间中找最相似的记录</span>
+        query_embedding = self._encode(query)
+        results = self.collection.query(
+            query_embeddings=[query_embedding],
+            n_results=n_results
+        )
+        <span class="keyword">return</span> results</code></pre>
+
+<h2>4.5 FastAPI SSE 流式接口 (main.py 核心部分)</h2>
+<pre><code><span class="keyword">@app.post</span>(<span class="string">"/api/chat/stream"</span>)
+<span class="keyword">async def</span> <span class="function">chat_stream</span>(req: ChatRequest):
+    <span class="keyword">async def</span> event_generator():
+        orchestrator = MultiAgentOrchestrator()
+
+        yield {<span class="string">"event"</span>: <span class="string">"emotion_start"</span>, <span class="string">"data"</span>: <span class="string">""</span>}
+        emotion = orchestrator.emotion_agent.run(req.message)
+        yield {<span class="string">"event"</span>: <span class="string">"emotion_done"</span>, <span class="string">"data"</span>: json.dumps(emotion)}
+
+        yield {<span class="string">"event"</span>: <span class="string">"memory_start"</span>, <span class="string">"data"</span>: <span class="string">""</span>}
+        memories = orchestrator.memory_agent.search_relevant(req.message)
+        orchestrator.memory_agent.extract_and_save(req.message, emotion)
+        yield {<span class="string">"event"</span>: <span class="string">"memory_done"</span>, <span class="string">"data"</span>: json.dumps({<span class="string">"count"</span>: len(memories)})}
+
+        yield {<span class="string">"event"</span>: <span class="string">"diary_start"</span>, <span class="string">"data"</span>: <span class="string">""</span>}
+        diary = orchestrator.diary_agent.run(req.message, emotion, memories)
+        yield {<span class="string">"event"</span>: <span class="string">"diary_done"</span>, <span class="string">"data"</span>: diary}
+
+        yield {<span class="string">"event"</span>: <span class="string">"response_start"</span>, <span class="string">"data"</span>: <span class="string">""</span>}
+        response = orchestrator.dialog_agent.run(req.message, emotion, diary, memories)
+        yield {<span class="string">"event"</span>: <span class="string">"response_done"</span>, <span class="string">"data"</span>: response}
+
+    <span class="keyword">return</span> StreamingResponse(event_generator(), media_type=<span class="string">"text/event-stream"</span>)</code></pre>
+</div>
+
+<!-- ==================== 五、功能模块详解 ==================== -->
+<div class="section" id="s5">
+<h1>五、功能模块详解</h1>
+
+<h2>5.1 对话模块</h2>
+<p>对话是用户与系统交互的核心入口。用户在输入框中输入当天的想法、经历或心情，系统通过多智能体协作处理后返回包含情绪分析、生成日记和温暖回复的综合响应。</p>
+<p><strong>主要特性：</strong></p>
+<ul>
+    <li>SSE 实时流式推送，用户可看到每个智能体的工作状态（脉冲动画 → 完成 ✓）</li>
+    <li>快捷情绪标签（😊开心 / 😴疲惫 / 😰焦虑 / 🌙平静 / 🥹感动），一键快速输入</li>
+    <li>每日一句励志语随机展示，引导用户开始记录</li>
+    <li>打字机效果逐字显示 AI 回复，增强真实感</li>
+    <li>对话历史自动保存至 localStorage，刷新页面可恢复最近 50 条消息</li>
+    <li>多轮对话上下文：短期记忆保留最近 10 轮对话，让回复更连贯</li>
+</ul>
+
+<h2>5.2 日记本模块</h2>
+<p>日记本模块提供日记的浏览、搜索、编辑、删除和导出功能：</p>
+<table>
+    <tr><th>功能</th><th>说明</th></tr>
+    <tr><td>卡片浏览</td><td>以卡片网格形式展示所有日记，显示日期、情绪标签、预览内容</td></tr>
+    <tr><td>详情弹窗</td><td>点击卡片弹出详情，展示完整日记内容和原始输入</td></tr>
+    <tr><td>在线编辑</td><td>支持 contentEditable 实时编辑日记内容并保存</td></tr>
+    <tr><td>全文搜索</td><td>支持按日记内容、用户输入、情绪名称、日期实时过滤</td></tr>
+    <tr><td>Markdown 导出</td><td>支持单篇导出或全部批量导出为 Markdown 格式</td></tr>
+    <tr><td>数据导入导出</td><td>JSON 格式备份全部数据（日记+记忆），支持恢复</td></tr>
+</table>
+
+<h2>5.3 情绪统计模块</h2>
+<p>情绪统计模块帮助用户了解自身的情绪变化模式：</p>
+<div class="feature-grid">
+    <div class="feature-item">
+        <h4>📊 三大指标</h4>
+        <p>总日记数、连续记录天数、最常出现的情绪类型</p>
+    </div>
+    <div class="feature-item">
+        <h4>🎭 情绪分布图</h4>
+        <p>8种情绪的彩色柱状图，直观展示各情绪占比</p>
+    </div>
+    <div class="feature-item">
+        <h4>📈 近7天趋势</h4>
+        <p>柱状趋势图，悬停显示每天的情绪和强度详情</p>
+    </div>
+    <div class="feature-item">
+        <h4>📅 情绪日历</h4>
+        <p>GitHub 风格热力图，每月每一天按情绪着色，支持月份切换</p>
+    </div>
+</div>
+
+<h2>5.4 记忆管理模块</h2>
+<p>侧边栏记忆面板提供长期记忆的管理功能：</p>
+<ul>
+    <li><strong>实时更新</strong>：每次对话后自动提取关键信息并存入记忆库</li>
+    <li><strong>语义搜索</strong>：支持关键词过滤查找特定记忆</li>
+    <li><strong>单条删除</strong>：鼠标悬停显示删除按钮，可移除不需要的记忆</li>
+    <li><strong>元数据显示</strong>：每条记忆附带日期和关联情绪</li>
+</ul>
+</div>
+
+<!-- ==================== 六、部署与演示 ==================== -->
+<div class="section" id="s6">
+<h1>六、部署与演示</h1>
+
+<h2>6.1 本地部署</h2>
+<pre><code><span class="comment"># 1. 安装依赖</span>
+pip install -r requirements.txt
+
+<span class="comment"># 2. 配置环境变量（复制模板并填入 API Key）</span>
+cp .env.example .env
+<span class="comment"># 编辑 .env 填写 DEEPSEEK_API_KEY</span>
+
+<span class="comment"># 3. 启动服务</span>
+python main.py
+
+<span class="comment"># 4. 打开浏览器访问</span>
+<span class="comment"># http://localhost:8000/static/index.html</span></code></pre>
+
+<h2>6.2 Docker 部署</h2>
+<pre><code><span class="comment"># 使用 docker-compose 一键启动</span>
+docker-compose up -d
+
+<span class="comment"># 访问 http://localhost:8000</span></code></pre>
+
+<h2>6.3 GitHub Pages 在线体验</h2>
+<p>无需任何服务器，直接通过浏览器访问即可体验全部核心功能：</p>
+<div class="info-card">
+    <p style="text-indent:0;"><strong>🌐 在线地址：</strong><code>https://w020316.github.io/geren-riji/</code></p>
+    <p style="text-indent:0;"><strong>📦 源码仓库：</strong><code>https://github.com/w020316/geren-riji</code></p>
+</div>
+
+<h2>6.4 功能对比表</h2>
+<table>
+    <tr><th>功能特性</th><th>完整版（本地/Docker）</th><th>体验版（GitHub Pages）</th></tr>
+    <tr><td>情绪分析</td><td>✅ DeepSeek LLM 深度理解</td><td>✅ 规则引擎（8种×20+词）</td></tr>
+    <tr><td>记忆系统</td><td>✅ ChromaDB 向量检索</td><td>✅ localStorage + 关键词匹配</td></tr>
+    <tr><td>日记生成</td><td>✅ LLM 动态创作</td><td>✅ 模板化生成（3种模板）</td></tr>
+    <tr><td>对话回复</td><td>✅ LLM 动态回复</td><td>✅ 模板化回复（每情绪2变体）</td></tr>
+    <tr><td>SSE 实时进度</td><td>✅ 后端推送</td><td>✅ 前端模拟延迟</td></tr>
+    <tr><td>日记 CRUD</td><td>✅ 完整支持</td><td>✅ 完整支持</td></tr>
+    <tr><td>情绪统计</td><td>✅ 完整支持</td><td>✅ 完整支持</td></tr>
+    <tr><td>数据持久化</td><td>✅ 文件系统</td><td>✅ localStorage</td></tr>
+    <tr><td>需要 API Key</td><td>❌ 是</td><td>✅ 否</td></tr>
+</table>
+
+<div class="footer-note">
+    <p>心语日记 · 多智能体 AI 日记助手 | 课程作业项目 | 2026年5月</p>
+    <p>源码：<a href="https://github.com/w020316/geren-riji" style="color:#d4758c;text-decoration:none;">https://github.com/w020316/geren-riji</a></p>
+</div>
+</div>
+
+</body>
+</html>
