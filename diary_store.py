@@ -1,14 +1,17 @@
 import json
 import os
+import threading
+import uuid
 from datetime import datetime
-from config import PROJECT_ROOT
+from config import DATA_DIR
 
 
 class DiaryStore:
     def __init__(self):
-        self.diary_dir = os.path.join(PROJECT_ROOT, "diaries")
+        self.diary_dir = os.path.join(DATA_DIR, "diaries")
         os.makedirs(self.diary_dir, exist_ok=True)
         self.index_file = os.path.join(self.diary_dir, "index.json")
+        self._lock = threading.Lock()
         self._ensure_index()
 
     def _ensure_index(self):
@@ -28,7 +31,8 @@ class DiaryStore:
         now = datetime.now()
         date_str = now.strftime("%Y-%m-%d")
         time_str = now.strftime("%H:%M:%S")
-        diary_id = now.strftime("%Y%m%d_%H%M%S")
+        # 时间戳 + uuid 短码，保证绝对唯一，避免同秒/同微秒并发写入冲突
+        diary_id = now.strftime("%Y%m%d_%H%M%S") + "_" + uuid.uuid4().hex[:8]
 
         entry = {
             "id": diary_id,
@@ -44,16 +48,17 @@ class DiaryStore:
         with open(diary_file, "w", encoding="utf-8") as f:
             json.dump(entry, f, ensure_ascii=False, indent=2)
 
-        index = self._read_index()
-        index.insert(0, {
-            "id": diary_id,
-            "date": date_str,
-            "time": time_str,
-            "emotion": emotion.get("emotion", "平静"),
-            "intensity": emotion.get("intensity", 5),
-            "preview": diary_text[:80] + "..." if len(diary_text) > 80 else diary_text
-        })
-        self._write_index(index)
+        with self._lock:
+            index = self._read_index()
+            index.insert(0, {
+                "id": diary_id,
+                "date": date_str,
+                "time": time_str,
+                "emotion": emotion.get("emotion", "平静"),
+                "intensity": emotion.get("intensity", 5),
+                "preview": diary_text[:80] + "..." if len(diary_text) > 80 else diary_text
+            })
+            self._write_index(index)
         return diary_id
 
     def get_diary(self, diary_id: str) -> dict:
@@ -64,17 +69,28 @@ class DiaryStore:
         return None
 
     def get_all_diaries(self) -> list:
-        return self._read_index()
+        with self._lock:
+            return self._read_index()
+
+    def search_diaries(self, keyword: str) -> list:
+        """按关键词搜索日记（匹配预览文本）。"""
+        if not keyword:
+            return []
+        kw = keyword.lower()
+        with self._lock:
+            index = self._read_index()
+        return [d for d in index if kw in (d.get("preview", "") + d.get("emotion", "")).lower()]
 
     def delete_diary(self, diary_id: str) -> bool:
         diary_file = os.path.join(self.diary_dir, f"{diary_id}.json")
-        if os.path.exists(diary_file):
-            os.remove(diary_file)
-            index = self._read_index()
-            index = [d for d in index if d["id"] != diary_id]
-            self._write_index(index)
-            return True
-        return False
+        with self._lock:
+            if os.path.exists(diary_file):
+                os.remove(diary_file)
+                index = self._read_index()
+                index = [d for d in index if d["id"] != diary_id]
+                self._write_index(index)
+                return True
+            return False
 
     def export_markdown(self, diary_id: str) -> str:
         entry = self.get_diary(diary_id)

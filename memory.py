@@ -3,7 +3,10 @@ from chromadb.config import Settings
 from sentence_transformers import SentenceTransformer
 from config import CHROMA_DB_DIR, EMBEDDING_MODEL
 import uuid
+import logging
 from datetime import datetime
+
+logger = logging.getLogger(__name__)
 
 
 class MemoryManager:
@@ -56,7 +59,8 @@ class MemoryManager:
         try:
             self.collection.delete(ids=[memory_id])
             return True
-        except Exception:
+        except Exception as e:
+            logger.warning("删除记忆失败 %s: %s", memory_id, e)
             return False
 
     def get_all_memories(self, limit: int = 50) -> list:
@@ -74,6 +78,14 @@ class MemoryManager:
                     "metadata": meta
                 })
         return memories
+
+    def count(self) -> int:
+        """返回当前记忆总数。"""
+        try:
+            return self.collection.count()
+        except Exception as e:
+            logger.warning("获取记忆总数失败: %s", e)
+            return 0
 
 
 class ShortTermMemory:

@@ -21,3 +21,17 @@ tokenizers/
 huggingface_hub/
 safetensors/
 hf_xet/
+
+# 大文件不提交（占用仓库空间）
+*.mp4
+*.zip
+*.docx
+
+# 实验指导书素材
+多智能体AI小项目_实验指导书.files/
+多智能体AI小项目_实验指导书.html
+
+# 测试缓存
+.pytest_cache/
+.coverage
+htmlcov/

@@ -1,306 +1,392 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>心语日记 - 多智能体AI日记助手</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #0f0d12;
-            --bg-card: #1a1620;
-            --bg-elevated: #231e2a;
-            --accent: #e8a87c;
-            --accent-rose: #d4758c;
-            --accent-lavender: #9b8ec4;
-            --accent-gold: #d4b896;
-            --text: #ede8e3;
-            --text-dim: #8a8095;
-            --border: rgba(155,142,196,0.12);
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Noto Serif SC', serif; background: var(--bg);
-            color: var(--text); line-height: 1.7; overflow-x: hidden;
-        }
-        .hero {
-            min-height: 100vh; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; text-align: center;
-            padding: 40px 20px; position: relative;
-        }
-        body::before {
-            content: ''; position: fixed; top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background:
-                radial-gradient(ellipse at 30% 20%, rgba(232,168,124,0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 70% 80%, rgba(212,117,140,0.06) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, rgba(155,142,196,0.04) 0%, transparent 60%);
-            z-index: 0; pointer-events: none;
-        }
-        .hero > * { position: relative; z-index: 1; }
-        .logo-icon {
-            width: 72px; height: 72px; border-radius: 20px;
-            background: linear-gradient(135deg, var(--accent), var(--accent-rose));
-            display: flex; align-items: center; justify-content: center;
-            font-size: 32px; margin-bottom: 24px;
-            animation: float 6s ease-in-out infinite;
-        }
-        @keyframes float {
-            0%,100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        h1 {
-            font-family: 'ZCOOL XiaoWei', serif; font-size: clamp(2.4rem, 6vw, 3.8rem);
-            background: linear-gradient(135deg, var(--accent), var(--accent-rose), var(--accent-lavender));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            letter-spacing: 10px; margin-bottom: 16px;
-        }
-        .subtitle {
-            font-size: 1rem; color: var(--text-dim); letter-spacing: 4px;
-            margin-bottom: 40px; max-width: 500px;
-        }
-        .cta-group { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
-        .btn {
-            padding: 13px 28px; border-radius: 14px; font-size: 0.9rem;
-            font-family: 'Noto Serif SC', serif; cursor: pointer; transition: all 0.3s ease;
-            text-decoration: none; letter-spacing: 1px;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, var(--accent), var(--accent-rose));
-            color: white; border: none; font-weight: 600;
-        }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(232,168,124,0.25); }
-        .btn-secondary {
-            background: transparent; color: var(--text-dim);
-            border: 1px solid var(--border);
-        }
-        .btn-secondary:hover { border-color: var(--accent-lavender); color: var(--accent-lavender); }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>心语日记 · 多智能体 AI 日记助手</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Cormorant+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css" rel="stylesheet">
+<style>
+:root{
+  --paper:#f4ede0;--paper-light:#fbf7ee;--paper-warm:#efe6d4;
+  --ink:#2a2520;--ink-soft:#4a4138;
+  --vermillion:#b8412e;--vermillion-deep:#8e2f20;
+  --sepia:#8b6f47;--ink-green:#4a5d4f;
+  --muted:#8a8275;--rule:#d4c9b5;--rule-soft:#e3dac8;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'LXGW WenKai','Cormorant SC',serif;
+  background:var(--paper);color:var(--ink);line-height:1.85;
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    radial-gradient(circle at 12% 18%,rgba(139,111,71,0.05) 0%,transparent 42%),
+    radial-gradient(circle at 88% 76%,rgba(184,65,46,0.04) 0%,transparent 46%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.3  0 0 0 0 0.25  0 0 0 0 0.2  0 0 0 0.04 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+.wrap{position:relative;z-index:1;max-width:1040px;margin:0 auto;padding:0 28px}
 
-        section { max-width: 960px; margin: 0 auto; padding: 80px 24px; }
-        .section-title {
-            font-family: 'ZCOOL XiaoWei', serif; font-size: 1.8rem;
-            color: var(--accent-gold); text-align: center; letter-spacing: 4px;
-            margin-bottom: 48px; position: relative;
-        }
-        .section-title::after {
-            content: ''; position: absolute; bottom: -12px; left: 50%;
-            transform: translateX(-50%); width: 60px; height: 2px;
-            background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
-        }
+/* 刊头 */
+.masthead{text-align:center;padding:80px 0 56px;position:relative}
+.masthead::after{content:'';position:absolute;bottom:32px;left:50%;transform:translateX(-50%);width:120px;height:1px;background:var(--ink)}
+.eyebrow{
+  font-family:'Cormorant Garamond',serif;font-size:0.78rem;letter-spacing:0.5em;
+  text-transform:uppercase;color:var(--sepia);margin-bottom:18px;
+}
+.seal-row{display:flex;align-items:center;justify-content:center;gap:22px;margin-bottom:14px}
+.seal{
+  display:inline-block;width:54px;height:54px;border:3px solid var(--vermillion);
+  color:var(--vermillion);font-family:'LXGW WenKai',serif;font-weight:700;
+  font-size:1.9rem;line-height:48px;text-align:center;border-radius:8px;
+  background:rgba(184,65,46,0.05);box-shadow:0 0 0 2.5px var(--paper) inset;
+}
+.seal.r{transform:rotate(5deg)}
+.seal.l{transform:rotate(-5deg)}
+.title{
+  font-family:'Cormorant SC','LXGW WenKai',serif;font-weight:600;
+  font-size:clamp(2.4rem,6vw,3.6rem);letter-spacing:0.5em;
+  color:var(--ink);padding-left:0.5em;
+}
+.subtitle{
+  font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;
+  color:var(--muted);margin-top:10px;letter-spacing:0.1em;
+}
+.tagline{
+  margin-top:22px;font-size:0.96rem;color:var(--ink-soft);
+  max-width:520px;margin-left:auto;margin-right:auto;line-height:2;
+}
+.cta{display:flex;gap:14px;justify-content:center;margin-top:34px;flex-wrap:wrap}
+.btn{
+  font-family:'LXGW WenKai',serif;font-size:0.92rem;padding:11px 28px;
+  text-decoration:none;letter-spacing:0.15em;transition:all 0.3s;cursor:pointer;border-radius:2px;
+}
+.btn-primary{background:var(--vermillion);color:var(--paper-light);border:1.5px solid var(--vermillion)}
+.btn-primary:hover{background:var(--vermillion-deep);border-color:var(--vermillion-deep)}
+.btn-ghost{background:var(--paper-light);color:var(--ink);border:1px solid var(--rule)}
+.btn-ghost:hover{border-color:var(--vermillion);color:var(--vermillion)}
 
-        .features-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px;
-        }
-        .feature-card {
-            background: var(--bg-card); border: 1px solid var(--border);
-            border-radius: 18px; padding: 28px; transition: all 0.3s ease;
-        }
-        .feature-card:hover {
-            border-color: rgba(232,168,124,0.3); transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.3);
-        }
-        .feature-icon { font-size: 2rem; margin-bottom: 14px; }
-        .feature-title { font-size: 1.05rem; color: var(--accent); margin-bottom: 8px; font-weight: 600; }
-        .feature-desc { font-size: 0.85rem; color: var(--text-dim); line-height: 1.8; }
+.badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:28px}
+.badge{
+  font-family:'Cormorant Garamond',serif;font-size:0.74rem;letter-spacing:0.12em;
+  padding:4px 12px;border:1px solid var(--rule);color:var(--sepia);
+  background:var(--paper-light);text-transform:uppercase;
+}
 
-        .arch-section { background: var(--bg-card); border-radius: 22px; border: 1px solid var(--border); padding: 40px; margin-top: 60px; }
-        .arch-flow {
-            display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-            justify-content: center; margin-top: 28px;
-        }
-        .arch-step {
-            padding: 10px 18px; border-radius: 12px; font-size: 0.82rem;
-            border: 1px solid var(--border); background: var(--bg-elevated);
-            white-space: nowrap;
-        }
-        .arch-arrow { color: var(--accent-lavender); font-size: 1.2rem; }
+/* 章节 */
+section{padding:72px 0;border-top:1px solid var(--rule)}
+.section-head{text-align:center;margin-bottom:48px}
+.section-num{
+  font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.86rem;
+  color:var(--vermillion);letter-spacing:0.3em;margin-bottom:8px;text-transform:uppercase;
+}
+.section-title{
+  font-family:'Cormorant SC',serif;font-weight:600;font-size:1.9rem;
+  color:var(--ink);letter-spacing:0.3em;
+}
+.section-title::before,.section-title::after{content:'—';color:var(--vermillion);margin:0 16px;font-weight:400}
+.section-sub{
+  font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.92rem;
+  color:var(--muted);margin-top:8px;letter-spacing:0.05em;
+}
 
-        .agents-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 36px;
-        }
-        .agent-card {
-            background: var(--bg-card); border: 1px solid var(--border);
-            border-radius: 14px; padding: 22px; text-align: center;
-            transition: all 0.3s ease;
-        }
-        .agent-card:hover { border-color: var(--accent); }
-        .agent-avatar { font-size: 2rem; margin-bottom: 10px; }
-        .agent-name { font-size: 0.95rem; color: var(--accent-gold); font-weight: 600; margin-bottom: 6px; }
-        .agent-role { font-size: 0.78rem; color: var(--text-dim); }
+/* 功能网格 */
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
+.feature{
+  background:var(--paper-light);border:1px solid var(--rule);padding:28px 26px;
+  position:relative;transition:all 0.35s;
+}
+.feature::before{
+  content:'';position:absolute;top:0;left:0;width:100%;height:2px;
+  background:var(--vermillion);transform:scaleX(0);transform-origin:left;transition:transform 0.4s;
+}
+.feature:hover{transform:translateY(-4px);border-color:var(--sepia);box-shadow:0 16px 36px -18px rgba(74,65,56,0.3)}
+.feature:hover::before{transform:scaleX(1)}
+.feature-num{
+  font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.78rem;
+  color:var(--vermillion);letter-spacing:0.2em;margin-bottom:12px;
+}
+.feature-icon{
+  font-family:'LXGW WenKai',serif;font-size:1.6rem;color:var(--ink);
+  margin-bottom:10px;font-weight:700;
+}
+.feature-title{
+  font-family:'Cormorant SC',serif;font-weight:600;font-size:1.1rem;
+  color:var(--ink);margin-bottom:8px;letter-spacing:0.15em;
+}
+.feature-desc{font-size:0.88rem;color:var(--ink-soft);line-height:1.95}
 
-        .code-block {
-            background: #0d0b10; border: 1px solid var(--border);
-            border-radius: 14px; padding: 24px; margin-top: 32px;
-            overflow-x: auto;
-        }
-        .code-block pre { font-family: 'Consolas', monospace; font-size: 0.82rem; color: #a89fb5; line-height: 1.7; }
-        .code-block .kw { color: var(--accent-rose); }
-        .code-block .str { color: var(--accent); }
-        .code-block .cmd { color: var(--accent-mint); }
+/* 智能体 */
+.agents{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:36px}
+.agent{
+  background:var(--paper-light);border:1px solid var(--rule);padding:26px 22px;
+  text-align:center;position:relative;transition:all 0.35s;
+}
+.agent:hover{border-color:var(--vermillion);transform:translateY(-3px)}
+.agent-seal{
+  display:inline-block;width:50px;height:50px;border:2px solid var(--vermillion);
+  color:var(--vermillion);font-family:'LXGW WenKai',serif;font-weight:700;
+  font-size:1.5rem;line-height:46px;text-align:center;border-radius:6px;
+  margin-bottom:14px;background:rgba(184,65,46,0.05);
+}
+.agent-name{
+  font-family:'Cormorant SC',serif;font-weight:600;font-size:1.02rem;
+  color:var(--ink);letter-spacing:0.2em;margin-bottom:6px;
+}
+.agent-en{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.78rem;color:var(--sepia);margin-bottom:10px}
+.agent-role{font-size:0.82rem;color:var(--muted);line-height:1.8}
 
-        footer {
-            text-align: center; padding: 48px 24px; color: var(--text-dim);
-            font-size: 0.82rem; border-top: 1px solid var(--border);
-            margin-top: 60px;
-        }
-        footer a { color: var(--accent-lavender); text-decoration: none; }
-        footer a:hover { text-decoration: underline; }
+/* 流程 */
+.flow{margin-top:40px;background:var(--paper-light);border:1px solid var(--rule);padding:32px;position:relative}
+.flow::before{content:'';position:absolute;top:8px;left:8px;right:8px;bottom:8px;border:1px solid var(--rule-soft);pointer-events:none}
+.flow-title{
+  font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.92rem;
+  color:var(--vermillion);letter-spacing:0.2em;text-align:center;margin-bottom:22px;text-transform:uppercase;
+}
+.flow-steps{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;position:relative;z-index:1}
+.flow-step{
+  font-family:'LXGW WenKai',serif;font-size:0.85rem;padding:8px 16px;
+  border:1px solid var(--rule);background:var(--paper-warm);color:var(--ink-soft);
+  letter-spacing:0.08em;
+}
+.flow-arrow{color:var(--vermillion);font-family:'Cormorant Garamond',serif;font-size:1.1rem}
 
-        .tech-badges { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 20px; }
-        .tech-badge {
-            padding: 5px 14px; border-radius: 20px; font-size: 0.75rem;
-            border: 1px solid var(--border); color: var(--text-dim);
-        }
+/* 代码块 */
+.code{
+  background:#faf3e3;border:1px solid var(--sepia);border-style:double;border-width:3px;
+  padding:26px 28px;margin-top:8px;overflow-x:auto;position:relative;
+}
+.code::before{
+  content:'code';position:absolute;top:-11px;left:20px;background:var(--paper);
+  padding:0 10px;font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:0.78rem;color:var(--vermillion);letter-spacing:0.2em;
+}
+.code pre{
+  font-family:'Cormorant Garamond','Consolas',monospace;font-size:0.84rem;
+  color:var(--ink-soft);line-height:1.95;white-space:pre;
+}
+.code .cmd{color:var(--vermillion);font-style:italic}
+.code .kw{color:var(--ink-green)}
+.code .str{color:var(--sepia)}
 
-        .screenshot-container {
-            margin-top: 40px; border-radius: 18px; overflow: hidden;
-            border: 1px solid var(--border); background: var(--bg-card);
-        }
-        .screenshot-placeholder {
-            aspect-ratio: 16/10; display: flex; align-items: center; justify-content: center;
-            background: linear-gradient(135deg, var(--bg-card), var(--bg-elevated));
-            color: var(--text-dim); font-size: 1rem;
-        }
-        @media (max-width: 600px) {
-            h1 { letter-spacing: 4px; }
-            .btn { padding: 11px 22px; font-size: 0.85rem; }
-            section { padding: 56px 16px; }
-        }
-    </style>
+/* 结构树同理 */
+.tree pre{font-family:'Cormorant Garamond','Consolas',monospace;font-size:0.82rem;color:var(--ink-soft);line-height:1.9}
+.tree .kw{color:var(--vermillion)}
+
+/* 页脚 */
+footer{
+  text-align:center;padding:48px 28px;margin-top:60px;
+  border-top:1px solid var(--ink);color:var(--muted);font-size:0.84rem;position:relative;
+}
+footer::before{content:'';position:absolute;top:-5px;left:50%;transform:translateX(-50%);width:40%;height:1px;background:var(--rule)}
+footer a{color:var(--sepia);text-decoration:none;border-bottom:1px dotted var(--sepia);transition:color 0.3s}
+footer a:hover{color:var(--vermillion);border-color:var(--vermillion)}
+.foot-orn{color:var(--vermillion);margin:0 10px}
+
+@media(max-width:640px){
+  .wrap{padding:0 18px}
+  .masthead{padding:56px 0 40px}
+  .title{letter-spacing:0.35em}
+  .seal{width:44px;height:44px;font-size:1.5rem;line-height:40px}
+  .section-title{font-size:1.5rem;letter-spacing:0.2em}
+  section{padding:56px 0}
+}
+</style>
 </head>
 <body>
+<div class="wrap">
 
-<div class="hero">
-    <div class="logo-icon">📔</div>
-    <h1>心语日记</h1>
-    <p class="subtitle">基于多智能体协作的 AI 日记助手<br>感知情绪 · 记忆瞬间 · 书写温暖</p>
-    <div class="cta-group">
-        <a href="https://github.com/w020316/geren-riji" class="btn btn-primary" target="_blank">⭐ 查看源码</a>
-        <a href="#features" class="btn btn-secondary">了解功能</a>
-        <a href="#quickstart" class="btn btn-secondary">快速开始</a>
+  <!-- 刊头 -->
+  <header class="masthead">
+    <div class="eyebrow">Vol. I · A Diary of Inner Words</div>
+    <div class="seal-row">
+      <span class="seal l">心</span>
+      <h1 class="title">心语日记</h1>
+      <span class="seal r">语</span>
     </div>
-    <div class="tech-badges" style="margin-top: 36px;">
-        <span class="tech-badge">Python 3.12</span>
-        <span class="tech-badge">FastAPI</span>
-        <span class="tech-badge">ChromaDB</span>
-        <span class="tech-badge">DeepSeek API</span>
-        <span class="tech-badge">BGE Embedding</span>
-        <span class="tech-badge">SSE Streaming</span>
+    <div class="subtitle">— multi-agent companion for tender journaling —</div>
+    <p class="tagline">基于多智能体协作的个性化 AI 日记应用，感知情绪、记忆瞬间、生成温暖日记。</p>
+    <div class="cta">
+      <a class="btn btn-primary" href="https://github.com/w020316/geren-riji" target="_blank" rel="noopener">查看源码</a>
+      <a class="btn btn-ghost" href="#features">了解功能</a>
+      <a class="btn btn-ghost" href="#quickstart">快速开始</a>
     </div>
-</div>
+    <div class="badges">
+      <span class="badge">Python 3.12</span>
+      <span class="badge">FastAPI</span>
+      <span class="badge">ChromaDB</span>
+      <span class="badge">Agnes AI</span>
+      <span class="badge">BGE Embedding</span>
+      <span class="badge">SSE Streaming</span>
+    </div>
+  </header>
 
-<section id="features">
-    <h2 class="section-title">核心功能</h2>
-    <div class="features-grid">
-        <div class="feature-card">
-            <div class="feature-icon">🎭</div>
-            <div class="feature-title">情绪感知</div>
-            <div class="feature-desc">自动识别用户输入中的情绪状态，分析情绪强度和关键词，让日记更有情感深度。</div>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon">🧠</div>
-            <div class="feature-title">长期记忆</div>
-            <div class="feature-desc">基于 ChromaDB 向量数据库和 BGE 中文嵌入模型，智能检索和保存重要记忆，跨对话连贯。</div>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon">📝</div>
-            <div class="feature-title">日记生成</div>
-            <div class="feature-desc">融合情绪分析和历史记忆，自动生成温暖、个性化的日记文本，支持 Markdown 导出。</div>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon">✨</div>
-            <div class="feature-title">实时进度</div>
-            <div class="feature-desc">SSE 流式响应，实时显示每个智能体的处理状态（working → done），告别等待焦虑。</div>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon">📔</div>
-            <div class="feature-title">日记管理</div>
-            <div class="feature-desc">自动保存每篇日记，支持历史浏览、详情查看、单篇/批量导出 Markdown 文件。</div>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon">🌙</div>
-            <div class="feature-title">精美界面</div>
-            <div class="feature-desc">暗色主题设计，渐变背景动效，响应式布局，移动端完美适配，沉浸式体验。</div>
-        </div>
+  <!-- 功能 -->
+  <section id="features">
+    <div class="section-head">
+      <div class="section-num">— I —</div>
+      <h2 class="section-title">核心功能</h2>
+      <div class="section-sub">features of the journal</div>
     </div>
-</section>
+    <div class="features">
+      <div class="feature">
+        <div class="feature-num">No. 01</div>
+        <div class="feature-icon">喜</div>
+        <div class="feature-title">情绪感知</div>
+        <div class="feature-desc">自动识别用户输入中的情绪状态，分析情绪强度和关键词，让日记更有情感深度。</div>
+      </div>
+      <div class="feature">
+        <div class="feature-num">No. 02</div>
+        <div class="feature-icon">记</div>
+        <div class="feature-title">长期记忆</div>
+        <div class="feature-desc">基于 ChromaDB 向量数据库和 BGE 中文嵌入模型，智能检索和保存重要记忆，跨对话连贯。</div>
+      </div>
+      <div class="feature">
+        <div class="feature-num">No. 03</div>
+        <div class="feature-icon">书</div>
+        <div class="feature-title">日记生成</div>
+        <div class="feature-desc">融合情绪分析和历史记忆，自动生成温暖、个性化的日记文本，支持 Markdown 导出。</div>
+      </div>
+      <div class="feature">
+        <div class="feature-num">No. 04</div>
+        <div class="feature-icon">流</div>
+        <div class="feature-title">实时进度</div>
+        <div class="feature-desc">SSE 流式响应，实时显示每个智能体的处理状态，告别等待焦虑。</div>
+      </div>
+      <div class="feature">
+        <div class="feature-num">No. 05</div>
+        <div class="feature-icon">册</div>
+        <div class="feature-title">日记管理</div>
+        <div class="feature-desc">自动保存每篇日记，支持历史浏览、详情查看、关键词搜索、单篇/批量导出。</div>
+      </div>
+      <div class="feature">
+        <div class="feature-num">No. 06</div>
+        <div class="feature-icon">雅</div>
+        <div class="feature-title">文学界面</div>
+        <div class="feature-desc">纸质信笺美学，朱砂墨色配色，霞鹜文楷字体，响应式布局，沉浸式书写体验。</div>
+      </div>
+    </div>
+  </section>
 
-<section id="architecture">
-    <h2 class="section-title">多智能体架构</h2>
-    <div class="agents-grid">
-        <div class="agent-card"><div class="agent-avatar">🎭</div><div class="agent-name">情绪感知器</div><div class="agent-role">识别情绪 · 分析强度</div></div>
-        <div class="agent-card"><div class="agent-avatar">🧠</div><div class="agent-name">记忆管家</div><div class="agent-role">检索记忆 · 保存信息</div></div>
-        <div class="agent-card"><div class="agent-avatar">📝</div><div class="agent-name">日记生成器</div><div class="agent-role">融合情绪与记忆写日记</div></div>
-        <div class="agent-card"><div class="agent-avatar">✨</div><div class="agent-name">对话精灵</div><div class="agent-role">整合输出 · 温暖回复</div></div>
+  <!-- 架构 -->
+  <section id="architecture">
+    <div class="section-head">
+      <div class="section-num">— II —</div>
+      <h2 class="section-title">多智能体架构</h2>
+      <div class="section-sub">collaborative agents at work</div>
     </div>
-    <div class="arch-section">
-        <h3 style="color:var(--accent-gold);font-size:1.05rem;text-align:center;margin-bottom:8px;">数据流</h3>
-        <div class="arch-flow">
-            <span class="arch-step">👤 用户输入</span>
-            <span class="arch-arrow">→</span>
-            <span class="arch-step">🎭 情绪分析</span>
-            <span class="arch-arrow">→</span>
-            <span class="arch-step">🧠 记忆检索</span>
-            <span class="arch-arrow">→</span>
-            <span class="arch-step">📝 日记生成</span>
-            <span class="arch-arrow">→</span>
-            <span class="arch-step">✨ 整合回复</span>
-            <span class="arch-arrow">→</span>
-            <span class="arch-step">👤 用户</span>
-        </div>
+    <div class="agents">
+      <div class="agent">
+        <span class="agent-seal">感</span>
+        <div class="agent-name">情绪感知器</div>
+        <div class="agent-en">emotion sensor</div>
+        <div class="agent-role">识别情绪 · 分析强度</div>
+      </div>
+      <div class="agent">
+        <span class="agent-seal">记</span>
+        <div class="agent-name">记忆管家</div>
+        <div class="agent-en">memory keeper</div>
+        <div class="agent-role">检索记忆 · 保存信息</div>
+      </div>
+      <div class="agent">
+        <span class="agent-seal">书</span>
+        <div class="agent-name">日记生成器</div>
+        <div class="agent-en">diary writer</div>
+        <div class="agent-role">融合情绪与记忆写日记</div>
+      </div>
+      <div class="agent">
+        <span class="agent-seal">语</span>
+        <div class="agent-name">对话精灵</div>
+        <div class="agent-en">dialog elf</div>
+        <div class="agent-role">整合输出 · 温暖回复</div>
+      </div>
     </div>
-</section>
+    <div class="flow">
+      <div class="flow-title">— data flow —</div>
+      <div class="flow-steps">
+        <span class="flow-step">用户输入</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">情绪分析</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">记忆检索</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">日记生成</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">整合回复</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">用户</span>
+      </div>
+    </div>
+  </section>
 
-<section id="quickstart">
-    <h2 class="section-title">快速开始</h2>
-    <div class="code-block">
-<pre><span class="cmd"># 克隆项目</span>
+  <!-- 快速开始 -->
+  <section id="quickstart">
+    <div class="section-head">
+      <div class="section-num">— III —</div>
+      <h2 class="section-title">快速开始</h2>
+      <div class="section-sub">how to begin</div>
+    </div>
+    <div class="code">
+<pre><span class="cmd"># 1. 克隆项目</span>
 git clone https://github.com/w020316/geren-riji.git
 cd geren-riji
 
-<span class="cmd"># 安装依赖</span>
-pip install -r requirements.txt
+<span class="cmd"># 2. 安装依赖</span>
+pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
-<span class="cmd"># 配置环境变量</span>
+<span class="cmd"># 3. 配置环境变量</span>
 cp .env.example .env
-<span class="str"># 编辑 .env 填入 DeepSeek API Key</span>
+<span class="str"># 编辑 .env 填入 Agnes AI API Key</span>
 
-<span class="cmd"># 启动服务</span>
+<span class="cmd"># 4. 启动服务</span>
 python main.py
 
 <span class="kw"># 浏览器访问 http://localhost:8000</span></pre>
     </div>
-</section>
+  </section>
 
-<section>
-    <h2 class="section-title">项目结构</h2>
-    <div class="code-block">
+  <!-- 项目结构 -->
+  <section>
+    <div class="section-head">
+      <div class="section-num">— IV —</div>
+      <h2 class="section-title">项目结构</h2>
+      <div class="section-sub">repository layout</div>
+    </div>
+    <div class="code tree">
 <pre>geren-riji/
 ├── main.py              <span class="kw"># FastAPI 后端入口</span>
-├── agents.py            <span class="kw"># 4个智能体 + 编排器</span>
-├── tools.py             <span class="kw"># 工具函数</span>
+├── agents.py            <span class="kw"># 4 个智能体 + 编排器</span>
+├── tools.py             <span class="kw"># 工具函数（情绪分析、日记生成）</span>
 ├── memory.py            <span class="kw"># ChromaDB 长期 + 短期记忆</span>
 ├── diary_store.py       <span class="kw"># 日记持久化 & 导出</span>
-├── llm_client.py        <span class="kw"># DeepSeek API 封装</span>
+├── llm_client.py        <span class="kw"># LLM API 封装</span>
 ├── config.py            <span class="kw"># 配置管理</span>
+├── tests/               <span class="kw"># 单元测试与集成测试</span>
 ├── static/
-│   └── index.html       <span class="kw"># 暗色主题前端界面</span>
+│   └── index.html       <span class="kw"># 文学风格前端界面</span>
 ├── docs/
 │   └── architecture.svg <span class="kw"># 架构图</span>
 ├── Dockerfile           <span class="kw"># Docker 部署</span>
 ├── docker-compose.yml   <span class="kw"># Compose 编排</span>
+├── .env.example         <span class="kw"># 环境变量模板</span>
 └── requirements.txt     <span class="kw"># Python 依赖</span></pre>
     </div>
-</section>
+  </section>
 
-<footer>
-    <p>📔 心语日记 — 多智能体 AI 日记助手</p>
-    <p style="margin-top:8px;">
-        <a href="https://github.com/w020316/geren-riji" target="_blank">GitHub</a> ·
-        Built with ❤️ using Python · FastAPI · DeepSeek
-    </p>
-</footer>
+  <footer>
+    <span>心语日记</span><span class="foot-orn">·</span>
+    <span>multi-agent AI journal</span><span class="foot-orn">·</span>
+    <a href="https://agnes-ai.com/" target="_blank" rel="noopener">powered by Agnes AI</a>
+    <div style="margin-top:8px;font-family:'Cormorant Garamond',serif;font-style:italic;opacity:0.7">
+      Built with care using Python · FastAPI · ChromaDB
+    </div>
+  </footer>
 
+</div>
 </body>
 </html>

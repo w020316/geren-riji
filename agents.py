@@ -4,6 +4,9 @@ from memory import MemoryManager, ShortTermMemory
 from config import SHORT_MEMORY_MAX_TURNS
 from datetime import datetime
 import json
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class EmotionSensorAgent:
@@ -46,7 +49,8 @@ class MemoryManagerAgent:
                 )
                 saved_ids.append(mid)
             return saved_ids
-        except Exception:
+        except Exception as e:
+            logger.warning("记忆提取失败: %s", e)
             return []
 
     def search_relevant(self, user_input: str, n_results: int = 5) -> list:
@@ -66,7 +70,6 @@ class DialogElfAgent:
     description = "生成最终回复，协调其他智能体输出"
 
     def run(self, user_input: str, emotion_info: dict, diary: str, memories: list) -> str:
-        from datetime import datetime
         today = datetime.now().strftime("%Y年%m月%d日")
 
         system_prompt = f"""你是一个温暖、贴心的日记助手。你需要根据情绪分析、生成的日记和相关记忆，

@@ -1,5 +1,9 @@
 from llm_client import call_llm
 from datetime import datetime
+import json
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def analyze_emotion(text: str) -> dict:
@@ -15,12 +19,12 @@ def analyze_emotion(text: str) -> dict:
     user_message = f"请分析以下文本的情绪：\n\n{text}"
     try:
         result = call_llm(system_prompt, user_message, temperature=0.3)
-        import json
         clean = result.strip()
         if clean.startswith("```"):
             clean = clean.split("\n", 1)[-1].rsplit("```", 1)[0].strip()
         return json.loads(clean)
-    except Exception:
+    except Exception as e:
+        logger.warning("情绪分析失败: %s", e)
         return {
             "emotion": "平静",
             "intensity": 5,

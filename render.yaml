@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: xinyu-diary
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: LLM_API_KEY
+        sync: false  # 在 Render 控制台手动填入敏感值
+      - key: LLM_BASE_URL
+        value: https://apihub.agnes-ai.com/v1
+      - key: LLM_MODEL
+        value: agnes-2.0-flash
+      - key: LLM_TIMEOUT
+        value: "60"
+      - key: LLM_MAX_TOKENS
+        value: "2000"
+      - key: EMBEDDING_MODEL
+        value: BAAI/bge-small-zh-v1.5
+      - key: SHORT_MEMORY_MAX_TURNS
+        value: "10"
+      - key: DATA_DIR
+        value: /app/data
+      - key: PYTHONUNBUFFERED
+        value: "1"
+    disk:
+      name: data
+      mountPath: /app/data
+      sizeGB: 1
